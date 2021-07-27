@@ -1,0 +1,60 @@
+{% extends "c18/pc/index.html" %}
+
+{% block title %}C181800XXX{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/c18/roster-item.css">
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/c18/roster-item.js"></script>
+<div class="stu-info">
+    {% if num==data['num'] %}
+    <a href="javascript:window.location.href+='/editor'" id="edit">编辑</a>
+    {% endif %}
+    <div class="r-photo">
+        <img />
+    </div>
+    <div class="r-info">
+        <p>
+            <span class="num"></span><span class="name"></span>
+        </p>
+        <div class="info-">
+            <div>
+                <span class="tit">TEL:</span><span class="val tel">00000000000</span>
+            </div>
+            <div>
+                <span class="tit">QQ:</span><a target="_blank" class="val qq">0000000000</a>
+            </div>
+            <div>
+                <span class="tit">绰号:</span><span class="val nick">XXX</span>
+            </div>
+            <div>
+                <span class="tit">高中:</span><span class="val seni">XXX</span>
+            </div>
+            <div class="address">
+                <span class="tit">住址:</span><span class="val addr">XXXXXXXXXXXXXX</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="message">
+    <p>
+        毕业寄语
+    </p>
+    <span>此人比较懒，啥都没留...</span>
+</div>
+<div class="gp">
+    <img class="ph-left" />
+    <img class="ph-right" />
+</div>
+<div id="pp">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+<div id="fixed"></div>
+{% endblock %}

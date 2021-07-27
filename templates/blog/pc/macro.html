@@ -1,0 +1,52 @@
+{% macro blog_body(title='no title',time='2021-06-21 00:00:00',
+read_count=0,blogger='null',content='') %}
+<main>
+	<div class="blog-content-box">
+		<div class="article-header">
+			<h1 class="article-title">{{title}}</h1>
+			<div class="article-info-box">
+				<div class="article-bar-top">
+					<a class="blogger" href="/user/{{blogger}}" target="_blank" rel="noopener"> {{blogger}} </a>
+					<span class="time">{{time}}</span>
+					<img class="article-read-img" src="/static/images/articleReadEyes.png" alt="">
+					<span class="read-count">{{read_count}}</span>
+				</div>
+			</div>
+
+		</div>
+		<div class="article-content">
+			<style scoped>
+				@import url(/static/markdown-themes/{{theme}}.css);
+				@import url(/static/highlight/styles/{{code_theme}}.min.css);
+
+				/* for block of numbers */
+				.hljs-ln-numbers {
+					-webkit-touch-callout: none;
+					-webkit-user-select: none;
+					-khtml-user-select: none;
+					-moz-user-select: none;
+					-ms-user-select: none;
+					user-select: none;
+					text-align: center;
+					color: #ccc;
+					border-right: 1px solid #CCC;
+					vertical-align: top;
+					padding-right: 5px !important;
+					/* your custom style here */
+				}
+
+				/* for block of code */
+				.hljs-ln-code {
+					padding-left: 10px !important;
+				}
+				blockquote{
+					margin-bottom: 14px;
+				}
+			</style>
+			<div id="content-view">
+				{{content}}
+			</div>
+		</div>
+	</div>
+</main>
+{% endmacro %}

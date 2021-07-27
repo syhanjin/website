@@ -1,0 +1,84 @@
+#ph {
+    width: 75%;
+    height: 0;
+    padding-bottom: 50%;
+    margin: 15px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 5px 5px 5px #d8d8d8;
+    border: 1px solid #d8d8d8;
+    background: url(/static/c18/students.jpg) center/cover;
+}
+
+#roster {
+    width: 90%;
+    margin: 15px auto;
+    text-align: left;
+    font-size: 28px;
+}
+#roster table {
+    -moz-user-select: none; /*火狐*/
+    -webkit-user-select: none; /*webkit浏览器*/
+    -ms-user-select: none; /*IE10*/
+    -khtml-user-select: none; /*早期浏览器*/
+    user-select: none;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 12px;
+    border: 2px solid #d8d8d8;
+    overflow: hidden;
+    background-color: #cccccc;
+    box-shadow: 5px 5px 5px #d8d8d8;
+}
+#roster table td {
+    height: 25px;
+    line-height: 150%;
+}
+#roster table tr {
+    background-color: #ffffff;
+}
+#roster table tr:not(.th):hover {
+    background-color: #eeeeee;
+}
+#roster .roster-tr .num {
+    color: grey;
+    width: 130px;
+}
+.roster-tr .name {
+    width: 130px;
+}
+.roster-tr .gender {
+    width: 75px;
+}
+.roster-tr .posi{
+    /*text-align: left;*/
+    /*padding-left: 30px;*/
+}
+.roster-tr .posi-cadres{
+    width: 160px;
+}
+.pr{
+    width: 60px;
+    opacity: 0;
+}
+
+.pr-CH:before{content:'语文'}
+.pr-M:before{content:'数学'}
+.pr-E:before{content:'英语'}
+.pr-PH:before{content:'物理'}
+.pr-C:before{content:'化学'}
+.pr-P:before{content:'政治'}
+.pr-H:before{content:'历史'}
+.pr-B:before{content:'生物'}
+.pr-G:before{content:'地理'}
+.pr-A:before{content:'美术'}
+.pr-CO:before{content:'信息'}
+.roster-tr .posi span{
+    margin: 0 5px;
+}
+/*.roster-tr .detailed {
+ width: 100px;
+ }
+ .roster-tr .detailed a:hover {
+ text-decoration: underline
+ }*/

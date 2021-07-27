@@ -1,0 +1,80 @@
+.login {
+    border: .3rem solid #00B01B;
+    border-radius: 2.3rem;
+    width: 90%;
+    height: 40rem;
+    margin: 1.5rem auto;
+}
+.retrieve {
+    display: inline-block;
+    font-size: 1.2rem;
+    float: right;
+}
+.retrieve span {
+    margin: .5rem .7rem;
+}
+.retrieve a {
+    color: blue;
+}
+
+.title {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+.warns {
+    text-align: center;
+    font-size: 1.4rem;
+    color: red;
+}
+.submit {
+    text-align: center;
+    margin: 1.5rem auto;
+    display: block;
+    width: 90%;
+    height: 4.6rem;
+    font-size: 1.6rem;
+    border-radius: 2.3rem;
+    border: .1rem solid #00B01B;
+}
+
+.login *:focus {
+    outline: 0;
+}
+.login .entry {
+    background-color: white;
+    position: relative;
+    margin: 3rem auto;
+    display: block;
+    width: 80%;
+    height: 4.6rem;
+    font-size: 1.6rem;
+    border-radius: 2.3rem;
+    padding-left: 5rem;
+    border: .1rem solid #00B01B;
+}
+.login .entry:before {
+    content: "";
+    position: absolute;
+    top: .8rem;
+    left: 1.6rem;
+    width: 3rem;
+    height: 3rem;
+    background: url(/static/images/reg_icon.png) 0 0 no-repeat;
+}
+#entry-user:before {
+    background-position: -6.2rem -6.4rem;
+}
+#entry-pwd:before {
+    background-position: .7rem -2.8rem !important;
+}
+.login .entry input {
+    width: 88%;
+    height: 4.6rem;
+    border: 0;
+    outline: 0;
+}
+.other{
+    display: block;
+    width: 90%;
+}

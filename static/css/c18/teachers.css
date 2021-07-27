@@ -1,0 +1,49 @@
+.teacher {
+    width: 90%;
+    margin: 15px auto;
+    height: 0;
+    padding-bottom: 22.5%;
+    border: 3px solid #d8d8d8;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 5px 5px 5px #d8d8d8;
+    overflow: hidden;
+    position: relative;
+}
+.teacher:nth-child(even) .photo {
+    position: absolute;
+    width: 25%;
+    height: 0;
+    padding-bottom: 25%;
+    border-right: 3px solid #d8d8d8;
+}
+.teacher:nth-child(even) .text {
+    position: relative;
+    height: 0;
+    padding: 0 15px;
+    padding-top: 15px;
+    padding-bottom: calc(25% - 15px);
+    display: inline-block;
+    width: 70%;
+    margin: 0 calc(2.5% - 3px);
+    left: 25%;
+}
+.text *{
+    display: inline-block;
+}
+.text .name{
+    display: block;
+    font-size: 48px;
+}
+.text .subject:before{
+    content: '所教科目: ';
+}
+
+.teacher:nth-child(odd) .photo {
+    position: absolute;
+    right: 0;
+    width: 25%;
+    height: 0;
+    padding-bottom: 25%;
+    border-left: 3px solid #d8d8d8;
+}

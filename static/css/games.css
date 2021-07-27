@@ -1,0 +1,62 @@
+.game {
+    height: 250px;
+    margin: 30px auto;
+    width: 75%;
+    
+}
+.game p {
+    margin: 5px 0;
+}
+.info {
+    display: inline-block;
+    height: 250px;
+    vertical-align: top;
+    margin-left: 30px;
+    width: calc( 100% - 300px );
+}
+.game h3 {
+    display: inline-block;
+    vertical-align: top;
+    height: 2em;
+    line-height: 2em;
+    margin: 20px 0px 5px;
+}
+.pic {
+    height: 250px;
+    width: 250px;
+    background-color: white;
+    text-align: center;
+    line-height: 250px;
+    font-size: 48px;
+    display: inline-block;
+}
+.maker span {
+    margin-right: 5px;
+    letter-spacing: 1px;
+}
+.maker a {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+.intr {
+    border-top: 1px solid #a5a5a5;
+    border-bottom: 1px solid #a5a5a5;
+    padding: 26px 0 5px;
+    text-indent: 2em;
+    position: relative;
+}
+.intr:before {
+    content: 'introduction | 简介';
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: -2em;
+}
+.play {
+    padding: 10px 15px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 2px solid;
+    border-radius: 15px;
+    background-color: #7ae17b;
+}

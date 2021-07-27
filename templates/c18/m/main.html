@@ -1,0 +1,53 @@
+{% extends "c18/m/index.html" %}
+
+{% block css %}
+{% if data['first'] == True %}
+<style class="hori">
+    @media screen and (orientation: portrait) {
+        body {
+            position: absolute;
+            width: 100vh;
+            height: 100vw;
+            top: 0;
+            left: 100vw;
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+            transform-origin: 0% 0%;
+        }
+    }
+    @media screen and (orientation: landscape) {
+        body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+    }
+{% endif %}
+</style>
+<link rel="stylesheet" href="/static/css/c18/m/main.css">
+{% endblock %}
+
+{% block mdv %}
+{% if data['first'] == True %}
+<div id="graduate">
+    <canvas id="firework"></canvas>
+    <canvas id="shape-shifter"></canvas>
+    <script src="/static/js/c18/m/shape-shifter.js"></script>
+    <script src="/static/js/c18/main-firework.js"></script>
+</div>
+{% endif %}
+<script src="/static/js/c18/m/main.js"></script>
+<div id="together">
+    <ul>
+        {% for i in data["together"] %}
+        <li>
+            <img src="{{i['src']}}"/>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

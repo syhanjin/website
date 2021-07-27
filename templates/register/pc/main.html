@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+
+{% block title %}注册{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/rg.css" />
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/rg-main.js"></script>
+<div class="register">
+    <form action="/register" method="post">
+        <p class="entry">
+            用户名
+        </p>
+        <div class="entry-in" id="entry-user">
+            <input id="user" name="user" type="text" placeholder="请输入用户名" />
+        </div>
+        <span class="rp-warn" id="usermsg"></span>
+
+        <p class="entry">
+            密码
+        </p>
+        <div class="entry-in entry-pwd">
+        <input id="pwd1" name="pwd1" type="password" placeholder="请使用数字和大小写字母，否则易被破解！" />
+        </div>
+        <div class="rg-pwd-strength"></div>
+        <span class="rg-warn" id="pwd1msg"></span>
+
+        <p class="entry">
+            确认密码
+        </p>
+        <div class="entry-in entry-pwd">
+        <input id="pwd2" name="pwd2" type="password" placeholder="请再次输入密码" />
+        </div>
+        <span class="rg-warn" id="pwd2msg"></span>
+
+        <p class="entry">
+            输入邮箱
+        </p>
+        <div class="entry-in" id="entry-mail">
+        <input id="e-mail" type="email" name="mail" placeholder="请输入邮箱" />
+        </div>
+        <span class="rg-warn" id="emailmsg"></span>
+
+        <p class="entry">
+            输入验证码
+        </p>
+        <div class="entry-in-v">
+            <div>
+            <input id="vericode" type="text" name="veri" placeholder="若没有收到请查找垃圾箱" />
+            </div>
+            <input id="vericode-get" type="button" onclick="getvericode();" value="获取验证码" />
+        </div>
+        <span class="rg-warn" id="vericodewarn"></span>
+
+        <p class="rg-warn">
+            {{warn}}
+        </p>
+        <input class="submit" type="submit" value="注册" disabled />
+    </form>
+
+</div>
+{% endblock %}

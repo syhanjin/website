@@ -1,0 +1,39 @@
+{% extends "c18/pc/index.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/c18/main.css">
+{% endblock %}
+
+{% block mdv %}
+<!-- <script src="/static/js/jquery/jquery.fireworks.js"></script> -->
+{% if data['first'] == True %}
+<div id="graduate">
+    <canvas id="firework"></canvas>
+    <canvas id="shape-shifter"></canvas>
+    <script src="/static/js/c18/shape-shifter.js"></script>
+    <script src="/static/js/c18/main-firework.js"></script>
+</div>
+{% endif %}
+<script src="/static/js/c18/main.js"></script>
+<div id="together">
+    <ul>
+        {% for i in data["together"] %}
+        <li>
+            <img src="{{i['src']}}"/>
+        </li>
+        {% endfor %}
+    </ul>
+    <div id="to-left" class="to-op" onclick="Tlast()"></div>
+    <div id="to-right" class="to-op" onclick="Tnext()"></div>
+    <div id="bottom">
+    <div id="dots">
+        {% for i in data["together"] %}
+        <em></em>
+        {% endfor %}
+    </div>
+    </div>
+</div>
+<div class="item">
+
+</div>
+{% endblock %}

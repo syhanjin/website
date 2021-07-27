@@ -1,0 +1,69 @@
+{% extends "c18/pc/index.html" %}
+
+{% block title %}C181800XXX-编辑{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/c18/roster-item-editor.css">
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/c18/roster-item-editor.js"></script>
+<div class="stu-info">
+    <div class="r-photo">
+        <img />
+    </div>
+    <div class="r-info">
+        <p>
+            <span class="num"></span><span class="name"></span>
+        </p>
+        <div class="info-">
+            <div>
+                <span class="tit">TEL:</span>
+                <input type="tel" class="val tel" placeholder="00000000000" maxlength="11" oninput = "value=value.replace(/[^\d]/g,'')"/>
+            </div>
+            <div>
+                <span class="tit">QQ:</span>
+                <input type="text" class="val qq" placeholder="0000000000" oninput = "value=value.replace(/[^\d]/g,'')"/>
+            </div>
+            <div>
+                <span class="tit">绰号:</span>
+                <input class="val nick" placeholder="XXX" />
+            </div>
+            <div>
+                <span class="tit">高中:</span>
+                <input class="val seni" placeholder="XXX" />
+            </div>
+            <div class="address">
+                <span class="tit">住址:</span>
+                <input class="val addr" placeholder="XXXXXXXXXXXXXX" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="message">
+    <p>毕业寄语</p>
+    <textarea placeholder="此人比较懒，啥都没留..." wrap="virtual" maxlength="1500" oninput="$('.message > span > em').text($('.message textarea').val().length)"></textarea>
+    <span><em>0</em> / 1500</span>
+</div>
+<div class="gp">
+    <img class="ph-left" />
+    <img class="ph-right" />
+</div>
+<div id="pp">
+    <p>拖动图片调整顺序</p>
+    <div><span>1</span></div>
+    <div class="frame"></div>
+    <div><span>2</span></div>
+    <div class="frame"></div>
+    <div><span>3</span></div>
+    <div class="frame"></div>
+    <div><span>4</span></div>
+    <div class="frame"></div>
+    <div><span>5</span></div>
+    <div class="frame"></div>
+    <div><span>6</span></div>
+    <div class="frame"></div>
+</div>
+<button id="cancel">取消</button>
+<button id="preserve">保存</button>
+{% endblock %}

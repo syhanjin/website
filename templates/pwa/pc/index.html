@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>预备作家协会</title>
+        <link rel=icon href="//aichistudio.space/static/images/favicon.ico"/>
+        <link rel="stylesheet" href="//aichistudio.space/static/css/pwa/style.css">
+        <script src="//aichistudio.space/static/js/jquery/jquery-1.6.2.min.js"></script>
+        <script src="//aichistudio.space/static/js/jquery/jquery-1.8.3.min.js"></script>
+        <script src="https://cdn.staticfile.org/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="//aichistudio.space/static/js/pwa/index.js"></script>
+        {% block css %} {% endblock %}
+    </head>
+    <body>
+        <script src="//aichistudio.space/static/js/cursor-effect.js"></script>
+        <div class="nav">
+            <div class="hide-start"></div>
+            <div class="bar">
+                <div>
+                    <a href="/pwa">首页</a>
+                </div>
+            </div>
+            <div class="user">
+                <div class="oper">
+                    <a href="//aichistudio.space/register">注册</a>
+                    <span>|</span>
+                    <a href="//aichistudio.space/login?reback=pwa">登录</a>
+                </div>
+                <div class="photo">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            {% block mdv %} {% endblock %}
+        </div>
+        <div class="tail">
+            ©2020 pwa.aichistudio.space 版权所有
+            <a href="http://www.beian.miit.gov.cn">湘ICP备20006734号</a>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+
+{% block title %}游戏{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/games.css" />
+{% endblock %}
+
+{% block mdv %}
+{% for g in data %}
+<div class="game">
+    {% if g['photo'] %}
+    <img class="pic" src="{{g['photo']}}" alt="图片加载失败">
+    {% else %}
+    <div class="pic">无图片</div>
+    {% endif %}
+    <div class="info">
+        <h3>{{g['name']}}{% if g['name-zn'] %} | {{g['name-zn']}}{% endif %}</h3>
+        <p class="maker">
+            <span>Maker: </span>
+            <a {% if g['maker-host'] %}href="{{g['maker-host']}}"{% endif %}>
+                {{g['maker']}}
+            </a>
+        </p>
+        <p class="intr">
+            {{g['introduction']}}
+        </p>
+        <a class="play" href="{{g['play']}}" >Play now! | 马上玩!</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

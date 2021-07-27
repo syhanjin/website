@@ -1,0 +1,83 @@
+{% extends "index.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/blogs/index.css" />
+{% block markcss %} {% endblock %}
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/markdown/marked.min.js"></script>
+<script src="/static/highlight/highlight.min.js"></script>
+<script>
+	var network_error = function() {
+		openP(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p><div class="p-confirm" onclick="closeP()"></div>', function() {
+			window.location = '/';
+		});
+	}
+	function HTMLDecode(text) {
+		var temp = document.createElement("div");
+		temp.innerHTML = text;
+		var output = temp.innerText || temp.textContent;
+		temp = null;
+		return output;
+	}
+
+	var code_copy = function(e) {
+		var t = e.target || e.srcElement;
+		if (t.className.indexOf('hljs-button') > -1) {
+			e.preventDefault();
+			var i = document.getElementById("hljs-copy-el"), n = document.documentElement.scrollTop;
+			i || (i = document.createElement("textarea"),
+			i.style.position = "absolute",
+			i.style.left = "-9999px",
+			i.style.top = n + "px",
+			i.id = "hljs-copy-el",
+			document.body.appendChild(i)),
+			i.textContent = e.currentTarget.innerText.replace(/[\u00A0]/gi, " ");
+			i.select();
+			try {
+				var r = document.execCommand("copy");
+				t.dataset.title = r ? '复制成功' : '复制失败', r && setTimeout(function() {
+					t.dataset.title = '复制'
+				}, 1e3)
+			} catch(a) {
+				t.dataset.title = '复制失败'
+			}
+		}
+	}
+	var sources = [];
+	//储存源码的数组
+	$(document).ready(function() {
+		var source = $('#content-view');
+		var view = document.getElementById('content-view');
+		marked.setOptions({
+			langPrefix : 'hljs language-',
+			highlight : function(code) {
+
+				return hljs.highlightAuto(code).value.replace(/(^\s*)|(\s*$)/g, "") + //
+				'<div class="hljs-button" data-title="复制"></div>';
+			}
+		});
+		view.innerHTML = marked(HTMLDecode(source.get(0).innerHTML));
+		// 生成行号
+		$("pre code").each(function() {
+			var code = this.innerText.replace(/(^\s*)|(\s*$)/g, "");
+			$(this).bind('click',code_copy);
+			$(this).after('<ul class="pre-numbering" >');
+			var ul = $(this).next().get(0);
+			for (var i = 1; i <= code.split('\n').length; i++) {
+				ul.innerHTML += '<li style="color: rgb(153, 153, 153);">' + i + '</li>';
+			}
+		});
+		// hljs.initHighlighting();
+		// hljs.initLineNumbersOnLoad();
+	}); 
+</script>
+<div class="blog-body">
+	{% block blog_body %}
+	{% import 'blog/pc/macro.html' as func with context %}
+	{{ func.blog_body() }}
+	{% endblock %}
+
+</div>
+{% endblock %}

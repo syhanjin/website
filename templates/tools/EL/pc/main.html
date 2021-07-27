@@ -1,0 +1,206 @@
+{% extends "index.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/tools/EL/main.css" />
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/recording/recorder.js"></script>
+<script src="/static/js/tools/EL/main.js"></script>
+<div id="main">
+    <span class="intr">过渡文段从<span>湖南省长沙市2018中考英语听力</span>中截取，每段对话会自动进行重播</span>
+    <div class="part">
+        <span class="text">叮咚~~~</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/dingdong.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+
+    <div id="title" class="part">
+        <span>标题</span>
+        <input type="button" value="录制" id="r-t"/>
+    </div>
+    <div class="part">
+        <span class="text">第一节  听下面5段对话。每段对话后有一个小题，从题中所给的A、B、C三个选项中选出最佳选项回答问题，听每段对话前，你将有时间读各个小题，每小题5秒钟；听完后，各小题将给出5秒钟的作答时间。（共5小题，记5分）</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/01.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <div class="conv">
+            <span>对话1</span>
+            <input type="button" value="录制" name="1"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+        <div class="conv">
+            <span>对话2</span>
+            <input type="button" value="录制" name="2"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+        <div class="conv">
+            <span>对话3</span>
+            <input type="button" value="录制" name="3"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+        <div class="conv">
+            <span>对话4</span>
+            <input type="button" value="录制" name="4"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+        <div class="conv">
+            <span>对话5</span>
+            <input type="button" value="录制" name="5"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <span class="text">第二节  听下面6段对话或独白。每段对话或独白后有2-3个小题，从题中所给的A、B、C三个选项中选出最佳选项回答问题，听每段对话或独白前，你将有时间阅读各个小题，每小题5秒钟；听完后，各小题将给出5秒钟的作答时间（共15小题，计15分）</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/02.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <span class="text">听第6段对话，回答第6-7小题</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/03.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <div class="conv">
+            <span>对话6</span>
+            <input type="button" value="录制" name="6"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <span class="text">听第7段对话，回答第8-9小题</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/04.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <div class="conv">
+            <span>对话7</span>
+            <input type="button" value="录制" name="7"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <span class="text">听第8段对话，回答第10-11小题</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/05.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <div class="conv">
+            <span>对话8</span>
+            <input type="button" value="录制" name="8"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <span class="text">听第9段对话，回答第12-14小题</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/06.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <div class="conv">
+            <span>对话9</span>
+            <input type="button" value="录制" name="9"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <span class="text">听第10段对话，回答第15-17小题</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/07.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <div class="conv">
+            <span>对话10</span>
+            <input type="button" value="录制" name="10"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <span class="text">听下面一段独白，回答第18-20小题</span>
+        <div>
+            <span>试听：</span>
+            <audio src="/static/tools/EL/08.mp3" controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div class="part">
+        <div class="conv">
+            <span>独白</span>
+            <input type="button" value="录制" name="11"/>
+            <span>试听：</span>
+            <audio controls="">
+                浏览器不支持
+            </audio>
+        </div>
+    </div>
+    <div id="recording">
+        <em>0</em>
+        <span>:</span>
+        <em>0</em>
+    </div>
+</div>
+{% endblock %}

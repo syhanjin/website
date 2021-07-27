@@ -1,0 +1,31 @@
+{% extends "blog/pc/index.html" %}
+
+{% block title %}Developer & Helper{% endblock %}
+
+{% block markcss %}
+
+{% endblock %}
+
+{% block blog_body %}
+{% import 'blog/pc/macro.html' as func with context %}
+{{ func.blog_body(
+    title='开发者以及对开发提供帮助的人',
+    time='2021-07-24 12:00:00',
+    blogger='Sakuyark&C1818',
+    content='''
+## 开发者 & 维护者
+**[Sakuyark](https://sakuyark.com)**
+## 特别感谢
+【图片数据分类】[楠曦]('''+('https://sakuyark.com/c18/roster/23' if(user['c18']) else 'https://weibo.com/u/6974341736?is_all=1')+''')
+
+【图片资源提供】王曦佳妈妈
+
+【设计】陈凯妈妈
+汪佳仪妈妈
+
+【信息提供】十八班全体同学
+
+# 点 [这里](https://sakuyark.com/c18) 回到班级网站主页
+'''
+) }}
+{% endblock %}

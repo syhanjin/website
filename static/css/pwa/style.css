@@ -1,0 +1,181 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "微软雅黑";
+    /*cursor: default;*/
+    /*cursor: url(/static/images/cursor/default.cur),default !important ;*/
+}
+/*cursor:default cursor: url(/static/images/cursor/default.cur), default;*/
+
+a {
+    text-decoration: none;
+    color: black;
+}
+body{
+    background: #f6f6f6 url(/static/images/bg.gif);
+}
+.nav {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 80px;
+    width: 100%;
+    background-color: #E5E7E3;
+    box-shadow: 2px 2px 2px 2px #D5D7D3;
+}
+.user .photo {
+    border: 1px solid white;
+    border-radius: 50%;
+    display: none;
+    height: 45px;
+    width: 45px;
+}
+.user {
+    margin: auto;
+    bottom: 0;
+    top: 0;
+    position: absolute;
+    right: 5px;
+    width: 100px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    cursor: default;
+}
+.user .oper {
+    color: black;
+}
+.user .oper a {
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;
+}
+.nav .bar {
+    margin: auto;
+    bottom: 0;
+    top: 0;
+    position: absolute;
+    right: 150px;
+    min-width: 100px;
+    width: 600px;
+    height: 45px;
+    line-height: 45px;
+    cursor: default;
+    text-align: left;
+}
+.nav .bar div {
+    /*text-align: center;*/
+    font-size: 20px;
+    display: inline-block;
+    margin: 2.5px 20px;
+    height: 40px;
+    width: 80px;
+    cursor: default;
+}
+.nav .bar div:before {
+    content: '';
+    position: absolute;
+    display: inline-block;
+    width: 0;
+    /*height: 40px;*/
+    /*right: 0;*/
+    /*left: 40px;*/
+    margin: 0 40px;
+    bottom: 0;
+    border-bottom: 2.5px solid red;
+    animation: 0.3s _2 forwards;
+}
+.nav .hide-start {
+    margin: auto;
+    bottom: 5px;
+    z-index: 999;
+    background-color: #E5E7E3;
+    position: absolute;
+    right: 150px;
+    min-width: 100px;
+    width: 600px;
+    height: 20px;
+    line-height: 45px;
+    animation-delay:0.4s;
+    animation: hide 0.1s 0.4s forwards;
+}
+.nav .bar div:hover:before{
+    animation: 0.3s _1 forwards;
+}
+@keyframes hide{
+    100%{opacity: 0;display: none}
+}
+@keyframes _1{
+    0%{width: 0;margin: 0 40px;}
+    100%{width: 80px;margin: 0 0;}
+}
+@keyframes _2{
+    0%{width: 80px;margin: 0 0;}
+    100%{width: 0;margin: 0 40px;}
+}
+.nav .bar div a{
+    width: 100%;
+    height: 100%;
+    text-align:center;
+    display: inline-block;
+    position: relative;
+}
+.container {
+    min-height: 1000px;
+    width: 100%;
+    position: relative;
+    margin-top: 50px;
+}
+.tail {
+    min-height: 30px;
+    margin-bottom: 10px;
+    background-color: white;
+    padding-top: 15px;
+    width: 100%;
+    position: relative;
+    font-size: 12px;
+    top: 0;
+    left: 0;
+    text-align: center;
+    color: black;
+}
+.nav #Aichi{
+    width: 72px;
+    height: 72px;
+    cursor: pointer;
+    border-radius: 50%;
+    top: 0;
+    bottom: 0;
+    margin: auto 10px;
+    left: 15px;
+    position: absolute;
+}
+.tail .links{
+    position: relative;
+    width: 200px;
+    height: 84px;
+    margin: 15px 0 15px 100px;
+    text-align: left;
+    padding-left: 10px;
+}
+.tail .links p{
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: -10px;
+}
+.tail .links div a{
+    display: block;
+    width: 100%;
+    height: 14px;
+    line-height: 14px;
+}
+.tail .links div{
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 84px;
+    vertical-align:top;
+}
+.clear{
+    clear: both !important;
+}

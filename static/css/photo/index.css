@@ -1,0 +1,10 @@
+#now{
+    position: absolute;
+    margin: 5px auto;
+    overflow: hidden;
+    width: 100%;
+    height: 600px;
+}
+#popup .p-jc{
+    position: absolute !important;
+}

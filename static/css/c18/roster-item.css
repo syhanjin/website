@@ -1,0 +1,142 @@
+.r-photo {
+    width: 225px;
+    height: 300px;
+    /* padding-bottom: 25%; */
+    border: 3px solid #d8d8d8;
+    border-radius: 15px;
+    overflow: hidden;
+    display: inline-block;
+    margin-left: calc(4% - 1.5px);
+}
+.r-photo img {
+    width: 100%;
+}
+.stu-info {
+    width: 90%;
+    margin: 15px auto;
+    position: relative;
+}
+.r-info {
+    font-size: 48px;
+    display: inline-block;
+    height: 300px;
+    line-height: 225px;
+    position: absolute;
+    margin: 0 30px;
+    width: 60%;
+}
+.info p {
+    line-height: 50px;
+}
+.r-info p {
+    margin: 10px 0;
+    margin-bottom: 30px;
+    height: 50px;
+    line-height: 50px;
+}
+.r-info span {
+    margin: 0px 15px;
+}
+.r-info .info- {
+    font-size: 20px;
+    line-height: 20px;
+    margin: 10px 0;
+    width: 100%;
+}
+.r-info .info- span {
+    display: inline-block;
+}
+.r-info .info- div {
+    width: 49%;
+    display: inline-block;
+    height: 20px;
+    margin: 20px 0;
+    vertical-align: top;
+}
+.r-info .info- .tit {
+    vertical-align: top;
+    width: 60px;
+}
+.r-info .info- .val {
+    width: calc(100% - 120px);
+}
+.r-info .info- .address {
+    width: 100%;
+}
+.r-info .info- .qq {
+    cursor: pointer;
+}
+.gp {
+    width: 90%;
+    margin: 5px auto;
+    position: relative;
+}
+.gp img {
+    width: 42%;
+    height: 0;
+    padding-bottom: 28%;
+    margin: 5px calc(4% - 1.5px);
+    border-radius: 15px;
+    text-align: center;
+    background-color: white;
+}
+.stu-info .r-info .num {
+    color: grey;
+}
+.message{
+    width: 90%;
+    margin: 15px auto;
+    font-size: 24px;
+}
+.message > *{
+    margin: 5px calc(4% - 1.5px);
+    letter-spacing: .2em;
+    display: block;
+}
+.message > span{
+    text-indent: 2em;
+    width: 100%;
+    
+}
+#pp {
+    position: relative;
+    display: flex;
+    width: 300px;
+    height: 400px;
+    margin: 100px auto;
+    margin-bottom: 500px;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg);
+}
+#pp > div {
+    transform-style: preserve-3d;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 200px;
+    font-size: 50px;
+    text-align: center;
+    box-shadow: 0 0 10px #fff;
+    -webkit-box-reflect: below 10px -webkit-linear-gradient(top,rgba(0,0,0,0) 60%,rgba(0,0,0,.4) 100%);
+    /*background: url(/static/c18/test.jpg) center/cover;*/
+    background-color: white;
+    border: 3px solid #444444;
+    border-radius: 15px;
+}
+#fixed{
+    position: absolute;
+    width: 100%;
+    height: 1000px;
+    margin-top: -1000px;
+}
+body {
+    perspective: 2000px;
+}
+#edit{
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: grey;
+}

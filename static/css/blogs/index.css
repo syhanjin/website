@@ -1,0 +1,132 @@
+body {
+	font-size: 14px;
+}
+main .article-header a:hover {
+	color: #fc5531;
+}
+main .article-header a {
+	color: #555666;
+}
+.container main {
+	margin: 15px auto;
+	background-color: #FFFFFF;
+	color: #333;
+	width: 760px;
+}
+main *{
+	font-family: 'Consolas' !important;
+}
+main .article-bar-top .blogger {
+	margin-right: 20px;
+}
+main div.blog-content-box {
+	/*position: relative;*/
+	padding: 0 24px 16px;
+	background: #fff;
+}
+main .article-header {
+	border-bottom: 1px solid #f5f6f7;
+	padding-top: 8px;
+	z-index: 9;
+}
+main .article-info-box {
+	padding-left: 15px;
+	background: #f8f8f8;
+}
+main .article-title {
+	font-size: 36px;
+	margin-bottom: 8px;
+	word-wrap: break-word;
+	color: #222226;
+	font-weight: 600;
+	word-break: break-all;
+}
+main .blog-content-box .article-header .article-info-box .article-bar-top .article-read-img {
+	width: 24px;
+	height: 24px;
+	margin-top: 4px;
+}
+main .article-bar-top span, .article-bar-top a {
+	color: #999aaa;
+	vertical-align: top;
+	margin-right: 12px;
+	line-height: 32px;
+}
+main .article-content {
+	/*position: relative;*/
+	padding-top: 16px;
+}
+#content-view {
+	/*position: relative;*/
+	min-height: 70px;
+	font-size: 16px !important;
+}
+pre {
+	position: relative;
+	overflow-y: hidden;
+	overflow-x: auto;
+	line-height: 22px;
+	margin: 0 0 24px;
+    padding: 8px 16px 6px 56px;
+    background-color: #f6f8fa;
+    border: none;
+}
+pre code{
+	width: auto;
+	padding: 0!important;
+	margin: 0 !important;
+}
+pre code *{
+	margin: 0;
+	padding: 0;
+}
+pre:hover .hljs-button {
+    display: block;
+}
+.hljs-button:after{
+	content: attr(data-title)
+}
+.hljs-button{
+	margin: 2px 8px;
+	display: none;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    font-size: 16px;
+    color: #4d4d4d;
+    background-color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 5%), 0 2px 4px rgb(0 0 0 / 5%);
+}
+
+.pre-numbering {
+	position: absolute;
+	width: 48px;
+	background-color: #eef0f4;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 8px 0;
+	list-style: none;
+	text-align: right;
+	background-color: transparent;
+}
+.pre-numbering li {
+	color: #abb2bf !important;
+	border-right: 1px solid #c5c5c5;
+	padding: 0 8px;
+    list-style: none;
+    margin: 0;
+}
+@media screen and (max-width: 1320px) {
+	.blog-body {
+		width: 1068px;
+	}
+}
+@media screen and (max-width: 1320px) {
+	.container main {
+		width: 760px;
+	}
+}

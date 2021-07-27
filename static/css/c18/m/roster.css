@@ -1,0 +1,51 @@
+#ph {
+    width: 99%;
+    height: 0;
+    padding-bottom: 66%;
+    margin: 1.5rem auto;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: .5rem .5rem .5rem #d8d8d8;
+    border: .1rem solid #d8d8d8;
+    background: url(/static/c18/students.jpg) center/cover;
+}
+
+#roster {
+    width: 99%;
+    margin: 1.5rem auto;
+    text-align: left;
+    font-size: 1.8rem;
+}
+#roster table {
+    -moz-user-select: none; /*火狐*/
+    -webkit-user-select: none; /*webkit浏览器*/
+    -ms-user-select: none; /*IE10*/
+    -khtml-user-select: none; /*早期浏览器*/
+    user-select: none;
+    text-align: center;
+    border-radius: 1.2rem;
+    border: 0.2rem solid #d8d8d8;
+    overflow: hidden;
+    background-color: #cccccc;
+    box-shadow: .5rem .5rem .5rem #d8d8d8;
+}
+#roster table td {
+    height: 3rem;
+    line-height: 150%;
+}
+#roster table tr {
+    background-color: #ffffff;
+}
+#roster table tr:not(.th):hover {
+    background-color: #eeeeee;
+}
+#roster .roster-tr .num {
+    color: grey;
+    width: 8rem;
+}
+.roster-tr .name {
+    width: 13rem;
+}
+.roster-tr .gender {
+    width: 7.5rem;
+}

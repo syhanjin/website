@@ -1,0 +1,47 @@
+{% extends "blog/pc/index.html" %}
+
+{% block title %}blog{% endblock %}
+
+{% block markcss %}
+
+{% endblock %}
+
+{% block blog_body %}
+{% import 'blog/pc/macro.html' as func with context %}
+{{ func.blog_body(
+	title='关于SYBlog',
+	time='2021-08-1 08:00:00',
+	blogger='Sakuyark',
+	content='''
+> 网站使用 Flask 引擎
+> 个人觉得这个博客的代码有点**奇奇怪怪**
+> 这个模板为了更简洁使用了宏
+
+> 我想使博客主题内的css不干扰到整个框架，原打算使用 [jQuery-Scoped-CSS-plugin](https://github.com/thingsinjars/jQuery-Scoped-CSS-plugin)  但是这会使得加载完的文档变得特别 奇怪，而且会有一部分样式丢失
+> 没办法，我只能放弃这个方案，目前此问题暂未解决
+
+> ## 下面是源码，如果大佬们有什么好的优化方案。。。~~（貌似现在没有做留言的页面）~~ 可以去QQ群 [1032103456](https://qm.qq.com/cgi-bin/qm/qr?k=sMI1uTHOAEPAZEerDoQ3sfgOs8f7lZij&jump_from=webapi) 提提建议，或者联系我 [QQ：[2819469337](http://wpa.qq.com/msgrd?v=3&uin=2819469337&site=qq&menu=yes)]
+### blog/pc/index.html
+```html
+<!-- blog/pc/index.html -->
+'''+source_index+'''
+```
+
+<br/>
+
+### bloc/pc/main.html
+```html
+<!-- bloc/pc/main.html -->
+'''+source_main+'''
+```
+
+<br/>
+
+### blog/pc/macro.html
+```html
+<!-- blog/pc/macro.html -->
+'''+source_macro+'''
+```
+'''
+) }}
+{% endblock %}

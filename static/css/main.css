@@ -1,0 +1,24 @@
+.exte {
+    display: block;
+    padding: 10px 15px;
+    border-bottom: 2px dashed grey;
+    position: relative;
+    height: 30px;
+    font-size: 28px;
+    line-height: 30px;
+}
+.exte:after {
+    content: '>>>';
+    letter-spacing: -.3em;
+    position: absolute;
+    font-size: 36px;
+    height: 40px;
+    vertical-align: middle;
+    line-height: 40px;
+    right: 10px;
+    top: 0;
+}
+.extes {
+    width: 75%;
+    margin: 15px auto;
+}

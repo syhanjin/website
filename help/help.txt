@@ -1,0 +1,45 @@
+Templates model
+
+index.html
+
+-- Blocks
+··-- title 		页面标题
+··-- css 		css样式 		位于<head>最底部
+··-- mdv 		主体 		位于主体容器.container中
+
+-- javascripts
+··-- jQuery 		1.8.3 & 3.4.0
+··-- jQuery-cookie 	1.4.1
+··-- jquery-Jcrop
+··-- pcPopup		
+··-- cursor-effect
+
+blog/pc/index.html
+extends: index.html
+
+-- Blocks
+··-- title		页面标题
+··-- markcss	css样式 ! 不可使用 block css
+··-- blog_body	博客主体 需要宏 使用格式:
+----------------------------------------
+{% block blog_body %}
+	{% import 'blog/pc/macro.html' as func with context %}
+	{{ func.blog_body(
+		title='', 	<String> 博客标题
+		time='', 	<String> %Y-%m-%d %H:%M:%S 发布时间
+		blogger='',	<String> 博主
+		content='' 	<String> 内容 MarkDown 语法
+	) }}
+{% endblock %}
+----------------------------------------
+
+-- javascripts
+··-- All from index.html
+··-- marked					markdown编译器
+··-- highlight				语法高亮
+··-- 非外部引用js
+
+
+
+
+

@@ -1,0 +1,68 @@
+{% extends "index.html" %}
+
+{% block title %}关于我们{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/markdown/marked.min.js"></script>
+<script src="/static/highlight/highlight.min.js"></script>
+<script src="/static/js/markdown/highlightjs-line-numbers.min.js"></script>
+
+<script>
+	var network_error = function() {
+		openP(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p><div class="p-confirm" onclick="closeP()"></div>', function() {
+			window.location = '/';
+		});
+	}
+	$(document).ready(function() {
+		$.get('/api/about/text', function(rel) {
+			if (rel == 'False') {
+				network_error();
+			}
+			document.getElementById('text').innerHTML = marked(rel['content']);
+			hljs.initHighlightingOnLoad();
+			hljs.initLineNumbersOnLoad();
+			// $.scoped();
+		}).fail(network_error)
+		// $.scoped();
+	}); 
+</script>
+<style scoped>
+	@import url(/static/highlight/styles/vs.min.css);
+	@import url(/static/markdown-themes/typora-nord-theme-master/nord.css);
+
+	#text {
+		width: 560px;
+		min-height: 100px;
+		margin: 15px auto;
+		border-radius: 15px;
+		font-size: 24px;
+	}
+	/* for block of numbers */
+	.hljs-ln-numbers {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		text-align: center;
+		color: #ccc;
+		border-right: 1px solid #CCC;
+		vertical-align: top;
+		padding-right: 5px !important;
+		/* your custom style here */
+	}
+
+	/* for block of code */
+	.hljs-ln-code {
+		padding-left: 10px !important;
+	}
+
+</style>
+<div id="text">
+
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "index.html" %}
+
+{% block title %}SY图床{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/photo/index.css">
+{% endblock %}
+
+{% block mdv %}
+
+<script src="/static/js/jquery/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="/static/css/jquery.Jcrop.css">
+
+
+<script src="/static/js/photo/index.js"></script>
+<span>选择图片-->裁剪(宽高比=2:3[3:2竖屏])-->下载</span>
+<input type="file" id="pfile" multiple accept="image/*">
+{% endblock %}

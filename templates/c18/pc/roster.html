@@ -1,0 +1,28 @@
+{% extends "c18/pc/index.html" %}
+
+{% block title %}花名册{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/c18/roster.css">
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/c18/roster.js"></script>
+<div id="ph" >
+</div>
+<div id="roster">
+    <table width="100%" border="0" cellspacing="1" cellpadding="4" align="center">
+        <tr class="th">
+            <td class="tab-title num" rowspan="2">学号</td>
+            <td class="tab-title name" rowspan="2">姓名</td>
+            <td class="tab-title gender" rowspan="2">性别</td>
+            <td class="tab-title posi" colspan="13">曾担任职务</td>
+            <!-- <td class="detailed">&nbsp;</td> -->
+        </tr>
+        <tr class="th">
+            <td class="tab-title posi-cadres">班干部</td>
+            <td class="tab-title posi-repr" colspan="12">课代表</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

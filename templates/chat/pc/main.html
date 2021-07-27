@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+
+{% block title %}聊天室{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/chat/main.css">
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/chat/main.js"></script>
+<div id="chat-box">
+    <div id="chat-body">
+
+    </div>
+    <div id="send-box">
+        <div id="send-textarea" autofocus contenteditable ></div>
+        <div class="send-btn">
+            <input id="send" type="button" value="发送">
+        </div>
+    </div>
+    <div id="upload"></div>
+</div>
+{% endblock %}

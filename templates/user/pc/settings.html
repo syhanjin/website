@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/user/settings.css" />
+<link rel="stylesheet" href="/static/css/jquery.Jcrop.css">
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/user/settings.js"></script>
+<script src="/static/js/jquery/jquery.Jcrop.js"></script>
+<div class="li" id="info">
+    <div class="info-ops" id="cphoto">
+        <img id="info-ops-cphoto" />
+        <div>
+            <input type="file" title="" accept="image/jpeg,image/x-png,image/bmp" id="info-ops-uplphoto" />
+        </div>
+    </div>
+    <div class="info-ops" id="cuser">
+        <div style="height: 70%;line-height: 105px">
+            <p id="info-ops-cuser"></p>
+            <div id="info-ops-umodify">
+                <span></span>
+                <span id="warn"></span>
+                <div>
+                    <input type="text" id="text" />
+                    <input type="button" id="yes" value="" />
+                    <input type="button" id="no" value="" />
+                    <p id="mwarn"></p>
+                </div>
+            </div>
+        </div>
+        <div id="info-user-titles">
+            <div id="exp" style="display: none;">
+                <div id="bar"></div>
+                <span><em>0</em><span>/</span><em>0</em></span>
+            </div>
+        </div>
+    </div>
+    <div class="info-ops" id="usafe">
+        <h3>安全设置</h3>
+        <span>修改密码</span>
+        <div class="pwd">
+            <div>
+                <span>·</span>
+                <input type="password" id="old" placeholder="原密码..." />
+            </div>
+            <div>
+                <span>·</span>
+                <input type="password" id="new" placeholder="新密码..." />
+            </div>
+            <div>
+                <span>·</span>
+                <input type="password" id="new2" placeholder="再次输入..." />
+            </div>
+            <span>如您修改密码，您的所有已登录账号会被强制登出。
+                <br/>
+                在修改密码中，将不会进行强度提示，请自行掌握好密码强度，防止被暴力破解
+                <br/>
+                建议包含 数字+大小写字母(+符号)</span>
+            <input type="button" id="pmodify" value="修改" />
+            <input type="button" id="pcancel" value="取消" />
+        </div>
+    </div>
+</div>
+{% endblock %}

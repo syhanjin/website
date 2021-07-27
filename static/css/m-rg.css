@@ -1,0 +1,146 @@
+.register {
+    border: .3rem solid #00B01B;
+    border-radius: 2.3rem;
+    margin: 1.5rem auto;
+    width: 95%;
+}
+.register .rg-warn {
+    text-align: center;
+    margin: 0 auto;
+    min-width: 10rem;
+    display: block;
+    color: red;
+}
+.submit {
+    text-align: center;
+    margin: 1.5rem auto;
+    display: block;
+    width: 90%;
+    height: 4.6rem;
+    font-size: 1.6rem;
+    border-radius: 2.3rem;
+    border: .1rem solid #00B01B;
+}
+.register p {
+    /*text-align: center;*/
+    width: 15rem;
+    font-size: 1.8rem;
+    margin: 0 auto;
+    margin-left: 12.5rem;
+}
+.register *:focus {
+    outline: 0;
+}
+.register .entry-in {
+    position: relative;
+    margin: 1.5rem auto;
+    display: block;
+    width: 85%;
+    height: 4.6rem;
+    font-size: 1.6rem;
+    border-radius: 2.3rem;
+    padding-left: 5rem;
+    border: .1rem solid #00B01B;
+}
+.register .entry-in:before {
+    content: "";
+    position: absolute;
+    top: .8rem;
+    left: 1.6rem;
+    width: 3rem;
+    height: 3rem;
+    background: url(/static/images/reg_icon.png) 0 0 no-repeat;
+}
+#entry-user:before {
+    background-position: -6.2rem -6.4rem;
+}
+.entry-pwd:before {
+    background-position: .7rem -2.8rem !important;
+}
+#entry-mail:before {
+    background-position: -9.8rem -6.4rem;
+}
+.register .entry-in input {
+    width: 32.7rem;
+    height: 4.6rem;
+    border: 0;
+    outline: 0;
+}
+.register .entry-in-v {
+    display: block;
+    border-radius: 2.3rem;
+    border: 0;
+    margin: 1.5rem auto;
+    width: 100%;
+    height: 4.6rem;
+    text-align: center;
+}
+.register .entry-in-v div:before {
+    content: "";
+    position: absolute;
+    top: .8rem;
+    left: 1.6rem;
+    width: 3rem;
+    height: 3rem;
+    background: url(/static/images/reg_icon.png) 0 0 no-repeat;
+    background-position: -2.4rem -6.3rem;
+}
+.register #vericode {
+    width: 48%;
+    height: 4.6rem;
+    outline: 0;
+    display: inline-block;
+    margin: 0 auto;
+    font-size: 1.6rem;
+}
+.register #vericode-get {
+    width: 35%;
+    height: 100%;
+    cursor: pointer;
+    border-radius: 2.3rem;
+    border: .1rem solid #00B01B;
+    display: inline-block;
+}
+
+.rg-pwd-strength {
+    display: block;
+    height: 2.6rem;
+    line-height: 1.8rem;
+    text-align: center;
+    font-size: 1.2rem;
+}
+.sgh {
+    display: inline-block;
+    position: relative;
+    line-height: 2.6rem;
+    height: 2.6rem;
+    left: 0px;
+    top: 0;
+    margin: 0 0.05rem;
+    padding: 0 1.5rem;
+    border-radius: .25rem;
+}
+.sgh1 {
+    background-color: #7CFFA5;
+}
+.sgh2 {
+    background-color: #00EC49;
+}
+.sgh3 {
+    background-color: #00CC39;
+}
+.sgh4 {
+    background-color: #00B01B;
+}
+._sgh1 {
+    background-color: #C7FFC4;
+}
+._sgh2 {
+    background-color: #C7FFC4;
+}
+._sgh3 {
+    background-color: #C7FFC4;
+}
+._sgh4 {
+    background-color: #C7FFC4;
+}

@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+{% block title %}账户激活{% endblock %}
+
+{% block css %}
+<style>
+    
+</style>
+{% endblock %}
+
+{% block mdv %}
+<div class="retrieve">
+    <span>账户激活</span>
+    <form action="/login/activate" method="post">
+        <span>账户:</span>
+        <input type="text" name="user" readonly="" value="{{user}}">
+        <span>邮箱:</span>
+        <input type="email" name="mail" placeholder="邮箱" />
+        <input type="submit" value="发送激活邮件" />
+    </form>
+</div>
+{% endblock %}

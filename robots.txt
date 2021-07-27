@@ -1,0 +1,5 @@
+User-agent: *
+Crawl-delay: 60
+Disallow: /static
+Disallow: /api
+Disallow: /c18/api
