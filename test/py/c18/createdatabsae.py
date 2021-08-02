@@ -10,7 +10,7 @@ c18db.nav_item.insert_many(
     {'title':'班级信息', 'href':'/c18', 'loca':10000},
     {'title':'老师信息', 'href':'/c18/teachers', 'loca':20000},
     {'title':'花名册', 'href':'/c18/roster', 'loca':30000},
-    {'title':'下载app','href':'/static/c18/NY·C1818.apk', 'loca':40000},
+    {'title':'下载app', '/static/c18/NY·C1818.apk', 'loca':40000},
     {'title':'说明','href':'/c18/d&h', 'loca':60000}
 ]
 )

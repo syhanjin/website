@@ -2,7 +2,7 @@
 from random import getstate
 from flask import Blueprint, render_template, request, jsonify, session, redirect
 from flask.helpers import send_file
-import pymongo,datetime
+import pymongo,datetime,os,json
 from datetime import timedelta
 # from tools import userhelper
 client = pymongo.MongoClient('127.0.0.1', 27017)
@@ -11,12 +11,12 @@ maindb = client['main']
 noveldb = client['novel']
 getdatas = Blueprint('getdatas', __name__)
 userdels = ['pwd']
-def getuser(user):
-    if not user == session.get('user'):
+def getuser(_uid):
+    if not (_uid == session.get('_uid')):
         return None
     if not 'utime' in session:
         return None
-    return user
+    return _uid
 @getdatas.route('/api/about/text')
 def api_about():
     data = maindb.about.find_one({'type':'text'})
@@ -39,18 +39,18 @@ def api_getlinksitems():
     return jsonify(data)
 @getdatas.route('/api/getuserdata')
 def api_getuserdata():
-    user = getuser(request.cookies.get('user'))
-#     print(user)
-    data = userdb.userdata.find_one({'user':user})
+    _uid = getuser(request.cookies.get('_uid'))
+    data = userdb.userdata.find_one({'_uid':_uid})
     if data == None:
-        session['user'] = ''
+        session['_uid'] = ''
         return 'False'
     utime = datetime.datetime.strptime(session.get('utime'),'%Y-%m-%d %H:%M:%S')
     ptime = datetime.datetime.strptime(data['pmodify'],'%Y-%m-%d %H:%M:%S')
-#     print(utime)
-#     print(ptime)
+    # print(utime)
+    # print(type(ptime))
     if utime.__lt__(ptime):
         return 'False'
+    # print('T02')
     now = datetime.datetime.now()
     session['utime'] = now.__format__('%Y-%m-%d %H:%M:%S')
 #     print(data['lastLogin'])
@@ -69,7 +69,7 @@ def api_getuserdata():
         if exp >= nexp:
             exp -= nexp
             lvl += 1
-        userdb.userdata.update_one({'user':user},{'$set':{'ConLoginDays':cld,'exp':exp,'lvl':lvl,'lastLogin':now.__format__('%Y-%m-%d')}})
+        userdb.userdata.update_one({'_uid':_uid},{'$set':{'ConLoginDays':cld,'exp':exp,'lvl':lvl,'lastLogin':now.__format__('%Y-%m-%d')}})
     if 'umodifydate' not in data:
         data['umodify']=0
     else:
@@ -92,9 +92,9 @@ def api_getlvldata(lvl):
     return jsonify(data)
 
 # 用户头像动态获取
-@getdatas.route('/api/userphoto/<user>')
-def api_geruserphoto(user):
-    userd=userdb.userdata.find_one({'user':user})
+@getdatas.route('/api/userphoto/<_uid>')
+def api_geruserphoto(_uid):
+    userd=userdb.userdata.find_one({'_uid':_uid})
     if userd:
         if 'base64' in userd['photo']:
             return userd['photo']
@@ -138,6 +138,7 @@ def admin_logs():
 <input type="submit" value="OK" />
 </form>
 '''
+'''
 @getdatas.route('/admin/logs', methods=['POST'])
 def admin_logs_post():
     pwd = request.form.get('password')
@@ -146,3 +147,37 @@ def admin_logs_post():
     f = open('log_443.log', 'r')
     text = f.read().replace('&', '&&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace('\'', '&apos;').replace('\n', '<br/>')
     return text
+'''
+@getdatas.route('/api/gaa/list/timestamp')
+def gaa_list_timestamp():
+    return str(os.path.getmtime('static/file/GAA/host-list.txt'))
+@getdatas.route('/api/gaa/list')
+def gaa_list():
+    return send_file('static/file/GAA/host-list.txt')
+@getdatas.route('/api/gaa/win/timestamp')
+def gaa_win_timestamp():
+    return str(os.path.getmtime('static/file/GAA/GitHub-Access-Acceleration.exe'))
+@getdatas.route('/api/gaa/win')
+def gaa_win():
+    return send_file('static/file/GAA/GitHub-Access-Acceleration.exe')
+@getdatas.route('/api/gaa/py')
+def gaa_py():
+    return send_file('static/file/GAA/GitHub-Access-Acceleration.py')
+@getdatas.route('/api/gaa/edid')
+def gaa_edid():
+    return '4'
+
+# uni-app 自动更新请求
+@getdatas.route('/api/uniapp/update',methods=['POST'])
+def api_uniapp_update():
+    version = float(request.form.get('version'))
+    version_dict = {
+        "isUpdate": True,
+        "downloadAndroidUrl": 'https://sakuyark.com/static/file/sakuyark.apk',
+        "downloadIOSUrl": 'null',
+        "note": "版本已更新,请下载最新版本v1.4",
+    } if version < 1.4 else {
+        "isUpdate": False,
+        "note": "当前已经是最新版本",
+    }
+    return jsonify(version_dict)

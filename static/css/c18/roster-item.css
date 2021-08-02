@@ -93,10 +93,11 @@
     letter-spacing: .2em;
     display: block;
 }
-.message > span{
-    text-indent: 2em;
+.message > div{
     width: 100%;
-    
+}
+.message > div > p{
+    text-indent: 2em;
 }
 #pp {
     position: relative;

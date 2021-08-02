@@ -22,7 +22,7 @@ loginm = Blueprint('loginm', __name__)
 # 电脑版
 @login.route('/',methods=['GET'])
 def login_pc_main():
-    if 'user' in session and session['user'] == request.cookies.get('user'):
+    if session.get('_uid') == request.cookies.get('_uid') != None:
         return redirect('/')
     return render_template('login/pc/main.html')
 # 重置密码
@@ -52,9 +52,9 @@ def login_retrieve_reset_():
     redata=userdb.retrieve.find_one({'key':key})
     if redata == None:
         return render_template('error/pc.html',error=u'key错误')
-    user=redata['user']
+    _uid=redata['_uid']
     pwdmd5 = hashlib.md5(pwd1.encode(encoding='UTF-8')).hexdigest()
-    userdb.userdata.update_one({'user':user},{'$set':{'pwd':pwdmd5}})
+    userdb.userdata.update_one({'_uid':_uid},{'$set':{'pwd':pwdmd5}})
     userdb.retrieve.delete_one({'key':key})
     return render_template('login/pc/retrieve_success.html')
 # 登录数据POST
@@ -73,18 +73,18 @@ def login_post():
         return render_template('login/pc/main.html',warn=u'用户名或密码错误',user=user)
     pwdmd5 = hashlib.md5(pwd.encode(encoding='UTF-8')).hexdigest()
     if data['pwd'] == pwdmd5:
-        session['user']=user
+        session['_uid']=data['_uid']
         session['utime'] = datetime.datetime.now().__format__('%Y-%m-%d %H:%M:%S')
         if data.get('notActive'):
             return redirect('/login/activate')
-        return render_template('login/pc/success.html',user=user,url=session.get('lpage'))
+        return render_template('login/pc/success.html',_uid=data['_uid'],url=session.get('lpage'))
     else :
         return render_template('login/pc/main.html',warn=u'用户名或密码错误',user=user)
 # 激活
 @login.route('/activate',methods=['GET'])
 def login_activate():
-    
-    return render_template('login/pc/activate.html',user=session['user'])
+    user = userdb.userdata.find_one({'_uid':session.get('_uid')}).get('user')
+    return render_template('login/pc/activate.html',user=user)
     
 @login.route('/activate/<key>',methods=['GET'])
 def login_activate_(key):
@@ -94,9 +94,9 @@ def login_activate_(key):
     dt = userdb.activate.find_one({'key':str(key)})
     if dt == None:
         abort(404)
-    session['user']=dt['user']
+    session['_uid']=dt['_uid']
     session['utime'] = datetime.datetime.now().__format__('%Y-%m-%d %H:%M:%S')
-    userdb.userdata.update_one({'user':dt['user']},{'$set':{'mail':dt['mail'],'notActive':None}})
+    userdb.userdata.update_one({'_uid':dt['_uid']},{'$set':{'mail':dt['mail'],'notActive':None}})
     userdb.activate.delete_one({'key':str(key)})
     return '激活成功'
 
@@ -117,15 +117,15 @@ def login_m_retrieve_reset_():
     redata=userdb.retrieve.find_one({'key':key})
     if redata == None:
         return render_template('error/m.html',error=u'key错误')
-    user=redata['user']
+    _uid=redata['_uid']
     pwdmd5 = hashlib.md5(pwd1.encode(encoding='UTF-8')).hexdigest()
-    userdb.userdata.update_one({'user':user},{'$set':{'pwd':pwdmd5}})
+    userdb.userdata.update_one({'_uid':_uid},{'$set':{'pwd':pwdmd5}})
     userdb.retrieve.delete_one({'key':key})
     return render_template('login/m/retrieve_success.html')
 
 @loginm.route('/',methods=['GET'])
 def login_m_main():
-    if 'user' in session and session['user'] == request.cookies.get('user'):
+    if session.get('_uid') == request.cookies.get('_uid') != None:
         return redirect('/')
     return render_template('login/m/main.html')
 @loginm.route('/retrieve',methods=['GET'])
@@ -154,18 +154,18 @@ def login_m_post():
         return render_template('login/m/main.html',warn=u'用户名或密码错误',user=user)
     pwdmd5 = hashlib.md5(pwd.encode(encoding='UTF-8')).hexdigest()
     if data['pwd'] == pwdmd5:
-        session['user']=user
+        session['_uid']=data['_uid']
         session['utime'] = datetime.datetime.now().__format__('%Y-%m-%d %H:%M:%S')
-        if data['notActive']:
+        if data.get('notActive'):
             return redirect('/login/activate')
-        return render_template('login/m/success.html',user=user,url=session.get('lpage'))
+        return render_template('login/m/success.html',_uid=data['_uid'],url=session.get('lpage'))
     else :
         return render_template('login/m/main.html',warn=u'用户名或密码错误',user=user)
 # 激活
 @loginm.route('/activate',methods=['GET'])
 def login_m_activate():
-    
-    return render_template('login/m/activate.html',user=session['user'])
+    user = userdb.userdata.find_one({'_uid':session.get('_uid')}).get('_uid')
+    return render_template('login/m/activate.html',user=user)
     
 @loginm.route('/activate/<key>',methods=['GET'])
 def login_m_activate_(key):
@@ -175,11 +175,11 @@ def login_m_activate_(key):
     dt = userdb.activate.find_one({'key':key})
     if dt == None:
         abort(404)
-    session['user']=dt['user']
+    session['_uid']=dt['_uid']
     session['utime'] = datetime.datetime.now().__format__('%Y-%m-%d %H:%M:%S')
-    userdb.userdata.update_one({'user':dt['user']},{'$set':{'mail':dt['mail'],'notActive':None}})
+    userdb.userdata.update_one({'_uid':dt['_uid']},{'$set':{'mail':dt['mail'],'notActive':None}})
     userdb.activate.delete_one({'key':str(key)})
-    return render_template('login/m/success.html',user=dt['user'],url=session.get('lpage'))
+    return render_template('login/m/success.html',_uid=dt['_uid'],url=session.get('lpage'))
     
 # 发送邮件
 @login.route('/retrieve',methods=['POST'])
@@ -194,12 +194,12 @@ def login_retrieve_post():
     data=userdb.userdata.find_one({'mail':receiver})
     if data == None:
         return '数据错误'
-    user=data['user']
+    _uid=data['_uid']
     key=''.join(random.sample(randombase, 24))
     while not userdb.retrieve.find_one({'key':key}) == None:
         key=''.join(random.sample(randombase, 24))
     receiver = str(receiver)
-    mail_content = u'<div><div style="margin:0;"><span style="font-size: 18px;">您好：</span></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="margin:0;"><span style="font-size: 18px;">这里是Sakuyark，您正在重置您的密码，账户：'+user+'。</span></div><div style="margin:0;"><span style="font-size: 18px;">请点击下方链接来重置您的密码：</span></div><div style="margin:0;"><br /></div><div style="text-align: left; margin: 0px;"></div></blockquote></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><a href="https://www.sakuyark.com/login/retrieve/reset?key='+key+'" style="font-size: 18px; text-decoration: underline;"><span style="font-size: 18px;">https://www.sakuyark.com/login/retrieve/reset?key='+key+'</span></a></div></blockquote>'
+    mail_content = u'<div><div style="margin:0;"><span style="font-size: 18px;">您好：</span></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="margin:0;"><span style="font-size: 18px;">这里是Sakuyark，您正在重置您的密码，账户：'+data['user']+'。</span></div><div style="margin:0;"><span style="font-size: 18px;">请点击下方链接来重置您的密码：</span></div><div style="margin:0;"><br /></div><div style="text-align: left; margin: 0px;"></div></blockquote></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><a href="https://www.sakuyark.com/login/retrieve/reset?key='+key+'" style="font-size: 18px; text-decoration: underline;"><span style="font-size: 18px;">https://www.sakuyark.com/login/retrieve/reset?key='+key+'</span></a></div></blockquote>'
     mail_title = u'Sakuyark密码重置'
     msg = MIMEText(mail_content, "html", 'utf-8')
     msg["Subject"] = Header(mail_title, 'utf-8')
@@ -211,7 +211,7 @@ def login_retrieve_post():
         smtp.login(sender, pwd)
         smtp.sendmail(sender_mail, receiver, msg.as_string())
         smtp.quit()
-        userdb.retrieve.insert_one({'key':key,'mail':receiver,'user':user,'time':datetime.datetime.now()})
+        userdb.retrieve.insert_one({'key':key,'mail':receiver,'_uid':_uid,'time':datetime.datetime.now()})
         return redirect('/')
     except smtplib.SMTPException:
         return redirect('/error')
@@ -227,14 +227,15 @@ def login_activate_post():
     receiver = request.form.get('mail')
     if receiver == None:
         return '邮件错误'
-    user=request.form.get('user')
-    if user == None:
-        return '用户名信息错误'
+    _uid=request.form.get('_uid')
+    if _uid == None:
+        return '用户信息错误'
+    data = userdb.userdata.find_one({'_uid':_uid})
     key=''.join(random.sample(randombase, 24))
     while not userdb.retrieve.find_one({'key':key}) == None:
         key=''.join(random.sample(randombase, 24))
     receiver = str(receiver)
-    mail_content = u'<div><div style="margin:0;"><span style="font-size: 18px;">您好：</span></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="margin:0;"><span style="font-size: 18px;">这里是Sakuyark，您的账户：'+user+'。</span></div><div style="margin:0;"><span style="font-size: 18px;">请点击下方链接激活账号</span></div><div style="margin:0;"><br /></div><div style="text-align: left; margin: 0px;"></div></blockquote></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><a href="https://www.sakuyark.com/login/activate/'+key+'" style="font-size: 18px; text-decoration: underline;"><span style="font-size: 18px;">https://www.sakuyark.com/login/activate/'+key+'</span></a></div></blockquote>'
+    mail_content = u'<div><div style="margin:0;"><span style="font-size: 18px;">您好：</span></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div style="margin:0;"><span style="font-size: 18px;">这里是Sakuyark，您的账户：'+data['user']+'。</span></div><div style="margin:0;"><span style="font-size: 18px;">请点击下方链接激活账号</span></div><div style="margin:0;"><br /></div><div style="text-align: left; margin: 0px;"></div></blockquote></div><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><div><a href="https://www.sakuyark.com/login/activate/'+key+'" style="font-size: 18px; text-decoration: underline;"><span style="font-size: 18px;">https://www.sakuyark.com/login/activate/'+key+'</span></a></div></blockquote>'
     mail_title = u'Sakuyark用户激活'
     msg = MIMEText(mail_content, "html", 'utf-8')
     msg["Subject"] = Header(mail_title, 'utf-8')
@@ -246,7 +247,7 @@ def login_activate_post():
         smtp.login(sender, pwd)
         smtp.sendmail(sender_mail, receiver, msg.as_string())
         smtp.quit()
-        userdb.activate.insert_one({'key':key,'mail':receiver,'user':user,'time':datetime.datetime.now()})
+        userdb.activate.insert_one({'key':key,'mail':receiver,'_uid':_uid,'time':datetime.datetime.now()})
         return redirect('/login')
     except smtplib.SMTPException:
         return redirect('/error')

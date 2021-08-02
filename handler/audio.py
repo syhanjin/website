@@ -6,10 +6,10 @@ client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 audiodb = client['audio']
 audio = Blueprint('audio', __name__)
-def getuser(user):
-    if not user == session.get('user'):
+def getuser(_uid):
+    if not _uid == session.get('_uid'):
         return None
-    return user
+    return _uid
 ALLOWED_EXTENSIONS = ['cda','wav','mp3','aif','aiff','mid','wma','ra','vqf','ape']
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
@@ -33,7 +33,7 @@ def audio_separator_upload():
             'time':datetime.datetime.now(),
             'status':'waiting',
             'ext':ext,
-            'user':getuser(request.cookies.get('user'))
+            '_uid':getuser(request.cookies.get('_uid'))
         })
         return jsonify({'id':id})
     else:

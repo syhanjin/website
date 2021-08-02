@@ -22,6 +22,10 @@ def register(data):
     data['pmodify'] = '2019-9-10 0:0:0'
     data['lastLogin'] = '2019-9-10'
     data['ConLoginDays'] = 0
+    _uid = random.randint(1000000,9999999)
+    while userdb.userdata.find_one({'_uid':_uid}) != None:
+        _uid = random.randint(1000000,9999999)
+    data['_uid'] = _uid
     userdb.userdata.insert_one(data)
     
 # 电脑版

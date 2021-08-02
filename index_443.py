@@ -14,7 +14,7 @@ def get_host_ip():
 sy = Flask(__name__)
 sy.config['SECRET_KEY']='sakuyark_secret_key_2021'
 sy.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
-# sy.config['SERVER_NAME'] = 'sakuyrak.com'
+# sy.config['SERVER_NAME'] = 'sakuyark.com'
 sy.debug = True
 @sy.route('/')
 def home():
@@ -75,6 +75,7 @@ sy.register_blueprint(register.rg)
 sy.register_blueprint(login.login,url_prefix='/login')
 sy.register_blueprint(login.loginm,url_prefix='/m/login')
 sy.register_blueprint(user.userb,url_prefix='/user')
+sy.register_blueprint(user.usermb,url_prefix='/m/user')
 sy.register_blueprint(games.games,url_prefix='/games')
 sy.register_blueprint(tool_EL.EL)
 sy.register_blueprint(admin_file.admin_file)
@@ -83,7 +84,7 @@ sy.register_blueprint(c18.c18m,url_prefix='/c18/m')
 sy.register_blueprint(blogs.blogs,url_prefix='/blogs')
 sy.register_blueprint(blogs.blogsm,url_prefix='/m/blogs')
 sy.register_blueprint(photo.photo,url_prefix='/photo')
-sy.register_blueprint(chat.chat,url_prefix='/chat')
+# sy.register_blueprint(chat.chat,url_prefix='/chat') # 聊天室暂关
 
 # sy.register_blueprint(pwa.pwa, subdomain='pwa')
 LocalIP = get_host_ip()#获取ip

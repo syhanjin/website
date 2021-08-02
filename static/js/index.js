@@ -21,15 +21,15 @@ $(document).ready(function() {
     $.get('/api/getuserdata', function(rel) {
         if (rel == 'False') {
             // alert('t');
-            $.cookie('user', '', { path : '/', expires: -1 });
+            $.cookie('_uid', '', { path : '/', expires: -1 });
             $(".user .user-menu").remove();
         } else {
-            // alert($.cookie('user'));
-            $.cookie('user', $.cookie('user'), {
+            // alert($.cookie('_uid'));
+            $.cookie('_uid', $.cookie('_uid'), {
                 expires : 3,
                 path : '/'
             });
-            user=$.cookie('user');
+            user=rel['user'];
             $(".oper").remove();
             var p = $(".user .photo");
             p.prepend('<img src="' + rel['photo'] + '" />');
@@ -37,7 +37,7 @@ $(document).ready(function() {
             p.show();
         }
     }).fail(function() {
-        $.cookie('user', '', {
+        $.cookie('_uid', '', {
             path : '/'
         });
         $(".user .user-menu").remove();

@@ -19,12 +19,12 @@ try {
 $(document).ready(function() {
     $.get('//aichistudio.space/api/getuserdata', function(rel) {
         if (rel == 'False') {
-            $.cookie('user', '', {
+            $.cookie('_uid', '', {
                 path : '/'
             });
         } else {
-            // alert($.cookie('user'));
-            $.cookie('user', $.cookie('user'), {
+            // alert($.cookie('_uid'));
+            $.cookie('_uid', $.cookie('_uid'), {
                 expires : 3
             });
             $(".oper").hide();

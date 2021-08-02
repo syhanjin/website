@@ -39,8 +39,12 @@ $(document).ready(function() {
             if(data['qq'])
                 $(".stu-info .info- .qq").text(data['qq']).get(0).href = "http://wpa.qq.com/msgrd?v=3&uin=" + data['qq'] + "&site=qq&menu=yes";
             
-            if(data['message'])
-                $(".message span").html(data['message'].replace(/ /g,"&nbsp;").replace(/\n/g,"<br/>"));
+            if(data['message']){
+                var spl = data['message'].replace(/ /g,"&nbsp;").split(/\n/g);
+                var res = '';
+                for(i in spl)res+='<p>'+spl[i]+'</p>';
+                $(".message div").html(res);
+            }
             
             if(data['gp']){
                 $(".gp .ph-left").css('background','url('+data['gp'][0]+') center/cover');

@@ -6,29 +6,24 @@ userdb = client['user']
 maindb = client['main']
 c18db = client['c18']
 c18 = Blueprint('c18', __name__)
-def getuser(user):
-    if not user == session.get('user'):
+def getuser(_uid):
+    if not _uid == session.get('_uid'):
         return None
-    return user
-def get_c18_data(user):
-    user = userdb.userdata.find_one({'user':user})
+    return _uid
+def get_c18_data(_uid):
+    user = userdb.userdata.find_one({'_uid':_uid})
     if not user:
         return None
     stu = c18db.roster.find_one({'__id':user['_id']})
-    if (not stu):
-        return None
-    else:
+    if stu:
         return stu
     tch = c18db.teacher.find_one({'__id':user['_id']})
-    if (not tch):
-        return None
-    else:
+    if tch:
         return tch
     par = c18db.parents.find_one({'__id':user['_id']})
-    if (not par):
-        return None
-    else:
+    if par:
         return par
+    return None
 #电脑版
 @c18.route('/')
 def c18_main():
@@ -42,23 +37,23 @@ def c18_roster():
     return render_template('/c18/pc/roster.html') 
 @c18.route('/roster/<int:num>', methods=['GET'])
 def c18_roster_(num):
-    user = getuser(request.cookies.get('user'))
+    user = getuser(request.cookies.get('_uid'))
     data = get_c18_data(user)
     if not data:
         return render_template('/error/pc.html',error='再往下就是我们班专属了的哦，如果你是我们班的，那请<a href="/login">登录</a>')
     return render_template('/c18/pc/roster_item.html',num=num,data=data)
 @c18.route('/roster/<int:num>/editor', methods=['GET'])
 def c18_roster__editor(num):
-    user = getuser(request.cookies.get('user'))
+    user = getuser(request.cookies.get('_uid'))
     data = get_c18_data(user)
     if (not data) or data['num'] != num:
         return render_template('/error/pc.html',error='权限不足')
     return render_template('/c18/pc/roster_item_editor.html')
 @c18.route('/roster/<int:num>/editor', methods=['POST'])
 def c18_roster__editor_post(num):
-    un=getuser(request.cookies.get('user'))
-    user = userdb.userdata.find_one({'user':un})
-    data = get_c18_data(un)
+    uid=getuser(request.cookies.get('_uid'))
+    user = userdb.userdata.find_one({'_uid':uid})
+    data = get_c18_data(uid)
     if (not data) or data['num'] != num:
         return 'False'
     pp = request.form.get('pp')
@@ -82,8 +77,8 @@ def c18_teachers():
 
 @c18.route('/d&h')
 def c18_developer_helper():
-    un=getuser(request.cookies.get('user'))
-    user = userdb.userdata.find_one({'user':un})
+    uid=getuser(request.cookies.get('_uid'))
+    user = userdb.userdata.find_one({'_uid':uid})
     if not user:
         user={'c18':False}
     return render_template('c18/pc/d&h.html',code_theme='vs2015',theme='Whitelines/whitelines',user=user)
@@ -102,23 +97,23 @@ def c18_m_roster():
     return render_template('/c18/m/roster.html') 
 @c18m.route('/roster/<int:num>', methods=['GET'])
 def c18_m_roster_(num):
-    user = getuser(request.cookies.get('user'))
+    user = getuser(request.cookies.get('_uid'))
     data = get_c18_data(user)
     if not data:
         return render_template('/error/m.html',error='再往下就是我们班专属了的哦，如果你是我们班的，那请<a href="/login">登录</a>')
     return render_template('/c18/m/roster_item.html',num=num,data=data)
 @c18m.route('/roster/<int:num>/editor', methods=['GET'])
 def c18_m_roster__editor(num):
-    user = getuser(request.cookies.get('user'))
+    user = getuser(request.cookies.get('_uid'))
     data = get_c18_data(user)
     if (not data) or data['num'] != num:
         return render_template('/error/m.html',error='权限不足')
     return render_template('/c18/m/roster_item_editor.html')
 @c18m.route('/roster/<int:num>/editor', methods=['POST'])
 def c18_m_roster__editor_post(num):
-    un=getuser(request.cookies.get('user'))
-    user = userdb.userdata.find_one({'user':un})
-    data = get_c18_data(un)
+    uid=getuser(request.cookies.get('_uid'))
+    user = userdb.userdata.find_one({'_uid':uid})
+    data = get_c18_data(uid)
     if (not data) or data['num'] != num:
         return 'False'
     
@@ -141,8 +136,8 @@ def c18_m_teachers():
 
 @c18m.route('/d&h')
 def c18_developer_helper():
-    un=getuser(request.cookies.get('user'))
-    user = userdb.userdata.find_one({'user':un})
+    uid=getuser(request.cookies.get('_uid'))
+    user = userdb.userdata.find_one({'_uid':uid})
     if not user:
         user={'c18':False}
     return render_template('c18/m/d&h.html',code_theme='vs2015',theme='Whitelines/whitelines',user=user)
@@ -157,7 +152,7 @@ def c18_api_getteachers():
     return jsonify(data)
 @c18.route('/api/getstuinfo', methods=['GET'])
 def c18_api_getstuinfo():
-    user = getuser(request.cookies.get('user'))
+    user = getuser(request.cookies.get('_uid'))
     data = get_c18_data(user)
     if (not data):
         return 'False'
@@ -182,11 +177,26 @@ def c18_api_getnavitems():
     for i in items:
         i['_id'] = str(i['_id'])
     return jsonify(items)
+    
+# uni-app 自动更新请求
+@c18.route('/api/uniapp/update',methods=['POST'])
+def api_uniapp_update():
+    version = float(request.form.get('version'))
+    version_dict = {
+        "isUpdate": True,
+        "downloadAndroidUrl": 'https://sakuyark.com/static/c18/NY·C1818.apk',
+        "downloadIOSUrl": 'null',
+        "note": "版本已更新,请下载最新版本v1.4",
+    } if version < 1.4 else {
+        "isUpdate": False,
+        "note": "当前已经是最新版本",
+    }
+    return jsonify(version_dict)
 
 # 访问图片
 @c18.route('/api/pictures/<path:p>')
 def api_pictures(p):
-    user = getuser(request.cookies.get('user'))
+    user = getuser(request.cookies.get('_uid'))
     data = get_c18_data(user)
     if (not data):
         return 'False'

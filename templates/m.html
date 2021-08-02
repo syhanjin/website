@@ -1,44 +1,50 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-        <title>{% block title %}Sakuyark{% endblock %}</title>
-        <link rel=icon href="/static/images/favicon.ico"/>
-        <link rel="stylesheet" href="/static/css/m.css">
-        <link rel="stylesheet" href="/static/css/jquery.Jcrop.css">
-        <link rel="stylesheet" href="/static/css/canvi.css">
-        <script src="/static/js/jquery/jquery-1.6.2.min.js"></script>
-        <script src="/static/js/jquery/jquery-1.8.3.min.js"></script>
-        <script src="/static/js/jquery/jquery-3.4.0.min.js"></script>
-        <script src="/static/js/jquery/jquery.cookie.min.js"></script>
-        <script src="/static/js/m.js"></script>
-        <script src="/static/js/canvi.js"></script>
-        <script src="/static/js/jquery/jquery.Jcrop.js"></script>
-        <link rel="stylesheet" href="/static/css/pcPopup.css">
-        <script src="/static/js/pcPopup.js"></script>
-        {% block css %} {% endblock %}
-    </head>
-    <body>
-        <div class="nav">
-            <div class="user">
-                <img />
-                <div class="uinfo">
-                    <span class="uname"><a href="/m/login" style="color:blue">登录</a></span>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>{% block title %}Sakuyark{% endblock %}</title>
+    <link rel=icon href="/static/images/favicon.ico" />
+    <link rel="stylesheet" href="/static/css/m.css">
+    <link rel="stylesheet" href="/static/css/jquery.Jcrop.css">
+    <link rel="stylesheet" href="/static/css/canvi.css">
+    <script src="/static/js/jquery/jquery-1.6.2.min.js"></script>
+    <script src="/static/js/jquery/jquery-1.8.3.min.js"></script>
+    <!-- <script src="/static/js/jquery/jquery-3.4.0.min.js"></script> -->
+    <script src="/static/js/jquery/jquery.cookie.min.js"></script>
+    <script src="/static/js/m.js"></script>
+    <script src="/static/js/canvi.js"></script>
+    <script src="/static/js/jquery/jquery.Jcrop.js"></script>
+    <link rel="stylesheet" href="/static/css/pcPopup.css">
+    <script src="/static/js/pcPopup.js"></script>
+    {% block css %} {% endblock %}
+</head>
+
+<body>
+    <div class="nav">
+        <div class="user">
+            <img />
+            <div class="uinfo">
+                <span class="uname"><a href="/m/login" style="color:blue">登录</a></span>
+                <div class="user-ops">
+                    <a href="/m/user/settings">修改信息</a>
                 </div>
             </div>
         </div>
-        <div class="layout"></div>
-        <div class="bar">
-            <button class="open-nav">
-                <svg viewBox="0 0 18 18">
-                    <path d="M2 13.5h14V12H2v1.5zm0-4h14V8H2v1.5zM2 4v1.5h14V4H2z"></path>
-                </svg>
-            </button>
-        </div>
-        <div class="container">
-            {% block mdv %}<a href="/c18/m">南雅·初1818班</a>{% endblock %}
-        </div>
-    </body>
-</html>
+    </div>
+    <div class="layout"></div>
+    <div class="bar">
+        <button class="open-nav">
+            <svg viewBox="0 0 18 18">
+                <path d="M2 13.5h14V12H2v1.5zm0-4h14V8H2v1.5zM2 4v1.5h14V4H2z"></path>
+            </svg>
+        </button>
+    </div>
+    <div class="container">
+        {% block mdv %}<a href="/c18/m">南雅·初1818班</a>{% endblock %}
+    </div>
+</body>
 
+</html>

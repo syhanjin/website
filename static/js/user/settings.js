@@ -1,4 +1,3 @@
-document.title = "用户信息";
 var network_error = function () {
 	openP(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p><div class="p-confirm" onclick="closeP()"></div>', function () {
 		window.location = '/login';
@@ -156,19 +155,12 @@ $(document).ready(function () {
 		if (newuser == "") {
 			$("#info-ops-umodify div #text").empty();
 			$("#info-ops-umodify div #text").attr('placeholder', '不可为空');
+			return ;
 		}
 		$.post('/user/settings/setuser', {
 			'user': newuser
 		}, function (rel) {
 			if (rel == 'True') {
-				$.cookie('user', "", {
-					expires: 3,
-					path: '/'
-				});
-				$.cookie('user', newuser, {
-					expires: 3,
-					path: '/'
-				});
 				location.reload();
 			} else if (rel == 'Existed') {
 				$("#info-ops-umodify div #mwarn").text('名字已存在');

@@ -20,14 +20,14 @@ $(document).ready(function() {
     $.get('/api/getuserdata', function(rel) {
         if (rel == 'False') {
             // alert('t');
-            $.cookie('user', '', {
+            $.cookie('_uid', '', {
                 path : '/',
                 expires : -1
             });
             $(".user .user-menu").remove();
         } else {
-            // alert($.cookie('user'));
-            $.cookie('user', $.cookie('user'), {
+            // alert($.cookie('_uid'));
+            $.cookie('_uid', $.cookie('_uid'), {
                 expires : 3,
                 path : '/'
             });
@@ -38,7 +38,7 @@ $(document).ready(function() {
             p.show();
         }
     }).fail(function() {
-        $.cookie('user', '', {
+        $.cookie('_uid', '', {
             path : '/'
         });
         $(".user .user-menu").remove();

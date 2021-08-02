@@ -1,13 +1,13 @@
 $(document).ready(function() {
     $.get('/api/getuserdata', function(rel) {
         if (rel == 'False') {
-            $.cookie('user', '', {
+            $.cookie('_uid', '', {
                 path : '/',
                 expires : -1
             });
         } else {
-            // alert($.cookie('user'));
-            $.cookie('user', $.cookie('user'), {
+            // alert($.cookie('_uid'));
+            $.cookie('_uid', $.cookie('_uid'), {
                 expires : 3,
                 path : '/'
             });
@@ -15,9 +15,10 @@ $(document).ready(function() {
             u.children('img').get(0).src = rel['photo'];
             var info = u.children('.uinfo');
             info.children('.uname').text(rel['user']);
+            if(rel['user'])info.children('.user-ops').show()
         }
     }).fail(function() {
-        $.cookie('user', '', {
+        $.cookie('_uid', '', {
             path : '/'
         });
     });

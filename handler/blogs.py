@@ -8,6 +8,10 @@ blogdb = client['blog']
 noveldb = client['novel']
 blogs = Blueprint('blogs', __name__)
 blogsm = Blueprint('blogsm', __name__)
+def getuser(_uid):
+    if not _uid == session.get('_uid'):
+        return None
+    return _uid
 @blogs.route('/')
 def blog_main():
     s_index=open('templates/blog/pc/index.html','r',encoding='UTF-8').read()
