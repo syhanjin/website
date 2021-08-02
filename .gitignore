@@ -4,3 +4,4 @@ __pycache__/
 handler/__pycache__/
 *.pyc
 file/
+logs/
