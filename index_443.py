@@ -88,6 +88,6 @@ sy.register_blueprint(photo.photo,url_prefix='/photo')
 
 # sy.register_blueprint(pwa.pwa, subdomain='pwa')
 LocalIP = get_host_ip()#获取ip
-# sy.run(host=LocalIP, port=443, ssl_context=('sakuyark.com.pem', 'sakuyark.com.key'))#启动服务器
-sy.run(host=LocalIP, port=80)#启动服务器
+sy.run(host=LocalIP, port=443, ssl_context=('sakuyark.com.pem', 'sakuyark.com.key'))#启动服务器
+# sy.run(host=LocalIP, port=80)#启动服务器
 # sy.run(host='127.0.0.1', port=80)
