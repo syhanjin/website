@@ -230,7 +230,9 @@ def login_activate_post():
     user=request.form.get('user')
     if user == None:
         return '用户信息错误'
-    data = userdb.userdata.find_one({'_uid':_uid})
+    data = userdb.userdata.find_one({'user':user})
+    if data == None:
+        return '无此用户'
     key=''.join(random.sample(randombase, 24))
     while not userdb.retrieve.find_one({'key':key}) == None:
         key=''.join(random.sample(randombase, 24))
@@ -247,7 +249,7 @@ def login_activate_post():
         smtp.login(sender, pwd)
         smtp.sendmail(sender_mail, receiver, msg.as_string())
         smtp.quit()
-        userdb.activate.insert_one({'key':key,'mail':receiver,'_uid':_uid,'time':datetime.datetime.now()})
+        userdb.activate.insert_one({'key':key,'mail':receiver,'_uid':data['_uid'],'time':datetime.datetime.now()})
         return redirect('/login')
     except smtplib.SMTPException:
         return redirect('/error')
