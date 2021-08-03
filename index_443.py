@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from flask import Flask,request,render_template, session,redirect,make_response,send_file #引入flask
-from handler import getdatas,register,login,pwa,user,games,tool_EL,admin_file,c18,blogs,photo,chat
+from handler import getdatas,register,login,pwa,user,games,tool_EL,admin_file,c18,blog,photo,chat
 import socket,base64,datetime
 from datetime import timedelta
 def get_host_ip():
@@ -108,8 +108,8 @@ sy.register_blueprint(tool_EL.EL)
 sy.register_blueprint(admin_file.admin_file)
 sy.register_blueprint(c18.c18,url_prefix='/c18')
 sy.register_blueprint(c18.c18m,url_prefix='/c18/m')
-sy.register_blueprint(blogs.blogs,url_prefix='/blogs')
-sy.register_blueprint(blogs.blogsm,url_prefix='/m/blogs')
+sy.register_blueprint(blog.blog,url_prefix='/blog')
+sy.register_blueprint(blog.blogm,url_prefix='/m/blog')
 sy.register_blueprint(photo.photo,url_prefix='/photo')
 # sy.register_blueprint(chat.chat,url_prefix='/chat') # 聊天室暂关
 

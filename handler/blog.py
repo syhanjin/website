@@ -6,13 +6,13 @@ userdb = client['user']
 maindb = client['main']
 blogdb = client['blog']
 noveldb = client['novel']
-blogs = Blueprint('blogs', __name__)
-blogsm = Blueprint('blogsm', __name__)
+blog = Blueprint('blog', __name__)
+blogm = Blueprint('blogm', __name__)
 def getuser(_uid):
     if not _uid == session.get('_uid'):
         return None
     return _uid
-@blogs.route('/')
+@blog.route('/')
 def blog_main():
     s_index=open('templates/blog/pc/index.html','r',encoding='UTF-8').read()
     s_macro=open('templates/blog/pc/macro.html','r',encoding='UTF-8').read()
@@ -41,8 +41,8 @@ def blog_main():
 ''',
                 source_macro=s_macro
             )
-@blogsm.route('/')
-def blogs_m_():
+@blogm.route('/')
+def blog_m_():
     s_index=open('templates/blog/pc/index.html','r',encoding='UTF-8').read()
     s_macro=open('templates/blog/pc/macro.html','r',encoding='UTF-8').read()
     return render_template('blog/m/main.html',code_theme='vs2015',theme='typora-nord-theme-master/nord',

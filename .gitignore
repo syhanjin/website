@@ -5,3 +5,4 @@ __pycache__
 file/
 !static/file
 logs/
+index_test.py
