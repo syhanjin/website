@@ -37,7 +37,7 @@ $(document).ready(function() {
             if(data['seni'])
                 $(".stu-info .info- .seni").text(data['seni']);
             if(data['qq'])
-                $(".stu-info .info- .qq").text(data['qq']).get(0).href = "http://wpa.qq.com/msgrd?v=3&uin=" + data['qq'] + "&site=qq&menu=yes";
+                $(".stu-info .info- .qq").text(data['qq']).get(0).href = "tencent://Message/?Uin=" + data['qq'] + "&amp;websiteName=q-zone.qq.com&amp;Menu=yes";
             
             if(data['message']){
                 var spl = data['message'].replace(/ /g,"&nbsp;").split(/\n/g);
