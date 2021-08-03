@@ -1,0 +1,34 @@
+main{
+    width: 90%;
+    padding: 10px;
+    margin: 0 auto;
+}
+/* header */
+.display-header{
+    background-color: white;
+    padding: 10px;
+}
+.display-header-top{
+    padding: 170px 20px 0; 
+}
+.display-user-photo{
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid #aaaaaa;
+}
+.display-user-info{
+    display: inline-block;
+    height: 68px;
+    vertical-align: top;
+}
+.display-user-name{
+    font-size: 1.5em;
+}
+.display-user-info p{
+    color: #fff;
+    text-shadow: 1px 1px 3px #333;
+}
+.display-user-personalized{
+    text-overflow: ellipsis;
+}

@@ -8,8 +8,17 @@
 
 {% block mdv %}
 <script src="/static/js/user/pc/display.js"></script>
-
-<div class="display-user-info">
-    
-</div>
+<main>
+    <div class="display-header">
+        <div class="display-header-top">
+            <img class="display-user-photo" src="{{data['photo']}}">
+            <div class="display-user-info">
+                <p class="display-user-name">{{data['user']}}</p>
+                <p class="display-user-personalized">
+                    {{data['personalized'] if(data['personalized']) else '此人很懒，啥都没留'}}
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}
