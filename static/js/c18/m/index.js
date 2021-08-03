@@ -15,6 +15,7 @@ $(document).ready(function() {
             u.children('img').get(0).src = rel['photo'];
             var info = u.children('.uinfo');
             info.children('.uname').text(rel['user']);
+            info.children('.uname').get(0).href='/m/user/'+rel['_uid'];
             if(rel['user'])info.children('.user-ops').show()
         }
     }).fail(function() {

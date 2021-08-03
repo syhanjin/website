@@ -36,7 +36,34 @@ def about():
 
 
 
-
+# 捕获500错误，并发送邮件
+@sy.errorhandler(500)
+def handle_500_error(err):
+    #引入邮箱工具
+    from email.mime.text import MIMEText 
+    from email.header import Header
+    import smtplib
+    from smtplib import SMTP_SSL
+    host_server = 'smtp.163.com'
+    sender = 'Sakuyark@163.com'
+    pwd = 'ILRUQMTUDAEPFDUI'
+    sender_mail = 'Sakuyark@163.com'
+    receiver = '2819469337@qq.com'
+    mail_content = err
+    mail_title = u'SY服务器500错误'
+    msg = MIMEText(mail_content, "plain", 'utf-8')
+    msg["Subject"] = Header(mail_title, 'utf-8')
+    msg["From"] = sender_mail
+    msg["To"] = receiver
+    try:
+        smtp = SMTP_SSL(host_server)
+        smtp.ehlo(host_server)
+        smtp.login(sender, pwd)
+        smtp.sendmail(sender_mail, receiver, msg.as_string())
+        smtp.quit()
+        return '服务器产生一个500错误，已报告管理员，错误信息：\n' + err
+    except smtplib.SMTPException:
+        return '服务器产生一个500错误，未成功报告管理员，错误信息：\n' + err
 
 @sy.errorhandler(404)
 def handle_404_error(err_msg):
@@ -88,6 +115,6 @@ sy.register_blueprint(photo.photo,url_prefix='/photo')
 
 # sy.register_blueprint(pwa.pwa, subdomain='pwa')
 LocalIP = get_host_ip()#获取ip
-sy.run(host=LocalIP, port=443, ssl_context=('sakuyark.com.pem', 'sakuyark.com.key'))#启动服务器
-# sy.run(host=LocalIP, port=80)#启动服务器
+# sy.run(host=LocalIP, port=443, ssl_context=('sakuyark.com.pem', 'sakuyark.com.key'))#启动服务器
+sy.run(host=LocalIP, port=80)#启动服务器
 # sy.run(host='127.0.0.1', port=80)

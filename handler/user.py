@@ -12,18 +12,36 @@ def getuser(_uid):
     if session.get('_uid') == _uid:
         return _uid
     return None
+# 页面
+## 电脑版
 @userb.route('/settings')
 def user_settings():
     _uid = getuser(request.cookies.get('_uid'))
     if _uid == None:
         return redirect('/login')
     return render_template('/user/pc/settings.html')
+@userb.route('/<string:_uid>')
+def user_display(_uid):
+    ud = userdb.userdata.find_one({'_uid':_uid})
+    if ud == None:
+        return render_template('error/pc.html',error='找不到用户：uid='+_uid)
+    return render_template('user/pc/display.html',data=ud)
+
+## 手机版
 @usermb.route('/settings')
-def user_settings():
+def user_m_settings():
     _uid = getuser(request.cookies.get('_uid'))
     if _uid == None:
         return redirect('/login')
     return render_template('/user/m/settings.html')
+@usermb.route('/<string:_uid>')
+def user_m_display(_uid):
+    ud = userdb.userdata.find_one({'_uid':_uid})
+    if ud == None:
+        return render_template('error/m.html',error='找不到用户：uid='+_uid)
+    return render_template('user/m/display.html')
+
+# 操作
 @userb.route('/settings/uplphoto',methods=['POST'])
 def user_settings_uplphoto():
     _uid = getuser(request.cookies.get('_uid'))

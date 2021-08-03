@@ -1,7 +1,6 @@
 .vscode/
 .settings/
-__pycache__/
-handler/__pycache__/
+__pycache__
 *.pyc
 file/
 logs/

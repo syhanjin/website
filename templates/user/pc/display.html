@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 
-{% block title %}个人主页{% endblock %}
+{% block title %}{{data['user']}}の个人中心{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="/static/css/user/pc/display.css" />
@@ -9,4 +9,7 @@
 {% block mdv %}
 <script src="/static/js/user/pc/display.js"></script>
 
+<div class="display-user-info">
+    
+</div>
 {% endblock %}
