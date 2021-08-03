@@ -164,7 +164,7 @@ def login_m_post():
 # 激活
 @loginm.route('/activate',methods=['GET'])
 def login_m_activate():
-    user = userdb.userdata.find_one({'_uid':session.get('_uid')}).get('_uid')
+    user = userdb.userdata.find_one({'_uid':session.get('_uid')}).get('user')
     return render_template('login/m/activate.html',user=user)
     
 @loginm.route('/activate/<key>',methods=['GET'])
