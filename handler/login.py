@@ -227,8 +227,8 @@ def login_activate_post():
     receiver = request.form.get('mail')
     if receiver == None:
         return '邮件错误'
-    _uid=request.form.get('_uid')
-    if _uid == None:
+    user=request.form.get('user')
+    if user == None:
         return '用户信息错误'
     data = userdb.userdata.find_one({'_uid':_uid})
     key=''.join(random.sample(randombase, 24))
