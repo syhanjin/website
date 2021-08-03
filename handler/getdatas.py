@@ -165,7 +165,7 @@ def gaa_py():
     return send_file('static/file/GAA/GitHub-Access-Acceleration.py')
 @getdatas.route('/api/gaa/edid')
 def gaa_edid():
-    return '4'
+    return '5'
 
 # uni-app 自动更新请求
 @getdatas.route('/api/uniapp/update',methods=['POST'])
