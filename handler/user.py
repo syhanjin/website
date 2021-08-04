@@ -26,6 +26,9 @@ def user_display(_uid):
     if data == None:
         return render_template('error/pc.html',error='找不到用户：uid='+_uid)
     data['is_mine'] = (_uid == data['_uid'])
+    # 获取等级信息
+    lvld=userdb.lvldata.find_one({'lvl':data['lvl']})
+    data['max_exp']=lvld['exp']
     return render_template('user/pc/display.html',data=data)
 
 ## 手机版

@@ -13,7 +13,21 @@
         <div class="display-header-top">
             <img class="display-user-photo" src="{{data['photo']}}">
             <div class="display-user-info">
-                <p class="display-user-name">{{data['user']}}</p>
+                <div class="display-user-name-box">
+                    <p class="display-user-name">{{data['user']}}</p>
+                    <div class="display-user-titles">
+                        <span class="lvl lv{{data['lvl']}}"
+                            style="background-image: linear-gradient(to right, rgb({{12 + 243 - data['lvl'] * 12}}, {{12 + 243 - data['lvl'] * 12}}, {{12 + 243 - data['lvl'] * 12}}) {{data['exp'] / data['max_exp'] * 100}}%, {% if data['lvl']> 0 %}rgb({{12 + 255 - data['lvl'] * 12}}, {{12 + 255 - data['lvl'] * 12}}, {{12 + 255 - data['lvl'] * 12}}{% else %}grey{% endif %}  0)">
+                            Lv.{{data['lvl']}}
+                        </span>
+                        {% if data['admin'] > 0 %}
+                        <span class="admin ad{{data['admin']}}">管理员</span>
+                        {% endif %}
+                        {% for i in data['titles'] %}
+                        <span class={{i['class']}}>{{i['text']}}</span>
+                        {% endfor %}
+                    </div>
+                </div>
                 <p class="display-user-personalized">
                     {{data['personalized'] if(data['personalized']) else '此人很懒，啥都没留'}}
                 </p>
@@ -44,7 +58,7 @@
         <div class="display-header-bottom">
             <div class="display-menu">
                 <ul class="display-menu-items">
-                    <li><span class="entry">
+                    <li><span class="entry selected">
                             主页
                         </span>
                     </li>
@@ -52,29 +66,12 @@
                             动态
                         </span>
                     </li>
-                    <li><span class="entry">
-                            练习
-                        </span>
-                    </li>
-                    <li><span class="entry">
-                            我的
-                        </span>
-                    </li>
-                    <li><span class="entry">
-                            题库
-                        </span>
-                    </li>
-                    <li><span class="entry">
-                            关注
-                        </span>
-                    </li>
-                    <li><span class="entry">
-                            收藏
-                        </span>
-                    </li>
                 </ul>
             </div>
         </div>
+    </div>
+    <div class="display-main">
+
     </div>
 </main>
 {% endblock %}
