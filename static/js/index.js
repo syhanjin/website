@@ -34,6 +34,7 @@ $(document).ready(function() {
             var p = $(".user .photo");
             p.prepend('<img src="' + rel['photo'] + '" />');
             $(".user .user-menu .header .name").append(rel['user']);
+            $(".user .user-menu .header .name").get(0).href='/user/'+rel['_uid'];
             p.show();
         }
     }).fail(function() {
