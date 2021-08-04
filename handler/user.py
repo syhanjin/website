@@ -25,7 +25,7 @@ def user_display(_uid):
     ud = userdb.userdata.find_one({'_uid':_uid})
     if ud == None:
         return render_template('error/pc.html',error='找不到用户：uid='+_uid)
-    return render_template('user/pc/display.html',data=ud)
+    return render_template('user/pc/display.html',data=ud,my_uid=_uid)
 
 ## 手机版
 @usermb.route('/settings')
@@ -39,7 +39,7 @@ def user_m_display(_uid):
     ud = userdb.userdata.find_one({'_uid':_uid})
     if ud == None:
         return render_template('error/m.html',error='找不到用户：uid='+_uid)
-    return render_template('user/m/display.html')
+    return render_template('user/m/display.html',data=ud,my_uid=_uid)
 
 # 操作
 @userb.route('/settings/uplphoto',methods=['POST'])

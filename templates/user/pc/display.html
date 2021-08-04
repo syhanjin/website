@@ -27,6 +27,7 @@
                     </svg>
                     个人博客
                 </a>
+                {% if my_uid == data['uid'] %}
                 <a href="/user/settings">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline">
                         <path fill="currentColor"
@@ -35,6 +36,43 @@
                     </svg>
                     用户设置
                 </a>
+                {% else %}
+                
+                {% endif %}
+            </div>
+        </div>
+        <div class="display-header-bottom">
+            <div class="display-menu">
+                <ul class="display-menu-items">
+                    <li><span class="entry">
+                            主页
+                        </span>
+                    </li>
+                    <li><span class="entry">
+                            动态
+                        </span>
+                    </li>
+                    <li><span class="entry">
+                            练习
+                        </span>
+                    </li>
+                    <li><span class="entry">
+                            我的
+                        </span>
+                    </li>
+                    <li><span class="entry">
+                            题库
+                        </span>
+                    </li>
+                    <li><span class="entry">
+                            关注
+                        </span>
+                    </li>
+                    <li><span class="entry">
+                            收藏
+                        </span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
