@@ -5,7 +5,7 @@ client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 admin_file = Blueprint('admin_file', __name__)
 def getuser(_uid):
-    if not _uid == session.get('_uid'):
+    if _uid and not _uid == session.get('_uid'):
         return None
     return _uid
 def getfile(path):

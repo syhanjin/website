@@ -9,9 +9,9 @@ noveldb = client['novel']
 userb = Blueprint('user', __name__)
 usermb = Blueprint('userm',__name__)
 def getuser(_uid):
-    if session.get('_uid') == _uid:
-        return _uid
-    return None
+    if _uid and not session.get('_uid') == _uid:
+        return None
+    return _uid
 # 页面
 ## 电脑版
 @userb.route('/settings')

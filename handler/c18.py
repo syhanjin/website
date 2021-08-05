@@ -7,7 +7,7 @@ maindb = client['main']
 c18db = client['c18']
 c18 = Blueprint('c18', __name__)
 def getuser(_uid):
-    if not _uid == session.get('_uid'):
+    if _uid and not _uid == session.get('_uid'):
         return None
     return _uid
 def get_c18_data(_uid):

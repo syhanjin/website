@@ -12,7 +12,7 @@ noveldb = client['novel']
 getdatas = Blueprint('getdatas', __name__)
 userdels = ['pwd']
 def getuser(_uid):
-    if not (_uid == session.get('_uid')):
+    if _uid and not (_uid == session.get('_uid')):
         return None
     if not 'utime' in session:
         return None

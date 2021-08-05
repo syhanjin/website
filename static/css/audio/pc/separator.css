@@ -1,0 +1,26 @@
+a::before{
+    content: attr(data-text);
+}
+
+.separator-status-box{
+    width: 90%;
+    max-width: 800px;
+    margin: 15px auto;
+    background-color: grey;
+}
+.separator-status-box td{
+    background-color: white;
+    padding: 5px 10px;
+}
+.separator-status-box .status::before{
+    content: attr(data-status);
+}
+.separator-status-box .status[data-status='waiting']{
+    color: blue;
+}
+.separator-status-box .status[data-status='working']{
+    color: yellowgreen;
+}
+.separator-status-box .status[data-status='finished']{
+    color: green;
+}

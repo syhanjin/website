@@ -9,7 +9,7 @@ noveldb = client['novel']
 blog = Blueprint('blog', __name__)
 blogm = Blueprint('blogm', __name__)
 def getuser(_uid):
-    if not _uid == session.get('_uid'):
+    if _uid and not _uid == session.get('_uid'):
         return None
     return _uid
 @blog.route('/')
