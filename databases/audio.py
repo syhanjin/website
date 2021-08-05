@@ -8,15 +8,15 @@ audiodb = client['audio']
 
 audiodb.drop_collection('separator')
 audiodb.create_collection('separator')
-audiodb.separator.insert_one({
-    'id': '123456',
-    'status': 'finished',
-    '_uid': '9889573',
-    'time': datetime.datetime.now()
-})
-audiodb.separator.insert_one({
-    'id': '1234567',
-    'status': 'finished',
-    '_uid': '9889573',
-    'time': datetime.datetime.now()-datetime.timedelta(hours=25)
-})
+# audiodb.separator.insert_one({
+#     'id': '123456',
+#     'status': 'finished',
+#     '_uid': '9889573',
+#     'time': datetime.datetime.now()
+# })
+# audiodb.separator.insert_one({
+#     'id': '1234567',
+#     'status': 'finished',
+#     '_uid': '9889573',
+#     'time': datetime.datetime.now()-datetime.timedelta(hours=25)
+# })
