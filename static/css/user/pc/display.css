@@ -60,6 +60,12 @@ main {
 .display-user-personalized {
     text-overflow: ellipsis;
 }
+.display-personalized-modify {
+    display: none;
+    padding: 1px 2px;
+    outline: 0;
+
+}
 
 .display-user-action {
     display: inline-block;

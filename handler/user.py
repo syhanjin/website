@@ -47,6 +47,16 @@ def user_m_display(_uid):
     return render_template('user/m/display.html',data=data)
 
 # 操作
+@userb.route('/modify/personalized',methods=['POST'])
+def user_modify_pres():
+    _uid = getuser(request.cookies.get('_uid'))
+    text = request.form.get('text')
+    if _uid == None or text == None:
+        return 'False'
+    userdb.userdata.update_one({'_uid':_uid},{'$set':{'personalized':text}})
+    return 'True'
+
+
 @userb.route('/settings/uplphoto',methods=['POST'])
 def user_settings_uplphoto():
     _uid = getuser(request.cookies.get('_uid'))
