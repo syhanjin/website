@@ -119,7 +119,7 @@ sy.register_blueprint(c18.c18m,url_prefix='/c18/m')
 sy.register_blueprint(blog.blog,url_prefix='/blog')
 sy.register_blueprint(blog.blogm,url_prefix='/m/blog')
 sy.register_blueprint(photo.photo,url_prefix='/photo')
-sy.register_blueprint(audio.audio,url_prefix='/audio')
+# sy.register_blueprint(audio.audio,url_prefix='/audio')
 # sy.register_blueprint(special_res.sr,url_prefix='/res')
 # sy.register_blueprint(chat.chat,url_prefix='/chat') # 聊天室暂关
 
