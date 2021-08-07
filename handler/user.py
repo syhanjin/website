@@ -19,6 +19,12 @@ def getuser(_uid):
     if _uid and not session.get('_uid') == _uid:
         return None
     return _uid
+def getacitivities(_uid,my_uid,page):
+    
+
+    return activities
+
+
 # 页面
 # 电脑版
 
@@ -74,6 +80,20 @@ def user_modify_pres():
         {'_uid': _uid}, {'$set': {'personalized': text}})
     return 'True'
 
+@userb.route('/<string:_uid>/introduction')
+def user_uid_intr(_uid):
+    data = userdb.userdata.find_one({'_uid':_uid})
+    if not data:
+        return 'False'
+    if not data['introduction']:
+        return jsonify({'md':'这个人很懒，什么都没写','html':'这个人很懒，什么都没写'})
+    return jsonify(data['introduction'])
+@userb.route('/<string:_uid>/activity')
+def user_uid_acti(_uid):
+    my_uid = getuser(request.cookies.get('_uid'))
+    page = request.args.get('page')
+    activities = getactivities(_uid,my_uid,page)
+    return jsonify(activities)
 
 @userb.route('/modify/introduction', methods=['POST'])
 def user_modify_intr():
