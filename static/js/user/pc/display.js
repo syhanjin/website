@@ -42,19 +42,68 @@ var numbering = function () {
         }
     });
 }
-
-$(document).ready(function () {
-    var stackedit = new Stackedit();
+function failed_intr(el, ta, old_text, old_html) {
+    el.innerText = '修改失败';
+    ta.innerText = old_text;
+    setTimeout(function () {
+        el.innerHTML = old_html;
+    }, 2500);
+}
+function failed_pers(p, old_text) {
+    var old_text = p.text();
+    p.text('修改失败');
+    setTimeout(function () {
+        p.text(old_text);
+    }, 2500);
+}
+var this_page, stackedit, activity_page=1;
+function check_hash() {
+    var hash = window.location.hash;
+    if (this_page)
+        this_page.hide();
+    this_page = $('#page-' + hash.slice(1));
+    this_page.show();
+    $('.selected').removeClass('selected');
+    $('a.entry[href="' + hash + '"]').addClass('selected');
     // 判断 hash
-    switch (window.location.hash) {
+    switch (hash) {
         case '#main':
-
+            $.get(location.pathname + '/introduction', function (rel) {
+                if (rel == 'False') return;
+                var el = document.querySelector('.display-main-introduction');
+                var ta = document.querySelector('.display-main-middle .card textarea');
+                el.innerHTML = rel['html'];
+                ta.value = rel['md'];
+            });
             break;
         case '#activity':
-
+            $.get(location.pathname + '/activity?page='+activity_page,function(rel){
+                if(rel == 'False' || rel.length <= 0){
+                    this_page.html('<p>获取动态失败</p>')
+                }else{
+                    for(i in rel){
+                        var div = document.createElement('div');
+                        div.className = "activity";
+                        
+                    }
+                }
+            }).fail(function(){
+                this_page.html('<p>获取动态失败</p>')
+            });
             break;
 
     }
+}
+function init() {
+    // pages
+    this_page = $('#page-main');
+    check_hash();
+    $(window).on('hashchange', check_hash);
+    // 初始化stackedit
+    stackedit = new Stackedit();
+}
+$(document).ready(function () {
+    init();
     var intr = $('.display-main-introduction');
     intr.html(HTMLDecode(intr.html()));
     numbering();
@@ -78,22 +127,12 @@ $(document).ready(function () {
             var text = ta.value;
             var html = el.innerHTML;
             $.post('/user/modify/introduction', { 'md': text, 'html': html }, function (rel) {
-                if (rel == 'True') {
+                if (rel == 'True')
                     numbering();
-                    return;
-                } else {
-                    el.innerText = '修改失败';
-                    ta.innerText = old_text;
-                    setTimeout(function () {
-                        el.innerHTML = old_html;
-                    }, 2500);
-                }
+                else
+                    failed_intr(el, ta, old_text, old_html);
             }).fail(function () {
-                el.text('修改失败');
-                ta.innerText = old_text;
-                setTimeout(function () {
-                    el.innerHTML = old_html;
-                }, 2500);
+                failed_intr(el, ta, old_text, old_html);
             });
         });
     });
@@ -111,22 +150,13 @@ $(document).ready(function () {
         var text = $(this).val().replace(/^\s\s*/, '').replace(/\s\s*$/, '');
         if (text.length > 0) {
             $.post('/user/modify/personalized', { 'text': text }, function (rel) {
-                if (rel == 'True') {
+                if (rel == 'True')
                     p.text(text);
-                } else {
-                    var old_text = p.text();
-                    p.text('修改失败');
-                    setTimeout(function () {
-                        p.text(old_text);
-                    }, 2500);
-                }
+                else
+                    failed_pers(p, old_text);
                 p.show();
             }).fail(function () {
-                var old_text = p.text();
-                p.text('修改失败');
-                setTimeout(function () {
-                    p.text(old_text);
-                }, 2500);
+                failed_pers(p, old_text);
             });
         } else
             p.show();

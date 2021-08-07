@@ -208,7 +208,7 @@ main {
     margin-bottom: 0;
 }
 
-/* #main{
+/* #page-main{
 
 } */
 
@@ -228,7 +228,7 @@ main {
     overflow-wrap: break-word;
 }
 
-#main #edit {
+#page-main #edit {
     border-color: rgb(52, 152, 219);
     color: rgb(52, 152, 219);
     background-color: rgba(52, 152, 219, 0);

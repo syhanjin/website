@@ -59,20 +59,20 @@
         <div class="display-header-bottom">
             <div class="display-menu">
                 <ul class="display-menu-items">
-                    <li><span class="entry selected">
+                    <li><a class="entry selected" href="#main">
                             主页
-                        </span>
+                    </a>
                     </li>
-                    <li><span class="entry">
+                    <li><a class="entry" href="#activity">
                             动态
-                        </span>
+                    </a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="display-main">
-        <div id="main">
+        <div id="page-main">
             <div class="display-main-middle">
                 <div class="card">
                     {% if data['is_mine'] %}
@@ -98,6 +98,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="page-activity">
+            
         </div>
     </div>
 </main>
