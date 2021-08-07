@@ -60,6 +60,7 @@ main {
 .display-user-personalized {
     text-overflow: ellipsis;
 }
+
 .display-personalized-modify {
     display: none;
     padding: 1px 2px;
@@ -166,6 +167,83 @@ main {
 /* display-main */
 .display-main {
     min-height: 100px;
+    margin-top: 15px;
+}
+
+.display-main-right {
+    width: calc(33.33% - .5em);
+    float: right;
+    box-sizing: border-box;
+}
+
+.display-main-middle {
+    display: inline-block;
+    width: calc(66.67% - .5em);
+    box-sizing: border-box;
+}
+
+.display-main .card {
+    display: block;
+    margin-bottom: 1.3em;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgb(26 26 26 / 10%);
+    box-sizing: border-box;
+    padding: 1.3em;
+}
+
+.display-main-right .card>div {
+    display: flex;
+}
+
+.display-main .card>div {
+    margin-bottom: 1em;
+    align-items: center;
+}
+
+.display-main .card>div>*:first-child {
+    flex: 1 0 auto;
+}
+
+.display-main .card>div:last-child {
+    margin-bottom: 0;
+}
+
+/* #main{
+
+} */
+
+.display-main-middle .card h3 {
+    margin-top: 0;
+    margin-bottom: .5em;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 1.2;
+    color: inherit;
+    font-size: 1.125em;
+}
+
+.display-main-introduction {
+    display: block;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+#main #edit {
+    border-color: rgb(52, 152, 219);
+    color: rgb(52, 152, 219);
+    background-color: rgba(52, 152, 219, 0);
+    /* display: inline-block; */
+    flex: none;
+    outline: 0;
+    cursor: pointer;
+    line-height: 1.5;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 3px;
+    border: 1px solid;
+    font-size: 0.875em;
+    padding: 0.125em 0.5em;
+    float: right;
 }
 
 
@@ -178,11 +256,79 @@ main {
     overflow: visible;
 }
 
+/* Markdown */
+
+pre {
+    position: relative;
+    overflow-y: hidden;
+    overflow-x: auto;
+    line-height: 22px;
+    margin: 0 0 24px;
+    padding: 8px 16px 6px 56px;
+    background-color: #f6f8fa;
+    border: none;
+}
+
+pre code {
+    width: auto;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+pre code * {
+    margin: 0;
+    padding: 0;
+}
+
+pre:hover .hljs-button {
+    display: block;
+}
+
+.hljs-button:after {
+    content: attr(data-title)
+}
+
+.hljs-button {
+    margin: 2px 8px;
+    display: none;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    font-size: 16px;
+    color: #4d4d4d;
+    background-color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 5%), 0 2px 4px rgb(0 0 0 / 5%);
+}
+
+.pre-numbering {
+    position: absolute;
+    width: 48px;
+    background-color: #eef0f4;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 8px 0;
+    list-style: none;
+    text-align: right;
+    background-color: transparent;
+}
+
+.pre-numbering li {
+    color: #abb2bf !important;
+    border-right: 1px solid #c5c5c5;
+    padding: 0 8px;
+    list-style: none;
+    margin: 0;
+}
 
 /* admin & lvl styles */
 .lvl {
     border: 1px solid;
 }
+
 .Sakuyark {
     border: 1px solid #008000b5;
     background: linear-gradient(to right, #0080006b, #008000b5, #0080006b);
@@ -191,6 +337,7 @@ main {
 .admin {
     border: 1px solid;
 }
+
 .ad1 {
     background-color: yellow;
     border-color: #ffca00;

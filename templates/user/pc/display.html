@@ -72,7 +72,32 @@
         </div>
     </div>
     <div class="display-main">
-
+        <div id="main">
+            <div class="display-main-middle">
+                <div class="card">
+                    {% if data['is_mine'] %}
+                    <button id="edit">编辑</button>
+                    {% endif %}
+                    <h3>个人介绍</h3>
+                    {% if data['is_mine'] %}
+                    <script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js"></script>
+                    <textarea style="display: none;">{{data['introduction']['md']}}</textarea>
+                    {% endif %}
+                    <div class="display-main-introduction" style="display: none;">{{data['introduction']['html']
+                        if(data['introduction']['html']) else '这个人很懒，什么都没写'}}</div>
+                </div>
+            </div>
+            <div class="display-main-right">
+                <div class="card">
+                    <div>
+                        <span>
+                            <span>用户编号</span>
+                        </span>
+                        <span>{{data['_uid']}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 {% endblock %}
