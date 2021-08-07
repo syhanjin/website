@@ -81,10 +81,11 @@
                     <h3>个人介绍</h3>
                     {% if data['is_mine'] %}
                     <script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js"></script>
-                    <textarea style="display: none;">{{data['introduction']['md'] if(data['introduction'])}}</textarea>
+                    <textarea style="display: none;">{{data['introduction']['md'] 
+                        if(data['introduction'] and data['introduction']['md'])}}</textarea>
                     {% endif %}
                     <div class="display-main-introduction" style="display: none;">{{data['introduction']['html']
-                        if(data['introduction']) else '这个人很懒，什么都没写'}}</div>
+                        if(data['introduction'] and data['introduction']['html']) else '这个人很懒，什么都没写'}}</div>
                 </div>
             </div>
             <div class="display-main-right">
