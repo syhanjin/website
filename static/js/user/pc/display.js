@@ -58,7 +58,7 @@ function failed_pers(p, old_text) {
 }
 var this_page, stackedit, activity_page=1;
 function check_hash() {
-    var hash = window.location.hash;
+    var hash = window.location.hash || '#main';
     if (this_page)
         this_page.hide();
     this_page = $('#page-' + hash.slice(1));

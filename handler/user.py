@@ -11,6 +11,7 @@ client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 maindb = client['main']
 noveldb = client['novel']
+activdb = client['activity']
 userb = Blueprint('user', __name__)
 usermb = Blueprint('userm', __name__)
 
@@ -19,9 +20,31 @@ def getuser(_uid):
     if _uid and not session.get('_uid') == _uid:
         return None
     return _uid
-def getacitivities(_uid,my_uid,page):
-    
-
+def getactivities(_uid,my_uid,page):
+    '''
+    动态分为3中类型  public, friends, private
+                    公开    好友可见  私密
+    按时间排序
+    activdb = client['activity']
+    _uid 为 `_uid` 的用户动态储存在 activdb['_uid'] 中
+    '''
+    # 检测是否存在集合
+    if _uid not in activdb.collection_names:
+        activdb.create_collection(_uid)
+        # 不存在则创建
+    # 判断是否是朋友
+    if userdb.friends.find_one({'_uid1':_uid,'_uid2':my_uid}):
+        activities = activdb[_uid].find({
+            '$or':[
+                {'allow':'public'},
+                {'allow':'friends'}
+            ]
+        })
+    else:
+        activities = activdb[_uid].find({'allow':'public'})
+    activities = list(activities.sort('time',-1).skip((page-1)*5).limit(5))
+    for i in activities:
+        i['_id'] = str(i['_id'])
     return activities
 
 
@@ -47,7 +70,20 @@ def user_display(_uid):
     lvld = userdb.lvldata.find_one({'lvl': data['lvl']})
     data['max_exp'] = lvld['exp']
     return render_template('user/pc/display.html', data=data)
-
+'''
+@userdb.route('/chat',methods=['GET'])
+def user_chat():
+    _uid = getuser(request.cookies.get('_uid'))
+    if not _uid:
+        return redirect('/login')
+    return render_template('user/pc/chat.html')
+@userdb.route('/chat/mes')
+def user_chat_mes():
+    _uid = getuser(request.cookies.get('_uid'))
+    if not _uid:
+        return 'False'
+    mess = chat
+'''
 # 手机版
 
 
