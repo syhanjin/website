@@ -29,7 +29,7 @@ def getactivities(_uid,my_uid,page):
     _uid 为 `_uid` 的用户动态储存在 activdb['_uid'] 中
     '''
     # 检测是否存在集合
-    if _uid not in activdb.collection_names:
+    if _uid not in list(activdb.collection_names()):
         activdb.create_collection(_uid)
         # 不存在则创建
     # 判断是否是朋友
@@ -121,13 +121,11 @@ def user_uid_intr(_uid):
     data = userdb.userdata.find_one({'_uid':_uid})
     if not data:
         return 'False'
-    if not data['introduction']:
-        return '这个人很懒，什么都没写'
     return data['introduction']
 @userb.route('/<string:_uid>/activity')
 def user_uid_acti(_uid):
     my_uid = getuser(request.cookies.get('_uid'))
-    page = request.args.get('page')
+    page = int(request.args.get('page'))
     activities = getactivities(_uid,my_uid,page)
     return jsonify(activities)
 
@@ -135,7 +133,7 @@ def user_uid_acti(_uid):
 def user_modify_intr():
     _uid = getuser(request.cookies.get('_uid'))
     text = request.form.get('text')
-    if _uid == None or not text:
+    if _uid == None or text == None:
         return 'False'
     userdb.userdata.update_one({'_uid': _uid}, {'$set': {
         'introduction': text

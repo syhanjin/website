@@ -1,3 +1,27 @@
+
+
+// 配置信息
+var katex_config = {
+    delimiters:
+        [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+        ]
+},showdown_config = {
+    ghCompatibleHeaderId: true,
+    parseImgDimensions: true,
+    simplifiedAutoLink: true,
+    strikethrough: true,
+    tables: true,
+    ghCodeBlocks: true,
+    tasklists: true,
+    emoji: true,
+    ghCodeBlocks: true,
+    // simpleLineBreaks: true,
+    disableForced4SpacesIndentedSublists: true,
+    extensions: []
+};
+// 方法函数
 function HTMLDecode(text) {
     var temp = document.createElement("div");
     temp.innerHTML = text;
@@ -6,15 +30,11 @@ function HTMLDecode(text) {
     return output;
 }
 function markdown(el, text) {
-    marked.setOptions({
-        langPrefix: 'hljs language-',
-        highlight: function (code) {
-            return hljs.highlightAuto(code).value.replace(/(^\s*)|(\s*$)/g, "") + //
-                '<div class="hljs-button" data-title="复制"></div>';
-        }
-    });
-    el.innerHTML = marked(text);
-    renderMathInElement(document.body, katex_config)
+    // '<div class="hljs-button" data-title="复制"></div>'
+    var converter = new showdown.Converter(showdown_config);
+    el.innerHTML = converter.makeHtml(text);
+    hljs.initHighlighting();
+    renderMathInElement(document.body, katex_config);
     numbering();
 }
 var code_copy = function (e) {
@@ -57,7 +77,7 @@ function failed_intr(el, ta, old_text) {
     el.innerText = '修改失败';
     ta.innerText = old_text;
     setTimeout(function () {
-        markdown();
+        markdown(el, old_text);
     }, 2500);
 }
 function failed_pers(p, old_text) {
@@ -80,7 +100,7 @@ function check_hash() {
     switch (hash) {
         case '#main':
             $.get(location.pathname + '/introduction', function (rel) {
-                if (rel == 'False') return;
+                if (rel == 'False' || !rel) return;
                 var el = document.querySelector('.display-main-introduction');
                 var ta = document.querySelector('.display-main-middle .card textarea');
                 ta.value = rel;
@@ -89,9 +109,11 @@ function check_hash() {
             break;
         case '#activity':
             $.get(location.pathname + '/activity?page=' + activity_page, function (rel) {
-                if (rel == 'False' || rel.length <= 0) {
+                if (rel == 'False')
                     this_page.html('<p>获取动态失败</p>')
-                } else {
+                else if (rel.length == 0)
+                    this_page.html('<p>此人无动态</p>')
+                else {
                     for (i in rel) {
                         var div = document.createElement('div');
                         div.className = "activity";
@@ -113,6 +135,8 @@ function init() {
     // 初始化stackedit
     stackedit = new Stackedit();
 }
+
+// main
 $(document).ready(function () {
     init();
     var intr = $('.display-main-introduction');

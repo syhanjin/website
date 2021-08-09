@@ -8,22 +8,14 @@
 {% endblock %}
 
 {% block mdv %}
-<script src="/static/js/markdown/marked.min.js"></script>
+<script src="/static/js/markdown/showdown-toc.js" ></script>
+<script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
 <script src="/static/highlight/highlight.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"
     integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"
     integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"
     crossorigin="anonymous"></script>
-<script>
-    var katex_config = {
-        delimiters:
-            [
-                { left: "$$", right: "$$", display: true },
-                { left: "$", right: "$", display: false }
-            ]
-    };
-</script>
 <script defer src="https://cdn.bootcss.com/KaTeX/0.11.1/contrib/auto-render.min.js"></script>
 <script src="/static/js/user/pc/display.js"></script>
 <main>
@@ -90,7 +82,7 @@
         </div>
     </div>
     <div class="display-main">
-        <div id="page-main">
+        <div id="page-main" style="display: none;">
             <div class="display-main-middle">
                 <div class="card">
                     {% if data['is_mine'] %}
@@ -100,13 +92,121 @@
                     {% if data['is_mine'] %}
                     <script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js"></script>
                     <textarea style="display: none;">{{data['introduction']
-                        if(data['introduction'])}}</textarea>
+                        if(data['introduction']) else ("
+# 欢迎使用Markdown编辑器
+
+你好！ 这是你第一次使用 **Markdown编辑器** 所展示的欢迎页。如果你想学习如何使用Markdown编辑器, 可以仔细阅读这篇文章，了解一下Markdown的基本语法知识。
+
+## 新的改变
+我们对Markdown编辑器进行了一些功能拓展与语法支持，除了标准的Markdown编辑器功能，我们增加了如下几点新功能，帮助你用它写博客：
+
+1.  **全新的界面设计** ，将会带来全新的写作体验；
+2. 在创作中心设置你喜爱的代码高亮样式，Markdown **将代码片显示选择的高亮样式** 进行展示；
+3. 增加了 **图片拖拽** 功能，你可以将本地的图片直接拖拽到编辑区域直接展示；
+4. 全新的 **KaTeX数学公式** 语法；
+5. 增加了 **多屏幕编辑** Markdown文章功能；
+6. 增加了 **焦点写作模式、预览模式、简洁写作模式、左右区域同步滚轮设置** 等功能，功能按钮位于编辑区域与预览区域中间；
+
+## 功能快捷键
+撤销：<kbd>Ctrl/Command</kbd> + <kbd>Z</kbd>
+重做：<kbd>Ctrl/Command</kbd> + <kbd>Y</kbd>
+加粗：<kbd>Ctrl/Command</kbd> + <kbd>B</kbd>
+斜体：<kbd>Ctrl/Command</kbd> + <kbd>I</kbd>
+标题：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd>
+无序列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>U</kbd>
+有序列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>O</kbd>
+检查列表：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>
+插入代码：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd>
+插入链接：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd>
+插入图片：<kbd>Ctrl/Command</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>
+查找：<kbd>Ctrl/Command</kbd> + <kbd>F</kbd>
+替换：<kbd>Ctrl/Command</kbd> + <kbd>G</kbd>
+
+## 如何改变文本的样式
+
+*强调文本*  _强调文本_
+**加粗文本**  __加粗文本__
+==标记文本==
+~~删除文本~~
+> 引用文本
+H~2~O is是液体。
+2^10^ 运算结果是 1024.
+
+## 插入链接与图片
+
+链接: [link](https://sakuyark.com/).
+图片: ![Alt](https://sakuyark.com/static/images/icon.jpg)
+带尺寸的图片: ![Alt](https://sakuyark.com/static/images/icon.jpg =30x30)
+居中的图片: ![Alt](https://sakuyark.com/static/images/icon.jpg#pic_center)
+居中并且带尺寸的图片: ![Alt](https://sakuyark.com/static/images/icon.jpg#pic_center =30x30)
+
+## 如何插入一段漂亮的代码片
+下面展示同样高亮的 `代码片`.
+```javascript
+// An highlighted block
+var foo = 'bar';
+```
+
+## 生成一个适合你的列表
+- 项目
+- 项目
+- 项目
+
+1. 项目1
+2. 项目2
+3. 项目3
+
+- [ ] 计划任务
+-  [x] 完成任务
+
+## 创建一个表格
+
+一个简单的表格是这么创建的：
+
+| 项目 | Value |
+| ---- | ----- |
+| 电脑 | $1600 |
+| 手机 | $12 |
+| 导管 | $1 |
+
+### 设定内容居中、居左、居右
+
+使用`:---------:`居中
+使用`:----------`居左
+使用`----------:`居右
+
+| 第一列 | 第二列 | 第三列 |
+| :------------: | -------------: | :------------- |
+| 第一列文本居中 | 第二列文本居右 | 第三列文本居左 |
+
+### SmartyPants
+
+SmartyPants将ASCII标点字符转换为“智能”印刷标点HTML实体。例如：
+
+| TYPE | ASCII | HTML |
+| ---------------- | ------------------------------- | ----------------------------- |
+| Single backticks | `'Isn't this fun?'` | 'Isn't this fun?' |
+| Quotes | `\"Isn't this fun?\"` | \"Isn't this fun?\" |
+| Dashes | `-- is en-dash, --- is em-dash` | -- is en-dash, --- is em-dash |
+
+## KaTeX数学公式
+
+您可以使用渲染LaTeX数学表达式 [KaTeX](https://khan.github.io/KaTeX/):
+Gamma公式展示 $\Gamma(n) = (n-1)!\quad\forall
+n\in\mathbb N$ 是通过欧拉积分
+$$
+\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
+$$
+> 你可以找到更多关于的信息 **LaTeX** 数学表达式[here][1].
+
+[1]: http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference
+")}}</textarea>
                     {% endif %}
                     <div class="display-main-introduction" style="display: none;">{{data['introduction']
                         if(data['introduction']) else '这个人很懒，什么都没写'}}</div>
                 </div>
             </div>
-            <div class="display-main-right">
+            <div class="display-main-right" >
                 <div class="card">
                     <div>
                         <span>
@@ -117,7 +217,7 @@
                 </div>
             </div>
         </div>
-        <div id="page-activity">
+        <div id="page-activity" class="card" style="display: none;">
 
         </div>
     </div>
