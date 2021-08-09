@@ -74,6 +74,11 @@ function check_hash() {
                 var ta = document.querySelector('.display-main-middle .card textarea');
                 el.innerHTML = rel['html'];
                 ta.value = rel['md'];
+                $('.katex--inline,.katex--display').each(function(){
+                    katex.render(this.innerText, this, {
+                        throwOnError: false
+                    });
+                });
             });
             break;
         case '#activity':
