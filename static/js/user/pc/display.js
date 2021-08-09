@@ -1,10 +1,21 @@
-
 function HTMLDecode(text) {
     var temp = document.createElement("div");
     temp.innerHTML = text;
     var output = temp.innerText || temp.textContent;
     temp = null;
     return output;
+}
+function markdown(el, text) {
+    marked.setOptions({
+        langPrefix: 'hljs language-',
+        highlight: function (code) {
+            return hljs.highlightAuto(code).value.replace(/(^\s*)|(\s*$)/g, "") + //
+                '<div class="hljs-button" data-title="复制"></div>';
+        }
+    });
+    el.innerHTML = marked(text);
+    renderMathInElement(document.body, katex_config)
+    numbering();
 }
 var code_copy = function (e) {
     var t = e.target || e.srcElement;
@@ -42,11 +53,11 @@ var numbering = function () {
         }
     });
 }
-function failed_intr(el, ta, old_text, old_html) {
+function failed_intr(el, ta, old_text) {
     el.innerText = '修改失败';
     ta.innerText = old_text;
     setTimeout(function () {
-        el.innerHTML = old_html;
+        markdown();
     }, 2500);
 }
 function failed_pers(p, old_text) {
@@ -56,7 +67,7 @@ function failed_pers(p, old_text) {
         p.text(old_text);
     }, 2500);
 }
-var this_page, stackedit, activity_page=1;
+var this_page, stackedit, activity_page = 1;
 function check_hash() {
     var hash = window.location.hash || '#main';
     if (this_page)
@@ -72,27 +83,22 @@ function check_hash() {
                 if (rel == 'False') return;
                 var el = document.querySelector('.display-main-introduction');
                 var ta = document.querySelector('.display-main-middle .card textarea');
-                el.innerHTML = rel['html'];
-                ta.value = rel['md'];
-                $('.katex--inline,.katex--display').each(function(){
-                    katex.render(this.innerText, this, {
-                        throwOnError: false
-                    });
-                });
+                ta.value = rel;
+                markdown(el, rel);
             });
             break;
         case '#activity':
-            $.get(location.pathname + '/activity?page='+activity_page,function(rel){
-                if(rel == 'False' || rel.length <= 0){
+            $.get(location.pathname + '/activity?page=' + activity_page, function (rel) {
+                if (rel == 'False' || rel.length <= 0) {
                     this_page.html('<p>获取动态失败</p>')
-                }else{
-                    for(i in rel){
+                } else {
+                    for (i in rel) {
                         var div = document.createElement('div');
                         div.className = "activity";
-                        
+
                     }
                 }
-            }).fail(function(){
+            }).fail(function () {
                 this_page.html('<p>获取动态失败</p>')
             });
             break;
@@ -116,7 +122,6 @@ $(document).ready(function () {
     $('#edit').on('click', function () {
         var el = document.querySelector('.display-main-introduction');
         var ta = document.querySelector('.display-main-middle .card textarea');
-        var old_html = el.innerHTML;
         var old_text = ta.innerText;
         stackedit.openFile({
             name: '编辑个人介绍',
@@ -125,19 +130,17 @@ $(document).ready(function () {
             }
         });
         stackedit.on('fileChange', (file) => {
-            el.innerHTML = file.content.html;
             ta.value = file.content.text;
         });
         stackedit.on('close', () => {
             var text = ta.value;
-            var html = el.innerHTML;
-            $.post('/user/modify/introduction', { 'md': text, 'html': html }, function (rel) {
+            $.post('/user/modify/introduction', { 'text': text }, function (rel) {
                 if (rel == 'True')
-                    numbering();
+                    markdown(el, text);
                 else
-                    failed_intr(el, ta, old_text, old_html);
+                    failed_intr(el, ta, old_text);
             }).fail(function () {
-                failed_intr(el, ta, old_text, old_html);
+                failed_intr(el, ta, old_text);
             });
         });
     });

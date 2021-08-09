@@ -122,8 +122,8 @@ def user_uid_intr(_uid):
     if not data:
         return 'False'
     if not data['introduction']:
-        return jsonify({'md':'这个人很懒，什么都没写','html':'这个人很懒，什么都没写'})
-    return jsonify(data['introduction'])
+        return '这个人很懒，什么都没写'
+    return data['introduction']
 @userb.route('/<string:_uid>/activity')
 def user_uid_acti(_uid):
     my_uid = getuser(request.cookies.get('_uid'))
@@ -134,12 +134,11 @@ def user_uid_acti(_uid):
 @userb.route('/modify/introduction', methods=['POST'])
 def user_modify_intr():
     _uid = getuser(request.cookies.get('_uid'))
-    md = request.form.get('md')
-    html = request.form.get('html')
-    if _uid == None or md == None or html == None:
+    text = request.form.get('text')
+    if _uid == None or not text:
         return 'False'
     userdb.userdata.update_one({'_uid': _uid}, {'$set': {
-        'introduction': {'md': md, 'html': html}
+        'introduction': text
     }})
     return 'True'
 
