@@ -32,9 +32,9 @@ $(document).ready(function() {
                 path : '/'
             });
             $(".oper").remove();
-            var p = $(".user .photo");
+            var p = $(".user-photo");
             p.prepend('<img src="' + rel['photo'] + '" />');
-            $(".user .user-menu .header .name").append(rel['user']);
+            $(".user-name").append(rel['user']);
             p.show();
         }
     }).fail(function() {
@@ -53,7 +53,7 @@ $(document).ready(function() {
             nav_bar.children("div").last().append("<a href=\"" + rel[i]['href'] + "\">" + rel[i]['title'] + "</a>");
         }
     });
-    $(".user .photo").hover(function() {
+    $(".user .user-photo").hover(function() {
         $(".user .user-menu").stop();
         $(".user .user-menu").css("display", "block");
         $(".user .user-menu").animate({

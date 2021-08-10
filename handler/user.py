@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, request, jsonify, session, redirec
 import pymongo
 import random
 import datetime
-import re
 import os
 import hashlib
 import base64
@@ -64,19 +63,19 @@ def user_settings():
 def user_display(_uid):
     data = userdb.userdata.find_one({'_uid': _uid})
     if data == None:
-        return render_template('error/pc.html', error='找不到用户：uid='+_uid)
+        return render_template('error/pc.html', error='找不到用户：uid='+_uid),404
     data['is_mine'] = (_uid == data['_uid'])
     # 获取等级信息
     lvld = userdb.lvldata.find_one({'lvl': data['lvl']})
     data['max_exp'] = lvld['exp']
     return render_template('user/pc/display.html', data=data)
-'''
-@userdb.route('/chat',methods=['GET'])
+@userb.route('/chat',methods=['GET'])
 def user_chat():
     _uid = getuser(request.cookies.get('_uid'))
     if not _uid:
         return redirect('/login')
     return render_template('user/pc/chat.html')
+'''
 @userdb.route('/chat/mes')
 def user_chat_mes():
     _uid = getuser(request.cookies.get('_uid'))
@@ -105,6 +104,19 @@ def user_m_display(_uid):
 
 # 操作
 
+@userb.route('/search')
+def user_search():
+    _uid = getuser(request.cookies.get('_uid'))
+    if not _uid:
+        return 'False'
+    u = request.args.get('u')
+    users = list(userdb.userdata.find({'user':{'$regex':u}}).limit(30))
+    if users == []:
+        return jsonify([])
+    import pandas as pd
+    users = pd.DataFrame(users)
+    users = users[['user','_uid']].to_dict(orient='index')
+    return jsonify(users)
 
 @userb.route('/modify/personalized', methods=['POST'])
 def user_modify_pres():

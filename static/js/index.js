@@ -31,10 +31,10 @@ $(document).ready(function () {
             });
             user = rel['user'];
             $(".oper").remove();
-            var p = $(".user .photo");
+            var p = $(".user-photo");
             p.prepend('<img src="' + rel['photo'] + '" />');
-            $(".user .user-menu .header .name").append(rel['user']);
-            $(".user .user-menu .header .name").get(0).href = '/user/' + rel['_uid'];
+            $(".user-name").append(rel['user']);
+            $(".user .user-menu .header .user-name").get(0).href = '/user/' + rel['_uid'];
             p.show();
         }
     }).fail(function () {
@@ -62,7 +62,7 @@ $(document).ready(function () {
             nav_bar.children("div").last().append("<a target=\"_Blank\" href=\"" + rel[i]['href'] + "\">" + rel[i]['title'] + "</a>");
         }
     });
-    $(".user .photo").hover(function () {
+    $(".user .user-photo").hover(function () {
         $(".user .user-menu").stop();
         $(".user .user-menu").css("display", "block");
         $(".user .user-menu").animate({

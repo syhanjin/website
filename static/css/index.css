@@ -26,8 +26,11 @@ body {
     width: 100%;
     background-color: #E5E7E3;
     box-shadow: 2px 2px 2px 2px #D5D7D3;
-	display: flex;
-	align-items: center;
+    display: flex;
+    align-items: center;
+}
+.user-name {
+    font-size: 20px;
 }
 
 .user .user-menu {
@@ -57,20 +60,20 @@ body {
     width: 1.2em;
 }
 
-.user .photo {
-    border: 3px solid white;
+.user-photo {
+    border: 3px solid rgb(199, 199, 199);
     border-radius: 50%;
     display: inline-block;
     height: 65px;
     width: 65px;
 }
 
-.user .photo img {
+.user-photo img{
     border-radius: 50%;
     height: 65px;
     width: 65px;
     margin: auto;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .user .user-menu footer {
@@ -88,7 +91,7 @@ body {
 }
 
 .user {
-	margin: auto;
+    margin: auto;
     bottom: 0;
     top: 0;
     position: relative;
@@ -105,10 +108,11 @@ body {
     position: relative;
     height: 100%;
     width: 100px;
-	display: inline-block;
+    display: inline-block;
 }
-.user > a{
-	margin: 0 10px;
+
+.user>a {
+    margin: 0 10px;
 }
 
 .user .oper div {
@@ -178,6 +182,7 @@ body {
     display: inline-block;
     position: relative;
 }
+
 .nav #icon {
     width: 72px;
     height: 72px;
@@ -191,10 +196,10 @@ body {
 }
 
 .container {
-    min-height: 1000px;
+    min-height: 600px;
     width: 100%;
     position: relative;
-    margin-top: 50px;
+    margin: 50px 0;
 }
 
 .tail {
