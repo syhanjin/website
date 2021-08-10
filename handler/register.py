@@ -25,7 +25,7 @@ def register(data):
     _uid = random.randint(1000000,9999999)
     while userdb.userdata.find_one({'_uid':_uid}) != None:
         _uid = random.randint(1000000,9999999)
-    data['_uid'] = _uid
+    data['_uid'] = str(_uid)
     userdb.userdata.insert_one(data)
     
 # 电脑版
