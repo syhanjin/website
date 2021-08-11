@@ -2,8 +2,11 @@
 var search_box
 // 定义函数
 function make_search_item(u, user, _uid) {
-    var re = new RegExp(u, 'g');
-    rel = user.replace(re, '<span class="matched">' + u + '</span>');
+    var re = new RegExp(u, 'gi');
+    rel = user.replace(re, function (i) {
+        return '<span class="matched">' + i + '</span>'
+    }
+    );
     rel.replace
     return rel
 }
@@ -51,8 +54,8 @@ function open_search_box(users, u) {
     }, 500);
 }
 
-function msg_box(_uid){
-    
+function msg_box(_uid) {
+
 }
 
 
@@ -75,9 +78,9 @@ $(document).ready(function () {
         }).fail(function () {
             new Event('用户查找失败');
         });
-    })  .on('focus', open_search_box)
+    }).on('focus', open_search_box)
         .on('blur', close_search_box)
-    search_box.on("click",".search-item",function(){
+    search_box.on("click", ".search-item", function () {
         var d = $(this);
         $("#search").val('');
         search_box.empty();

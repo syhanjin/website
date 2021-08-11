@@ -69,20 +69,6 @@ def user_display(_uid):
     lvld = userdb.lvldata.find_one({'lvl': data['lvl']})
     data['max_exp'] = lvld['exp']
     return render_template('user/pc/display.html', data=data)
-@userb.route('/chat',methods=['GET'])
-def user_chat():
-    _uid = getuser(request.cookies.get('_uid'))
-    if not _uid:
-        return redirect('/login')
-    return render_template('user/pc/chat.html')
-'''
-@userdb.route('/chat/mes')
-def user_chat_mes():
-    _uid = getuser(request.cookies.get('_uid'))
-    if not _uid:
-        return 'False'
-    mess = chat
-'''
 # 手机版
 
 
@@ -103,14 +89,14 @@ def user_m_display(_uid):
     return render_template('user/m/display.html', data=data)
 
 # 操作
-
+## 查找用户---目前主要为chat服务
 @userb.route('/search')
 def user_search():
     _uid = getuser(request.cookies.get('_uid'))
     if not _uid:
         return 'False'
     u = request.args.get('u')
-    users = list(userdb.userdata.find({'user':{'$regex':u}}).limit(30))
+    users = list(userdb.userdata.find({'user':{'$regex':u,'$options':'i'}}).limit(30))
     if users == []:
         return jsonify([])
     import pandas as pd

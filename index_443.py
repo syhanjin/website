@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from flask import Flask, request, render_template, session, redirect, make_response, send_file  # 引入flask
-from handler import getdatas, register, login, pwa, user, games, tool_EL, admin_file, c18, blog, photo, audio  # chat,special_res
+from handler import getdatas, register, login, user, games, tool_EL, admin_file, c18, blog, photo, chat  # special_res
 import socket
 import base64
 import datetime
@@ -71,9 +71,9 @@ def handle_500_error(err):
         smtp.login(sender, pwd)
         smtp.sendmail(sender_mail, receiver, msg.as_string())
         smtp.quit()
-        return '服务器产生一个500错误，已报告管理员，错误信息：\n' + err, 500
+        return '服务器产生一个500错误，已报告管理员，错误信息：\n' + err
     except smtplib.SMTPException:
-        return '服务器产生一个500错误，未成功报告管理员，错误信息：\n' + err, 500
+        return '服务器产生一个500错误，未成功报告管理员，错误信息：\n' + err
 
 
 @sy.errorhandler(404)
@@ -140,7 +140,7 @@ sy.register_blueprint(blog.blogm, url_prefix='/m/blog')
 sy.register_blueprint(photo.photo, url_prefix='/photo')
 # sy.register_blueprint(audio.audio,url_prefix='/audio')
 # sy.register_blueprint(special_res.sr,url_prefix='/res')
-# sy.register_blueprint(chat.chat,url_prefix='/chat') # 聊天室暂关
+sy.register_blueprint(chat.chatb, url_prefix='/chat')
 
 # sy.register_blueprint(pwa.pwa, subdomain='pwa')
 LocalIP = get_host_ip()  # 获取ip
