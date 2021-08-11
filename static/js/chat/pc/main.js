@@ -1,5 +1,11 @@
 // 定义变量
-var search_box
+var search_box,choices = {};
+// 数据获取完后运行
+var afterdata = function () {
+    // 同步用户数据
+    if (user_data['allowStrangers'])
+        $('#alws').addClass('select');
+}
 // 定义函数
 function make_search_item(u, user, _uid) {
     var re = new RegExp(u, 'gi');
@@ -54,6 +60,10 @@ function open_search_box(users, u) {
     }, 500);
 }
 
+function change_msg_sender() {
+    // $.get('/user/')
+}
+
 function msg_box(_uid) {
 
 }
@@ -86,4 +96,26 @@ $(document).ready(function () {
         search_box.empty();
         mes_box(d.attr("data-_uid"))
     });
+    // 接收方式按钮
+    $(".right-btn").on('click', function (e) {
+        $(this).toggleClass('R180');
+        var titset = $(".title-settings")
+            .slideToggle(500);
+
+    });
+
+    // 选择器
+    choices['alws'] = function (d) {
+        if (d.hasClass('select')) {
+            $.get('/chat/modify/allowStrangers?s=yes');
+        } else {
+            $.get('/chat/modify/allowStrangers?s=no');
+        }
+    };
+    $(document).on('click', '.choice', function () {
+        var d = $(this);
+        d.toggleClass('select');
+        if(choices[d.attr('id')])choices[d.attr('id')](d);
+    });
+
 });

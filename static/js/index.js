@@ -15,7 +15,7 @@ try {
     }
 } catch (err) {
 }
-var user;
+var user, user_data;
 $(document).ready(function () {
     $.cookie.raw = true;
     $.get('/api/getuserdata', function (rel) {
@@ -36,6 +36,8 @@ $(document).ready(function () {
             $(".user-name").append(rel['user']);
             $(".user .user-menu .header .user-name").get(0).href = '/user/' + rel['_uid'];
             p.show();
+            user_data = rel;
+            if(afterdata)afterdata();
         }
     }).fail(function () {
         $.cookie('_uid', '', {
@@ -99,5 +101,5 @@ $(document).ready(function () {
     //     new Event('Event');
     //     if (cnt++>15)clearInterval(interval);
     // }, 1000);
-    
+
 });

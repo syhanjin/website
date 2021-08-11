@@ -35,3 +35,15 @@ def chat_mes():
         return 'False'
     mess = chat
 '''
+
+
+# 操作
+@chatb.route('/modify/allowStrangers')
+def modify_allow_strangers():
+    _uid = getuser(request.cookies.get('_uid'))
+    s = request.args.get('s')
+    if not s or not _uid:
+        return 'False'
+    userdb.userdata.update_one(
+        {'_uid': _uid}, {'$set': {'allowStrangers': (s == 'yes')}})
+    return 'True'
