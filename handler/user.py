@@ -125,7 +125,7 @@ def user_modify_pres():
 @userb.route('/<string:_uid>/introduction')
 def user_uid_intr(_uid):
     data = userdb.userdata.find_one({'_uid': _uid})
-    if not data:
+    if not data or not data['introduction']:
         return 'False'
     return data['introduction']
 
