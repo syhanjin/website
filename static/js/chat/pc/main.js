@@ -1,5 +1,5 @@
 // 定义变量
-var search_box,choices = {};
+var search_box, choices = {};
 // 数据获取完后运行
 var afterdata = function () {
     // 同步用户数据
@@ -60,11 +60,14 @@ function open_search_box(users, u) {
     }, 500);
 }
 
-function change_msg_sender() {
-    // $.get('/user/')
+function msg_box(_uid) {
+
 }
 
-function msg_box(_uid) {
+function chat_list(){
+    $.get('/chat/list',function(rel){
+
+    });
 
 }
 
@@ -105,17 +108,19 @@ $(document).ready(function () {
     });
 
     // 选择器
-    choices['alws'] = function (d) {
-        if (d.hasClass('select')) {
+    choices['alws'] = function (status) {
+        if (status)
             $.get('/chat/modify/allowStrangers?s=yes');
-        } else {
+        else
             $.get('/chat/modify/allowStrangers?s=no');
-        }
     };
     $(document).on('click', '.choice', function () {
         var d = $(this);
         d.toggleClass('select');
-        if(choices[d.attr('id')])choices[d.attr('id')](d);
+        if (choices[d.attr('id')]) choices[d.attr('id')](d.hasClass('select'));
     });
 
+
+    // chat-list
+    chat_list();
 });
