@@ -1,5 +1,5 @@
 // 定义变量
-var search_box, choices = {};
+var search_box, choices = {}, chat_main;
 // 数据获取完后运行
 var afterdata = function () {
     // 同步用户数据
@@ -60,13 +60,111 @@ function open_search_box(users, u) {
     }, 500);
 }
 
-function msg_box(_uid) {
-
+function make_time_string(tstring) {
+    moment.locale('zh-cn');
+    var time = moment(tstring);
+    // var today = moment().startOf('day');
+    // if
+    // var yesterday = today.clone().subtract(1,'days');
+    return time.calendar();
 }
 
-function chat_list(){
-    $.get('/chat/list',function(rel){
+function msg_box(_uid) {
+    chat_main.empty();
+    
+}
 
+function chat_list() {
+    $.get('/chat/list', function (rel) {
+        if (rel == 'False') {
+
+        } else {
+            var cl = $('.chat-list');
+            for (i in rel) {
+                /*
+                <div class="msg-item">
+                    <div class="left photo">
+                        <img src="/api/userphoto/9889573" />
+                    </div>
+                    <div class="right">
+                        <div class="right-top">
+                            <div class="name">
+                                <span></span>
+                            </div>
+                            <div class="time"></div>
+                        </div>
+                        <div class="right-bottom">
+                            <p class="last-msg"></p>
+                            <span class="count"></span>
+                        </div>
+                    </div>
+                </div>
+                */
+                var div = document.createElement('div');
+                div.className = 'msg-item';
+                // 头像
+                var photo = document.createElement('div');
+                photo.className = 'left photo';
+                var img = document.createElement('img')
+                img.src = '/api/userphoto/' + rel[i]['s_uid'];
+                photo.appendChild(img); // photo | img
+                div.appendChild(photo); // msg-item | { photo | img }
+                // 右侧
+                var right = document.createElement('div');
+                right.className = 'right';
+                // 右上
+                var r_top = document.createElement('div');
+                r_top.className = 'right-top';
+                // 用户名
+                var name_ = document.createElement('div');
+                name_.className = 'user';
+                var span = document.createElement('span');
+                span.innerText = rel[i]['s_user'];
+                name_.appendChild(span);// name | span | s_user
+                r_top.appendChild(name_);// right-top | { name | span | s_user }
+                // 时间
+                var time = document.createElement('div');
+                time.className = 'time';
+                time.innerText = make_time_string(rel[i]['time']);
+                r_top.appendChild(time);// right-top | { name | span | s_user} { time }
+                right.appendChild(r_top);// right | { right-top | { name | span | s_user} time }
+                // 右下
+                var r_bottom = document.createElement('div');
+                r_bottom.className = 'right-bottom';
+                // 最后一条消息
+                var last_msg = document.createElement('p');
+                last_msg.className = 'last-msg';
+                last_msg.innerText = rel[i]['last_msg'];
+                r_bottom.appendChild(last_msg)// right-bottom | last-msg
+                //未读消息计数
+                if (rel[i]['count'] > 0) {
+                    var count = document.createElement('span');
+                    count.className = 'count';
+                    count.innerText = rel[i]['count'];
+                    r_bottom.appendChild(count)// right-bottom | last-msg count
+                }
+                right.appendChild(r_bottom)
+                /* right | 
+                { right-top | { name | span | s_user} time }
+                { right-bottom | last-msg [count] }
+                */
+                div.appendChild(right);
+                /* msg-item | 
+                { photo | img }
+                { right | 
+                    { right-top | 
+                        { name | span | s_user}
+                        time 
+                    }
+                    { right-bottom | 
+                        last-msg 
+                        [count]
+                    }
+                }
+                */
+               cl.append(div);
+            }
+        }
     });
 
 }
@@ -74,7 +172,7 @@ function chat_list(){
 
 $(document).ready(function () {
     // 获取jQuery对象
-    search_box = $("#search-box");
+    search_box = $("#search-box"),chat_main=$('.index-main');
     // 事件监听
     $("#search").on('keyup', function () {
         var u = this.value;

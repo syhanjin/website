@@ -15,6 +15,8 @@
     float: left;
     background: #555555;
     color: #fff;
+    display: flex;
+    flex-direction: column;
 }
 
 .title-box {
@@ -174,6 +176,26 @@
     margin-left: 15px;
 }
 
+.chat-list {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.chat-list::-webkit-scrollbar{
+    width: 5px;
+}
+.chat-list::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgb(152 152 152);
+}
+.chat-list::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 0;
+    background: transparent;
+
+}
+
 /* msg-item */
 .msg-item {
     height: 80px;
@@ -189,4 +211,94 @@
 
 .msg-item.active {
     background: #2e2e2e;
+}
+
+.msg-item .left.photo {
+    width: 44px;
+    height: 44px;
+    border: 2px solid grey;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 14px;
+}
+
+.msg-item .left.photo img {
+    width: 100%;
+}
+
+.msg-item .right {
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 100%;
+    font-weight: 400;
+    font-size: 14px;
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+.msg-item .right-top {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+}
+
+.msg-item .right-top .name {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    margin-bottom: 4px;
+    display: inline-block;
+    font-size: 14px;
+}
+
+.msg-item .right-top .name span {
+    display: inline-block;
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 22px;
+    line-height: 22px;
+    vertical-align: middle;
+}
+
+.msg-item .right-top .time {
+    color: #999;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.msg-item .right-bottom {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+}
+
+.msg-item .right-bottom .last-msg {
+    color: #999;
+    width: 182px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+/* 主体 */
+.index-main{
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.index-main .tip{
+    text-align: center;
+    color: grey;
+
 }

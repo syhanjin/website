@@ -8,6 +8,7 @@
 
 {% block mdv %}
 <script src="/static/js/chat/pc/main.js"></script>
+<script src="/static/js/moment.min.js"></script>
 <div class="index-page">
     <div class="index-left">
         <div class="title-box">
@@ -31,20 +32,30 @@
             </div>
         </div>
         <div class="chat-list">
-            <!--
+            <!-- 
             <div class="msg-item active">
-                <div class="left photo"></div>
+                <div class="left photo">
+                    <img src="/api/userphoto/9889573" />
+                </div>
                 <div class="right">
                     <div class="right-top">
-
+                        <div class="name">
+                            <span></span>
+                        </div>
+                        <div class="time"></div>
                     </div>
                     <div class="right-bottom">
-
+                        <p class="last-msg"></p>
+                        <span class="count"></span>
                     </div>
                 </div>
-            </div>
+            </div> 
             -->
+
         </div>
+    </div>
+    <div class="index-main">
+        <p class="tip">您还未选中或者发起聊天，快去跟好友聊一聊吧</p>
     </div>
 </div>
 {% endblock %}
