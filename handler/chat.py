@@ -11,6 +11,7 @@ client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 maindb = client['main']
 chatdb = client['chat']
+TSTRING = "%Y-%m-%d %H:%M:%S"  
 chatb = Blueprint('chat', __name__)
 
 '''
@@ -88,6 +89,7 @@ chatb = Blueprint('chat', __name__)
         'r_uid':r_uid,
         's_uid':s_uid,
         'type':'mkfriends',
+        'text': text,
         'time':datetime.datetime.now(),
         'read': False
     })
@@ -134,14 +136,29 @@ def chat():
 
 
 # 操作
-# 请求添加好友
-@chatb.route('/make_friends')
-def chat_make_friends():
+# 是否允许聊天
+@chatb.route('/can_chat')
+def chat_can_chat():
     _uid = getuser(request.cookies.get('_uid'))
     _uid2 = request.args.get('u')
     if not _uid or not _uid2:
         return 'False'
-    if userdb.friends({'_uid1': _uid, '_uid2': _uid2}):  # 如果已经是好友
+    if userdb.userdata.find_one({'_uid':_uid2}).get('allowStrangers'):
+        return 'True'
+    if userdb.friends.find_one({'_uid1':_uid,'_uid2':_uid2}):
+        return 'True'
+    return 'False'
+
+
+# 请求添加好友
+@chatb.route('/make_friends', methods=['POST'])
+def chat_make_friends():
+    _uid = getuser(request.cookies.get('_uid'))
+    _uid2 = request.form.get('u')
+    text = request.form.get('t')
+    if not _uid or not _uid2 or not text:
+        return 'False'
+    if userdb.friends.find_one({'_uid1': _uid, '_uid2': _uid2}):  # 如果已经是好友
         return 'True'
     if chatdb.messages.find_one({
         's_uid': _uid,
@@ -155,19 +172,32 @@ def chat_make_friends():
         's_uid': _uid,
         'type': 'mkfriends',
         'time': datetime.datetime.now(),
-        'read': False
+        'read': False,
+        'text': text
     })
+    if chatdb.list.find_one({'s_uid': _uid, 'r_uid': _uid2}):  # 如果已有就升级
+        chatdb.list.update_one({'s_uid': _uid, 'r_uid': _uid2}, {'$set': {
+            'time': datetime.datetime.now(),
+            'last_msg': text[:50]
+        }})
+    else:  # 没有就添加
+        chatdb.list.insert_one({
+            's_uid': _uid,
+            'r_uid': _uid2,
+            'time': datetime.datetime.now(),
+            'last_msg': text[:50],
+        })
     return 'True'
 
 
 # 同意添加好友
 @chatb.route('/make_friends/agree')
-def agree_make_friends(): # GET u ==> 对方 _uid
+def agree_make_friends():  # GET u ==> 对方 _uid
     _uid = getuser(request.cookies.get('_uid'))
     _uid2 = request.args.get('u')
     if not _uid or not _uid2:
         return 'False'
-    if userdb.friends({'_uid1': _uid, '_uid2': _uid2}):  # 如果已经是好友
+    if userdb.friends.find_one({'_uid1': _uid, '_uid2': _uid2}):  # 如果已经是好友
         return 'True'
     # 交友，建双向边
     userdb.friends.insert_many([
@@ -175,18 +205,19 @@ def agree_make_friends(): # GET u ==> 对方 _uid
         {'_uid1': _uid2, '_uid2': _uid}
     ])
     # 发送一条消息
-    send_msg(_uid,_uid2,'我们已经是好友啦，一起来聊天吧！')
+    send_msg(_uid, _uid2, '我们已经是好友啦，一起来聊天吧！')
     return 'True'
 
 
 # 不同意添加好友
-def disagree_make_friends(): # GET u ==> 对方 _uid
+@chatb.route('/make_friends/disagree')
+def disagree_make_friends():  # GET u ==> 对方 _uid
     _uid = getuser(request.cookies.get('_uid'))
     _uid2 = request.args.get('u')
     if not _uid or not _uid2:
         return 'False'
     # 发送一条消息
-    send_msg(_uid,_uid2,'对方拒绝了你的交友请求')
+    send_msg(_uid, _uid2, '对方拒绝了你的交友请求')
     return 'True'
 
 
@@ -223,20 +254,21 @@ def chat_unread_msg_s_uid(s_uid):
     if not _uid:
         return 'False'
     datas = list(chatdb.messages.find(
-        {'read': False, 's_uid': s_uid, 'r_uid': _uid}))
+        {'read': False, 's_uid': s_uid, 'r_uid': _uid})).sort('time', 1)
     # 将所有未读消息设置为已读
     chatdb.messages.update_many({'s_uid': s_uid, 'r_uid': _uid}, {
         '$set': {'read': True}})
     for data in datas:
         data['_id'] = str(data['_id'])
+        data['time'] = data['time'].__format__(TSTRING)
     return jsonify(datas)
 
 
 # 获取消息 & 页码 & timestamp
 @chatb.route('/all_msg/<string:s_uid>')
-def chat_all_msg_s_uid(s_uid):  # page, timestamp
+def chat_all_msg_s_uid(s_uid):  # p ==> page, t ==> timestamp
     _uid = getuser(request.cookies.get('_uid'))
-    page = request.args.get('p')
+    page = int(request.args.get('p'))
     timestamp = request.args.get('t')
     if not _uid or not page or not timestamp:
         return 'False'
@@ -247,13 +279,15 @@ def chat_all_msg_s_uid(s_uid):  # page, timestamp
         'r_uid': _uid,
         'time': {'$lte': time}
     }).sort('time', -1).skip((page - 1) * 20).limit(20))
-    # 将所有未读消息设置为已读
+    # 将timestamp之前的未读消息设置为已读
     chatdb.messages.update_many({
         's_uid': s_uid,
-        'r_uid': _uid
+        'r_uid': _uid,
+        'time': {'$lte': time}
     }, {'$set': {'read': True}})
     for data in datas:
         data['_id'] = str(data['_id'])
+        data['time'] = data['time'].__format__(TSTRING)
     return jsonify(datas)
 
 
@@ -270,6 +304,7 @@ def chat_list():
         data['s_user'] = userdb.userdata.find_one(
             {'_uid': data['s_uid']})['user']
         data['_id'] = str(data['_id'])
+        data['time'] = data['time'].__format__(TSTRING)
     return jsonify(datas)
 
 
