@@ -4,5 +4,6 @@ __pycache__
 *.pyc
 file/
 !static/file
-logs/
+!templates/admin/file
+./logs/
 index_test.py
