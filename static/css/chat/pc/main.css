@@ -298,6 +298,25 @@
     line-height: 22px;
 }
 
+.msg-item .right-bottom .count{
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    background-color: #ff0000;
+    text-align: center;
+    line-height: 16px;
+    font-size: 10px;
+    align-self: center;
+}
+
+.msg-item .right-bottom .count::before{
+    content: min( attr(data-count), 99);
+}
+.msg-item .right-bottom .count[data-count="99+"]{
+    width:24px;
+}
+
+
 /* 主体 */
 .index-main {
     flex: 1;

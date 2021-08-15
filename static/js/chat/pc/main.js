@@ -385,7 +385,7 @@ function chat_list() {
                 if (rel[i]['count'] > 0) {
                     var count = document.createElement('span');
                     count.className = 'count';
-                    count.innerText = rel[i]['count'];
+                    count.setAttribute('data-count', rel[i]['count'] < 100 ? rel[i]['count'] : '99+');
                     r_bottom.appendChild(count)// right-bottom | last-msg count
                 }
                 right.appendChild(r_bottom)
@@ -515,8 +515,8 @@ $(document).ready(function () {
             if (choices[d.attr('id')]) choices[d.attr('id')](d.hasClass('select'));
         })
         // 滚动条到最上方自动加载消息
-        .on('scroll','.msg-content-box',function(){
-            if(this.scrollTop == 0)
+        .on('scroll', '.msg-content-box', function () {
+            if (this.scrollTop == 0)
                 get_msg();
         });
 
