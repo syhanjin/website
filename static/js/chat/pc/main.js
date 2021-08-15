@@ -318,7 +318,7 @@ function msg_box(_uid, user) {
     // 滚动条到最上方自动加载消息
     $('.msg-content-box').off('scroll').on('scroll', function (e) {
         if (this.scrollTop == 0)
-            get_msg();
+            get_msg(now_uid);
     });
     msg_timestamp = new Date().getTime();
     msg_page = 1;
