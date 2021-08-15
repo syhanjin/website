@@ -109,15 +109,14 @@ def api_getlvldata(lvl):
     del data['_id']
     return jsonify(data)
 
+
 # 用户头像动态获取
-
-
 @getdatas.route('/api/userphoto/<_uid>')
 def api_geruserphoto(_uid):
     userd = userdb.userdata.find_one({'_uid': _uid})
     if userd:
         if 'base64' in userd['photo']:
-            return base64.b64decode(userd['photo'])
+            return send_file(base64.b64decode(userd['photo'][23:]))
         return send_file(userd['photo'][1:])
     else:
         return send_file('static/images/user.png')
