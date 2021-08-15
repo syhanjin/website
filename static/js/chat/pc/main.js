@@ -141,7 +141,7 @@ function send_msg(_uid, text) {
                 + '" data-_uid="'
                 + _uid + '">添加好友</span>';
             msg_item.appendChild(system_propmt);
-            $(".msg-content-box div").append(msg_item);
+            $(".msg-content-box > div").append(msg_item);
         } else {
             if (!auto_refresh) location.reload();
         }
@@ -149,8 +149,13 @@ function send_msg(_uid, text) {
 }
 
 function get_msg(_uid) {
+    if (msg_page == -1) return;
     $.get('/chat/all_msg/' + _uid + '?p=' + msg_page + '&t=' + (msg_timestamp / 1000), function (rel) {
         if (rel == 'False') return;
+        if (rel.length == 0) {
+            msg_page = -1;
+            return;
+        }
         var mcb = $(".msg-content-box div");
         for (var i = 0; i < rel.length; i++) {
             switch (rel[i]['type']) {
@@ -216,8 +221,11 @@ function get_msg(_uid) {
             }
 
         }
+        if (msg_page == 1) {
+            $('.msg-content-box').scrollTop($('.msg-content-box > div').height())
+        }
+        msg_page += 1;
     });
-    msg_page += 1;
 }
 
 function msg_box(_uid, user) {
@@ -402,7 +410,7 @@ function chat_list() {
                 cl.append(div);
             }
         }
-        $('.msg-item[href="'+window.location.hash+'"]').addClass('active');
+        $('.msg-item[href="' + window.location.hash + '"]').addClass('active');
     });
 
 }
@@ -414,7 +422,7 @@ function check_hash() {
     if (!_uid) return;
     msg_box(_uid);
     $('.msg-item.active').removeClass('active');
-    $('.msg-item[href="'+hash+'"]').addClass('active');
+    $('.msg-item[href="' + hash + '"]').addClass('active');
 }
 
 $(document).ready(function () {
@@ -455,11 +463,11 @@ $(document).ready(function () {
         // 绑定 好友操作
         .on('click', '.mkfriends .yes', function () {
             $.get('/chat/make_friends/accept?u=' + $(this).attr('data-_uid'));
-            if(!auto_refresh) location.reload();
+            if (!auto_refresh) location.reload();
         })
         .on('click', '.mkfriends .no', function () {
             $.get('/chat/make_friends/refuse?u=' + $(this).attr('data-_uid'));
-            if(!auto_refresh) location.reload();
+            if (!auto_refresh) location.reload();
         })
         //绑定 添加好友
         .on('click', '#mkfriends', function () {
@@ -500,6 +508,17 @@ $(document).ready(function () {
             $("#msg-text").val('');
             $('#msg-text').trigger('input');
         })
+        // 选择器
+        .on('click', '.choice', function () {
+            var d = $(this);
+            d.toggleClass('select');
+            if (choices[d.attr('id')]) choices[d.attr('id')](d.hasClass('select'));
+        })
+        // 滚动条到最上方自动加载消息
+        .on('scroll','.msg-content-box',function(){
+            if(this.scrollTop == 0)
+                get_msg();
+        });
 
     // 接收方式按钮
     $(".right-btn").on('click', function (e) {
@@ -507,13 +526,6 @@ $(document).ready(function () {
         var titset = $(".title-settings")
             .slideToggle(500);
 
-    });
-
-    // 选择器
-    $(document).on('click', '.choice', function () {
-        var d = $(this);
-        d.toggleClass('select');
-        if (choices[d.attr('id')]) choices[d.attr('id')](d.hasClass('select'));
     });
 
 
