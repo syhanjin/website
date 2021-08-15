@@ -126,6 +126,11 @@
 .title-settings>div {
     line-height: 16px;
     height: 20px;
+    margin-bottom: .3em;
+}
+
+.title-settings>div:last-child {
+    margin-bottom: 0;
 }
 
 .choice {
@@ -210,6 +215,7 @@
     cursor: pointer;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    color: #fff;
 }
 
 .msg-item.active {
@@ -339,8 +345,31 @@
     overflow: hidden auto;
 }
 
+.msg-content-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.msg-content-box::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(201, 201, 201, 0.2);
+}
+
+.msg-content-box::-webkit-scrollbar-thumb:hover {
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(201, 201, 201, 0.5);
+}
+
+.msg-content-box::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: transparent;
+}
+
 .msg-content-box>div {
     padding: 10px 24px;
+    display: flex;
+    flex-direction: column;
 }
 
 .msg {
@@ -512,7 +541,7 @@
     content: ')';
 }
 
-#mkfriends{
+#mkfriends {
     color: blue;
     cursor: pointer;
 }

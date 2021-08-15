@@ -1,11 +1,21 @@
 // 定义变量
 var search_box, choices = {}, chat_main,
-    msg_interval, msg_list = {}, msg_timestamp, msg_page;
+    msg_interval, msg_list = {}, msg_timestamp, msg_page,
+    my_uid, now_uid, auto_refresh, ctrl;
 // 数据获取完后运行
 var afterdata = function () {
     // 同步用户数据
     if (user_data['allowStrangers'])
         $('#alws').addClass('select');
+    if (user_data['MSG_CTRL']) {
+        $('#ctrl').addClass('select');
+        $('#send-msg span').text('Ctrl + Enter');
+        ctrl = true;
+    } else {
+        $('#send-msg span').text('Enter');
+        ctrl = false;
+    }
+    my_uid = user_data['_uid'];
 }
 // 定义函数
 choices['alws'] = function (status) {
@@ -15,10 +25,26 @@ choices['alws'] = function (status) {
         $.get('/chat/modify/allowStrangers?s=no');
 };
 choices['ar'] = function (status) {
+    new Event('这个东西还没做好，暂时不能开启');
+    $('#ar').removeClass('select');
+    return;
     if (status)
-        msg_interval = setInterval(get_new_msg, 1000);
+        msg_interval = setInterval(get_new_msg, 1000),
+            auto_refresh = true;
     else
-        clearInterval(msg_interval);
+        clearInterval(msg_interval),
+            auto_refresh = false;
+}
+choices['ctrl'] = function (status) {
+    if (status) {
+        $.get('/chat/modify/MSG_CTRL?s=yes');
+        $('#send-msg span').text('Ctrl + Enter');
+        ctrl = true;
+    } else {
+        $.get('/chat/modify/MSG_CTRL?s=no');
+        $('#send-msg span').text('Enter');
+        ctrl = false;
+    }
 }
 function make_search_item(u, user, _uid) {
     var re = new RegExp(u, 'gi');
@@ -95,7 +121,30 @@ function make_msg_string(text) {
 }
 
 function get_new_msg() {
+}
 
+function send_msg(_uid, text) {
+    $.post('/chat/send_msg', {
+        'r_uid': _uid,
+        'text': text
+    }, function (rel) {
+        if (rel == 'False') {
+            var msg_item = document.createElement('div');
+            msg_item.className = 'msg';
+            var system_propmt = document.createElement('div');
+            system_propmt.className = 'system-propmt';
+            system_propmt.innerHTML = '你还不是'
+                + (user ? user : 'TA')
+                + '的好友，你可以选择 <span id="mkfriends" data-user="'
+                + (user ? user : '')
+                + '" data-_uid="'
+                + _uid + '">添加好友</span>';
+            msg_item.appendChild(system_propmt);
+            $(".msg-content-box div").append(msg_item);
+        } else {
+            if (!auto_refresh) location.reload();
+        }
+    });
 }
 
 function get_msg(_uid) {
@@ -115,9 +164,9 @@ function get_msg(_uid) {
                     </div>
                     */
                     var msg_item = document.createElement('div');
-                    msg_item.className = 'msg';
+                    msg_item.className = 'msg' + (my_uid == rel[i]['s_uid'] ? ' r' : '');
                     if (i + 1 == rel.length ||
-                        moment(rel[i]['time']).diff(moment(rel[i + 1]['time']), 'minutes', true) > 300) {
+                        moment(rel[i]['time']).diff(moment(rel[i + 1]['time']), 'seconds') > 300) {
                         var system_propmt = document.createElement('div');
                         system_propmt.className = 'system-propmt';
                         system_propmt.innerText = make_time_string(rel[i]['time']);
@@ -136,6 +185,7 @@ function get_msg(_uid) {
                     mcb.prepend(msg_item);
                     break;
                 case 'mkfriends':
+                    if (my_uid == rel[i]['s_uid']) break;
                     var msg_item = document.createElement('div');
                     msg_item.className = 'msg';
                     var system_propmt = document.createElement('div');
@@ -168,106 +218,101 @@ function get_msg(_uid) {
     });
     msg_page += 1;
 }
+/*
+'你还不是' + (user ? user : 'TA') + '的好友，你可以选择 <span id="mkfriends" data-user="'
++ (user ? user : '')
++ '" data-_uid="'
++ _uid + '">添加好友</span>'
+*/
 
 function msg_box(_uid, user) {
-    $.get('/chat/can_chat?u=' + _uid, function (rel) {
+    now_uid = _uid;
+    $.get('/chat/has_uid?u=' + _uid, function (rel) {
         if (rel == 'False') {
-            new Event(
-                '你还不是' + (user ? user : 'TA') + '的好友，你可以选择 <span id="mkfriends" data-user="'
-                + (user ? user : '')
-                + '" data-_uid="'
-                + _uid + '">添加好友</span>'
-            )
-            return;
+            chat_main.empty();
+            chat_main.html('<div class="tip">找不到用户：uid = ' + _uid + '</div>')
+        } else {
+            $('.chat-header-user').text(rel);
         }
-        chat_main.empty();
-        /*
-        <div class="chat-header">
-            <a class="char-header-user"></a>
-            <div>
-                <span>自动刷新</span>
-                <div class="choice" id="ar" title="开启后，会自动获取最新消息"></div>
-            </div>
-        </div>
-        */
-        /*
-        <div class="msg-content-box">
-             <div>
-                 <!--
-                 <div class="msg r">
-                     <div class="system-propmt">08-04 16:38</div>
-                     <div class="msg-main">
-                         <img src="/static/images/icon.jpg">
-                         <div class="msg-text"></div>
-                     </div>
-                 </div>
-                 -->
-             </div>
-         </div>
-         */
-        /*
-         <div class="send-msg-box">
-             <div class="edit-textarea">
-                 <textarea id="msg-text" autofocus="autofocus" maxlength="500"></textarea>
-             </div>
-             <footer>
-                 <p class="word-count"><span>0</span> / 500</p>
-                 <button id="send-msg">发送<span>Enter</span></button>
-             </footer>
-         </div>
-        */
-        //#region 头部
-        var header = document.createElement('div');
-        header.className = 'chat-header';
-        {
-            var un = document.createElement('a');
-            un.href = "/user/" + _uid;
-            un.innerText = user || chat_list[_uid]['user'];
-            un.className = 'chat-header-user';
-            header.appendChild(un);
-        } {
-            var div = document.createElement('div');
-            div.innerHTML = '<span>自动刷新</span><div class="choice" id="ar" title="开启后，会自动获取最新消息"></div>';
-            header.appendChild(div);
-        }
-        chat_main.append(header);
-        //#endregion
-        //#region 主体
-        var main = document.createElement('div');
-        main.className = 'msg-content-box';
-        main.appendChild(document.createElement('div'));
-        chat_main.append(main);
-        //#endregion
-        //#region 发送消息
-        var smb = document.createElement('div');
-        smb.className = 'send-msg-box';
-        {
-            var edit_box = document.createElement('div');
-            edit_box.className = 'edit-textarea';
-            var textarea = document.createElement('textarea');
-            textarea.id = "msg-text";
-            textarea.autofocus = "autofocus";
-            textarea.maxLength = "500";
-            edit_box.appendChild(textarea);
-            smb.appendChild(edit_box);
-        } {
-            var footer = document.createElement('footer');
-            var p = document.createElement('p');
-            p.className = 'word-count';
-            p.innerHTML = '<span>0</span> / 500';
-            footer.appendChild(p);
-            var button = document.createElement('button');
-            button.id = "send-msg";
-            button.innerHTML = '发送<span>Enter</span>';
-            footer.appendChild(button);
-            smb.appendChild(footer);
-        }
-        chat_main.append(smb);
-        //#endregion
-        msg_timestamp = new Date().getTime();
-        msg_page = 1;
-        get_msg(_uid);
     })
+    chat_main.empty();
+    /*
+    <div class="msg-content-box">
+         <div>
+             <!--
+             <div class="msg r">
+                 <div class="system-propmt">08-04 16:38</div>
+                 <div class="msg-main">
+                     <img src="/static/images/icon.jpg">
+                     <div class="msg-text"></div>
+                 </div>
+             </div>
+             -->
+         </div>
+     </div>
+     */
+    /*
+     <div class="send-msg-box">
+         <div class="edit-textarea">
+             <textarea id="msg-text" autofocus="autofocus" maxlength="500"></textarea>
+         </div>
+         <footer>
+             <p class="word-count"><span>0</span> / 500</p>
+             <button id="send-msg">发送<span>Enter</span></button>
+         </footer>
+     </div>
+    */
+    //#region 头部
+    var header = document.createElement('div');
+    header.className = 'chat-header';
+    {
+        var un = document.createElement('a');
+        un.href = "/user/" + _uid;
+        un.innerText = user || '';
+        un.className = 'chat-header-user';
+        header.appendChild(un);
+    } {
+        var div = document.createElement('div');
+        div.innerHTML = '<span>自动刷新</span><div class="choice" id="ar" title="开启后，会自动获取最新消息"></div>';
+        header.appendChild(div);
+    }
+    chat_main.append(header);
+    //#endregion
+    //#region 主体
+    var main = document.createElement('div');
+    main.className = 'msg-content-box';
+    main.appendChild(document.createElement('div'));
+    chat_main.append(main);
+    //#endregion
+    //#region 发送消息
+    var smb = document.createElement('div');
+    smb.className = 'send-msg-box';
+    {
+        var edit_box = document.createElement('div');
+        edit_box.className = 'edit-textarea';
+        var textarea = document.createElement('textarea');
+        textarea.id = "msg-text";
+        textarea.autofocus = "autofocus";
+        textarea.maxLength = "500";
+        edit_box.appendChild(textarea);
+        smb.appendChild(edit_box);
+    } {
+        var footer = document.createElement('footer');
+        var p = document.createElement('p');
+        p.className = 'word-count';
+        p.innerHTML = '<span>0</span> / 500';
+        footer.appendChild(p);
+        var button = document.createElement('button');
+        button.id = "send-msg";
+        button.innerHTML = '发送<span>' + (ctrl ? 'Ctrl + ' : '') + 'Enter</span>';
+        footer.appendChild(button);
+        smb.appendChild(footer);
+    }
+    chat_main.append(smb);
+    //#endregion
+    msg_timestamp = new Date().getTime();
+    msg_page = 1;
+    get_msg(_uid);
 }
 
 function chat_list() {
@@ -296,11 +341,9 @@ function chat_list() {
                     </div>
                 </div>
                 */
-                msg_list[rel[i]['_uid']] = rel[i];
-                var div = document.createElement('div');
+                var div = document.createElement('a');
                 div.className = 'msg-item';
-                div.setAttribute('data-_uid', rel[i]['s_uid']);
-                div.setAttribute('data-user', rel[i]['s_user']);
+                div.href = "#" + rel[i]['s_uid'];
                 // 头像
                 var photo = document.createElement('div');
                 photo.className = 'left photo';
@@ -364,14 +407,27 @@ function chat_list() {
                 cl.append(div);
             }
         }
+        $('.msg-item[href="'+window.location.hash+'"]').addClass('active');
     });
 
 }
 
+function check_hash() {
+    var hash = window.location.hash;
+    if (!hash) return;
+    _uid = hash.substr(1);
+    if (!_uid) return;
+    msg_box(_uid);
+    $('.msg-item.active').removeClass('active');
+    $('.msg-item[href="'+hash+'"]').addClass('active');
+}
 
 $(document).ready(function () {
     // 获取jQuery对象
     search_box = $("#search-box"), chat_main = $('.index-main');
+    // 锚点监控
+    check_hash();
+    $(window).on('hashchange', check_hash);
     // 事件监听
     $("#search").on('keyup', function () {
         var u = this.value;
@@ -394,7 +450,7 @@ $(document).ready(function () {
         var d = $(this);
         $("#search").val('');
         search_box.empty();
-        msg_box(d.attr("data-_uid"), d.text())
+        window.location.hash = '#' + d.attr("data-_uid");
     });
     $(document)
         // 绑定输入框字数限制
@@ -403,39 +459,52 @@ $(document).ready(function () {
         })
         // 绑定 好友操作
         .on('click', '.mkfriends .yes', function () {
-            $.get('/chat/make_friends/agree?u=' + $(this).attr('data-_uid'));
+            $.get('/chat/make_friends/accept?u=' + $(this).attr('data-_uid'));
+            if(!auto_refresh) location.reload();
         })
         .on('click', '.mkfriends .no', function () {
-            $.get('/chat/make_friends/disagree?u=' + $(this).attr('data-_uid'));
-        })
-        .on('click', '.msg-item', function () {
-            msg_box(
-                $(this).attr('data-_uid'),
-                $(this).attr('data-user')
-            );
+            $.get('/chat/make_friends/refuse?u=' + $(this).attr('data-_uid'));
+            if(!auto_refresh) location.reload();
         })
         //绑定 添加好友
         .on('click', '#mkfriends', function () {
             var _uid = $(this).attr('data-_uid');
             openP(500, 300,
                 `<p style="font-size: 18px;text-align: center;">添加好友</p>
-                <span>`+ $(this).attr('data-user') + `</span>
+                <span style="text-align: center;display: block;">`+ $(this).attr('data-user') + `</span>
             <textarea data-_uid=`+ _uid + ` id="mk-text" type="text" maxlength="32" autofocus="autofocus" placeholder="填写验证信息..."
                 style="resize:none;width: 80%;max-width: 450px;display: block;outline: 0;border: 2px solid #000000;margin: auto;padding: .2em 1em;height: 72px;"></textarea>
             <button id="mk-send"
                 style="padding: .2em 1em;text-align: center;margin: auto;display: block;margin-top: 1em;">发送请求</button>`,
-                null, function () {
-                    $(document).on('click', '#mk-send', function () {
-                        $.post("/chat/make_friends", {
-                            "u": $("#mk-text").attr('data-_uid'),
-                            "t": $("#mk-text").val()
-                        }, (rel) => {
-                            if (rel == 'False')
-                                new Event('已经发送过请求');
-                        })
-                    })
-                });
-        });
+            );
+        })
+        // 添加好友按钮，事件绑定
+        .on('click', '#mk-send', function () {
+            $.post("/chat/make_friends", {
+                "u": $("#mk-text").attr('data-_uid'),
+                "t": $("#mk-text").val()
+            }, (rel) => {
+                if (rel == 'False')
+                    new Event('已经发送过请求');
+                else
+                    new Event('请求发送成功');
+            })
+            closeP();
+        })
+        // 发送消息 事件
+        .on('keydown', '#msg-text', function (e) {
+            if (e.keyCode == 13 && (!ctrl || e.ctrlKey) && this.value) {
+                send_msg(now_uid, this.value);
+                this.value = '';
+                $('#msg-text').trigger('input');
+            }
+        })
+        .on('click', '#send-msg', function () {
+            if (!$("#msg-text").val()) return;
+            send_msg(now_uid, $("#msg-text").val());
+            $("#msg-text").val('');
+            $('#msg-text').trigger('input');
+        })
 
     // 接收方式按钮
     $(".right-btn").on('click', function (e) {
