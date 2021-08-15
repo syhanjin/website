@@ -239,6 +239,7 @@ function msg_box(_uid, user) {
         }
     })
     chat_main.empty();
+
     /*
     <div class="msg-content-box">
          <div>
@@ -423,6 +424,7 @@ function check_hash() {
     msg_box(_uid);
     $('.msg-item.active').removeClass('active');
     $('.msg-item[href="' + hash + '"]').addClass('active');
+    $('.msg-item[href="' + hash + '"] .count').remove();
 }
 
 $(document).ready(function () {

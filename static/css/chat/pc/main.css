@@ -310,7 +310,7 @@
 }
 
 .msg-item .right-bottom .count::before{
-    content: min( attr(data-count), 99);
+    content: attr(data-count);
 }
 .msg-item .right-bottom .count[data-count="99+"]{
     width:24px;
