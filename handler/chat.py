@@ -176,7 +176,7 @@ def chat_unread_msg_s_uid(s_uid):
     if not _uid:
         return 'False'
     datas = list(chatdb.messages.find(
-        {'read': False, 's_uid': s_uid, 'r_uid': _uid})).sort('time', 1)
+        {'read': False, 's_uid': s_uid, 'r_uid': _uid}).sort('time', 1))
     # 将所有未读消息设置为已读
     chatdb.messages.update_many({'s_uid': s_uid, 'r_uid': _uid, 'read': False}, {
         '$set': {'read': True}})

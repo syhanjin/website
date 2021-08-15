@@ -1,7 +1,7 @@
 // 定义变量
 var search_box, choices = {}, chat_main,
     msg_interval, msg_list = {}, msg_timestamp, msg_page,
-    my_uid, now_uid, auto_refresh, ctrl;
+    my_uid, now_uid, auto_refresh, ctrl, last_time;
 // 数据获取完后运行
 var afterdata = function () {
     // 同步用户数据
@@ -25,9 +25,9 @@ choices['alws'] = function (status) {
         $.get('/chat/modify/allowStrangers?s=no');
 };
 choices['ar'] = function (status) {
-    new Event('这个东西还没做好，暂时不能开启');
-    $('#ar').removeClass('select');
-    return;
+    // new Event('这个东西还没做好，暂时不能开启');
+    // $('#ar').removeClass('select');
+    // return;
     if (status)
         msg_interval = setInterval(get_new_msg, 1000),
             auto_refresh = true;
@@ -120,7 +120,85 @@ function make_msg_string(text) {
     return res;
 }
 
+function make_msg(data, i2_time, T) {
+    var msg_item;
+    switch (data['type']) {
+        case 'text':
+            /*
+            <div class="msg">
+                <div class="system-propmt"></div>
+                <div class="msg-main">
+                    <img src="/static/images/icon.jpg">
+                    <div class="msg-text"></div>
+                </div>
+            </div>
+            */
+            msg_item = document.createElement('div');
+            msg_item.className = 'msg' + (my_uid == data['s_uid'] ? ' r' : '');
+            if (T ||
+                moment(data['time']).diff(moment(i2_time), 'seconds') > 300) {
+                var system_propmt = document.createElement('div');
+                system_propmt.className = 'system-propmt';
+                system_propmt.innerText = make_time_string(data['time']);
+                msg_item.appendChild(system_propmt);
+            }
+            var msg_main = document.createElement('div');
+            msg_main.className = 'msg-main';
+            var img = document.createElement('img');
+            img.src = "/api/userphoto/" + data['s_uid'];
+            msg_main.appendChild(img);
+            var msg_text = document.createElement('div');
+            msg_text.className = 'msg-text';
+            msg_text.innerHTML = make_msg_string(data['text']);
+            msg_main.appendChild(msg_text);
+            msg_item.appendChild(msg_main);
+            break;
+        case 'mkfriends':
+            if (my_uid == data['s_uid']) break;
+            msg_item = document.createElement('div');
+            msg_item.className = 'msg';
+            var system_propmt = document.createElement('div');
+            system_propmt.className = 'system-propmt';
+            system_propmt.innerText = make_time_string(data['time']);
+            msg_item.appendChild(system_propmt);
+            var msg_main = document.createElement('div');
+            msg_main.className = 'msg-main';
+            var img = document.createElement('img');
+            img.src = "/api/userphoto/" + data['s_uid'];
+            msg_main.appendChild(img);
+            var msg_text = document.createElement('div');
+            msg_text.className = 'msg-text mkfriends';
+            msg_text.innerHTML =
+                '对方请求添加你为好友\n'
+                + '验证信息：\n'
+                + data['text']
+                + '<span class="yes" data-_uid="'
+                + data['s_uid']
+                + '">同意</span><span class="no" data-_uid="'
+                + data['s_uid']
+                + '">拒绝</span>'
+            msg_main.appendChild(msg_text);
+            msg_item.appendChild(msg_main);
+            break;
+    }
+    return msg_item;
+}
+
 function get_new_msg() {
+    var flag = ($('.msg-content-box')[0].clientHeight
+        + $('.msg-content-box')[0].scrollTop
+        + 10 >= $('.msg-content-box > div')[0].scrollHeight);
+    $.get('/chat/unread_msg/' + now_uid, function (rel) {
+        if (rel == 'False') return;
+        var mcb = $(".msg-content-box > div");
+        for (var i = 0; i < rel.length; i++) {
+            mcb.append(make_msg(rel[i], last_time));
+            last_time = rel[i]['time'];
+        }
+        if (flag) {
+            $('.msg-content-box').scrollTop($('.msg-content-box > div').height());
+        }
+    });
 }
 
 function send_msg(_uid, text) {
@@ -144,6 +222,17 @@ function send_msg(_uid, text) {
             $(".msg-content-box > div").append(msg_item);
         } else {
             if (!auto_refresh) location.reload();
+            else {
+                $(".msg-content-box > div").append(make_msg({
+                    's_uid': my_uid,
+                    'r_uid': _uid,
+                    'text': text,
+                    'time': moment().format("YYYY-MM-DD HH:mm:ss"),
+                    'type': 'text'
+                }, last_time));
+                last_time = moment().format("YYYY-MM-DD HH:mm:ss");
+                $('.msg-content-box').scrollTop($('.msg-content-box > div').height());
+            }
         }
     });
 }
@@ -158,70 +247,13 @@ function get_msg(_uid) {
         }
         var mcb = $(".msg-content-box > div");
         for (var i = 0; i < rel.length; i++) {
-            switch (rel[i]['type']) {
-                case 'text':
-                    /*
-                    <div class="msg">
-                        <div class="system-propmt"></div>
-                        <div class="msg-main">
-                            <img src="/static/images/icon.jpg">
-                            <div class="msg-text"></div>
-                        </div>
-                    </div>
-                    */
-                    var msg_item = document.createElement('div');
-                    msg_item.className = 'msg' + (my_uid == rel[i]['s_uid'] ? ' r' : '');
-                    if (i + 1 == rel.length ||
-                        moment(rel[i]['time']).diff(moment(rel[i + 1]['time']), 'seconds') > 300) {
-                        var system_propmt = document.createElement('div');
-                        system_propmt.className = 'system-propmt';
-                        system_propmt.innerText = make_time_string(rel[i]['time']);
-                        msg_item.appendChild(system_propmt);
-                    }
-                    var msg_main = document.createElement('div');
-                    msg_main.className = 'msg-main';
-                    var img = document.createElement('img');
-                    img.src = "/api/userphoto/" + rel[i]['s_uid'];
-                    msg_main.appendChild(img);
-                    var msg_text = document.createElement('div');
-                    msg_text.className = 'msg-text';
-                    msg_text.innerHTML = make_msg_string(rel[i]['text']);
-                    msg_main.appendChild(msg_text);
-                    msg_item.appendChild(msg_main);
-                    mcb.prepend(msg_item);
-                    break;
-                case 'mkfriends':
-                    if (my_uid == rel[i]['s_uid']) break;
-                    var msg_item = document.createElement('div');
-                    msg_item.className = 'msg';
-                    var system_propmt = document.createElement('div');
-                    system_propmt.className = 'system-propmt';
-                    system_propmt.innerText = make_time_string(rel[i]['time']);
-                    msg_item.appendChild(system_propmt);
-                    var msg_main = document.createElement('div');
-                    msg_main.className = 'msg-main';
-                    var img = document.createElement('img');
-                    img.src = "/api/userphoto/" + rel[i]['s_uid'];
-                    msg_main.appendChild(img);
-                    var msg_text = document.createElement('div');
-                    msg_text.className = 'msg-text mkfriends';
-                    msg_text.innerHTML =
-                        '对方请求添加你为好友\n'
-                        + '验证信息：\n'
-                        + rel[i]['text']
-                        + '<span class="yes" data-_uid="'
-                        + rel[i]['s_uid']
-                        + '">同意</span><span class="no" data-_uid="'
-                        + rel[i]['s_uid']
-                        + '">拒绝</span>'
-                    msg_main.appendChild(msg_text);
-                    msg_item.appendChild(msg_main);
-                    mcb.prepend(msg_item);
-                    break;
-            }
-
+            if (i + 1 == rel.length)
+                mcb.prepend(make_msg(rel[i], null, true));
+            else
+                mcb.prepend(make_msg(rel[i], rel[i + 1]['time']))
         }
         if (msg_page == 1) {
+            last_time = rel[0]['time'];
             $('.msg-content-box').scrollTop($('.msg-content-box > div').height())
         }
         msg_page += 1;
@@ -287,7 +319,7 @@ function msg_box(_uid, user) {
     main.className = 'msg-content-box';
     main.appendChild(document.createElement('div'));
     chat_main.append(main);
-    
+
     //#endregion
     //#region 发送消息
     var smb = document.createElement('div');
@@ -522,7 +554,7 @@ $(document).ready(function () {
             d.toggleClass('select');
             if (choices[d.attr('id')]) choices[d.attr('id')](d.hasClass('select'));
         })
-        
+
 
     // 接收方式按钮
     $(".right-btn").on('click', function (e) {
