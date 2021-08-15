@@ -129,6 +129,7 @@ function send_msg(_uid, text) {
         'text': text
     }, function (rel) {
         if (rel == 'False') {
+            var user = $('.chat-header-user').text();
             var msg_item = document.createElement('div');
             msg_item.className = 'msg';
             var system_propmt = document.createElement('div');
@@ -218,12 +219,6 @@ function get_msg(_uid) {
     });
     msg_page += 1;
 }
-/*
-'你还不是' + (user ? user : 'TA') + '的好友，你可以选择 <span id="mkfriends" data-user="'
-+ (user ? user : '')
-+ '" data-_uid="'
-+ _uid + '">添加好友</span>'
-*/
 
 function msg_box(_uid, user) {
     now_uid = _uid;
