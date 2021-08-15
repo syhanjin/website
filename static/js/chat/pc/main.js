@@ -156,7 +156,7 @@ function get_msg(_uid) {
             msg_page = -1;
             return;
         }
-        var mcb = $(".msg-content-box div");
+        var mcb = $(".msg-content-box > div");
         for (var i = 0; i < rel.length; i++) {
             switch (rel[i]['type']) {
                 case 'text':
