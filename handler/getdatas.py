@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from random import getstate
-from flask import Blueprint, render_template, request, jsonify, session, redirect
+from flask import Blueprint, render_template, request, jsonify, session, redirect, Response
 from flask.helpers import send_file
 import pymongo
 import datetime
@@ -116,7 +116,7 @@ def api_geruserphoto(_uid):
     userd = userdb.userdata.find_one({'_uid': _uid})
     if userd:
         if 'base64' in userd['photo']:
-            return base64.b64decode(userd['photo'][23:])
+            return Response(base64.b64decode(userd['photo'][23:]), content_type='application/octet-stream')
         return send_file(userd['photo'][1:])
     else:
         return send_file('static/images/user.png')
