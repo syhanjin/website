@@ -287,6 +287,7 @@ function msg_box(_uid, user) {
     main.className = 'msg-content-box';
     main.appendChild(document.createElement('div'));
     chat_main.append(main);
+    
     //#endregion
     //#region 发送消息
     var smb = document.createElement('div');
@@ -314,6 +315,11 @@ function msg_box(_uid, user) {
     }
     chat_main.append(smb);
     //#endregion
+    // 滚动条到最上方自动加载消息
+    $('.msg-content-box').off('scroll').on('scroll', function (e) {
+        if (this.scrollTop == 0)
+            get_msg();
+    });
     msg_timestamp = new Date().getTime();
     msg_page = 1;
     get_msg(_uid);
@@ -516,11 +522,7 @@ $(document).ready(function () {
             d.toggleClass('select');
             if (choices[d.attr('id')]) choices[d.attr('id')](d.hasClass('select'));
         })
-        // 滚动条到最上方自动加载消息
-        .on('scroll', '.msg-content-box', function () {
-            if (this.scrollTop == 0)
-                get_msg();
-        });
+        
 
     // 接收方式按钮
     $(".right-btn").on('click', function (e) {
