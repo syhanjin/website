@@ -1,0 +1,56 @@
+{% extends "m.html" %}
+
+{% block title %}音轨分离{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/audio/m/separator.css" />
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/audio/m/separator.js"></script>
+{% if data == [] or data[0]['status'] not in ['waiting','working'] %}
+<div class="separator-upload">
+    <form action="/audio/separator/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="audio" accept="audio/*">
+        <input type="submit" value="提交">
+    </form>
+</div>
+{% endif %}
+{% if data != [] %}
+{% for i in data %}
+<table class="separator-status-box">
+    <tr class="th">
+        <td>项目id</td>
+        <td>项目状态</td>
+        <td rowspan="2"></td>
+    </tr>
+    <tr id="{{i['id']}}-1">
+        <td>{{i['id']}}</td>
+        <td class="status" data-status="{{i['status']}}"></td>
+    </tr>
+    <tr class="th">
+        <td>提交时间</td>
+        <td>人声</td>
+        <td>背景音乐</td>
+    </tr>
+    <tr id="{{i['id']}}-2">
+        <td>{{i['time'].__format__('%Y-%m-%d %H:%M:%S')}}</td>
+        {% if i['status']=='finished' and not i['expired'] %}
+        <td class="vocals">
+            <a href="/audio/separator/download/{{i['id']}}/vocals" data-text="下载"></a>
+        </td>
+        <td class="accompaniment">
+            <a href="/audio/separator/download/{{i['id']}}/accompaniment" data-text="下载"></a>
+        </td>
+        {% elif i['status']=='finished' %}
+        <td class="vocals">已过期</td>
+        <td class="accompaniment">已过期</td>
+        {% else %}
+        <td class="vocals"></td>
+        <td class="accompaniment"></td>
+        {% endif %}
+    </tr>
+</table>
+{% endfor %}
+{% endif %}
+{% endblock %}

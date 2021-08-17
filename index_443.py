@@ -139,6 +139,7 @@ sy.register_blueprint(blog.blog, url_prefix='/blog')
 sy.register_blueprint(blog.blogm, url_prefix='/m/blog')
 sy.register_blueprint(photo.photo, url_prefix='/photo')
 sy.register_blueprint(audio.audio,url_prefix='/audio')
+sy.register_blueprint(audio.audiom,url_prefix='/m/audio')
 # sy.register_blueprint(special_res.sr,url_prefix='/res')
 sy.register_blueprint(chat.chatb, url_prefix='/chat')
 
