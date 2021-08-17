@@ -12,7 +12,6 @@ client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 audiodb = client['audio']
 audio = Blueprint('audio', __name__)
-audiom = Blueprint('audiom', __name__)
 minute = 60 * 1000
 root_path = '../audio'
 tmp_path = os.path.join(root_path, 'tmp')
@@ -67,20 +66,6 @@ def audio_separator():
     return render_template('/audio/pc/separator.html', data=data)
 
 
-@audiom.route('/separator', methods=['GET'])
-def audio_separator():
-    _uid = getuser(request.cookies.get('_uid'))
-    if not _uid:
-        return render_template('error/m.html', error='请先登录再使用音轨分离')
-    data = list(audiodb.separator.find({'_uid': _uid}).sort('time', -1))
-    for i in data:
-        if (i['time'] + datetime.timedelta(hours=24)) < datetime.datetime.now():
-            i['expired'] = True
-        else:
-            i['expired'] = False
-    return render_template('/audio/m/separator.html', data=data)
-
-
 @audio.route('/separator/download/<string:id>/vocals')
 def audio_download_vocals(id):
     return send_file('../audio/out/'+id+'/vocals.wav')
@@ -105,7 +90,7 @@ def audio_separator_status():
 def audio_separator_upload():
     _uid = getuser(request.cookies.get('_uid'))
     if not _uid:
-        return '请先登录再使用音轨分离'
+        return render_template('error/pc.html', error='请先登录再使用音轨分离')
     f = request.files.get('audio')
     if f and allowed_file(f.filename):
         fname = secure_filename(f.filename)
@@ -115,9 +100,9 @@ def audio_separator_upload():
         file_bytes = f.read()
         if len(file_bytes) > 10 * 1024 * 1024:
             return '文件太大'
-        with open('../tmp/'+id+'.'+ext, 'wb') as f:
+        with open('../tmp/'+id+'.'+ext,'wb') as f:
             f.write(file_bytes)
-        n = division(open('../tmp/'+id+'.'+ext, 'rb'), fname, id)
+        n = division(open('../tmp/'+id+'.'+ext,'rb'), fname, id)
         os.remove('../tmp/'+id+'.'+ext)
         audiodb.separator.insert_one({
             'id': id,
