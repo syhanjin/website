@@ -14,3 +14,18 @@
 .separator-status-box .th td{
     border-top-color: #5c5c5c;
 }
+a::before{
+    content: attr(data-text);
+}
+.separator-status-box .status::before{
+    content: attr(data-status);
+}
+.separator-status-box .status[data-status='waiting']{
+    color: blue;
+}
+.separator-status-box .status[data-status='working']{
+    color: yellowgreen;
+}
+.separator-status-box .status[data-status='finished']{
+    color: green;
+}
