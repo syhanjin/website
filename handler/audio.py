@@ -5,12 +5,37 @@ import pymongo
 import random
 import datetime
 import os
-import shutil
+import math
+from pydub import AudioSegment
 from werkzeug.utils import secure_filename
 client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 audiodb = client['audio']
 audio = Blueprint('audio', __name__)
+minute = 60 * 1000
+root_path = '../audio'
+tmp_path = os.path.join(root_path, 'tmp')
+if not os.path.exists(tmp_path):
+    os.mkdir(tmp_path)
+
+
+def division(file, filename, id):
+    ext = filename.rsplit('.', 1)[1]
+    au = AudioSegment.from_file(file, ext)
+    leng = len(au)
+    # 构建文件夹
+    file_path = os.path.join(tmp_path, id)
+    if not os.path.exists(file_path):
+        os.mkdir(file_path)
+    n = math.floor(leng / minute)
+    for i in range(n):
+        tmp = au[i * minute: (i+1) * minute + 1]
+        tmp.export(os.path.join(file_path, str(i+1) + '.' + ext), format=ext)
+    if n * minute < leng:
+        tmp = au[n * minute: leng]
+        tmp.export(os.path.join(file_path, str(n+1) + '.' + ext), format=ext)
+        n += 1
+    return n
 
 
 def getuser(_uid):
@@ -73,15 +98,18 @@ def audio_separator_upload():
             str(random.randint(10, 99))
         ext = fname.rsplit('.', 1)[1].lower()
         file_bytes = f.read()
-        if len(file_bytes) > 5 * 1024 * 1024:
+        if len(file_bytes) > 10 * 1024 * 1024:
             return '文件太大'
-        with open('../audio/in/'+id+'.'+ext, 'wb') as f:
+        with open('../tmp/'+id+'.'+ext,'wb') as f:
             f.write(file_bytes)
+        n = division(open('../tmp/'+id+'.'+ext,'rb'), fname, id)
+        os.remove('../tmp/'+id+'.'+ext)
         audiodb.separator.insert_one({
             'id': id,
             'time': datetime.datetime.now(),
             'status': 'waiting',
             'ext': ext,
+            'n': n,
             '_uid': getuser(request.cookies.get('_uid'))
         })
         return redirect('/audio/separator')
