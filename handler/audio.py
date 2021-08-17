@@ -31,10 +31,10 @@ def division(file, filename, id):
     n = math.floor(leng / minute)
     for i in range(n):
         tmp = au[i * minute: (i+1) * minute + 1]
-        tmp.export(os.path.join(file_path, str(i+1) + '.' + ext), format=ext)
+        tmp.export(os.path.join(file_path, str(i+1) + '.mp3'), format='mp3')
     if n * minute < leng:
         tmp = au[n * minute: leng]
-        tmp.export(os.path.join(file_path, str(n+1) + '.' + ext), format=ext)
+        tmp.export(os.path.join(file_path, str(n+1) + '.mp3'), format='mp3')
         n += 1
     return n
 
@@ -82,12 +82,12 @@ def audio_separator():
 
 @audio.route('/separator/download/<string:id>/vocals')
 def audio_download_vocals(id):
-    return send_file('../audio/out/'+id+'/vocals.wav')
+    return send_file('../audio/out/'+id+'/vocals.mp3')
 
 
 @audio.route('/separator/download/<string:id>/accompaniment')
 def audio_download_accompaniment(id):
-    return send_file('../audio/out/'+id+'/accompaniment.wav')
+    return send_file('../audio/out/'+id+'/accompaniment.mp3')
 
 
 @audio.route('/separator/status', methods=['GET'])
@@ -122,7 +122,6 @@ def audio_separator_upload():
             'id': id,
             'time': datetime.datetime.now(),
             'status': 'waiting',
-            'ext': ext,
             'n': n,
             '_uid': getuser(request.cookies.get('_uid'))
         })

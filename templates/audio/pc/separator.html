@@ -8,6 +8,13 @@
 
 {% block mdv %}
 <script src="/static/js/audio/pc/separator.js"></script>
+
+<div>
+    <h3>稍稍做个小简介</h3>
+    <p>本项目使用 Python 音轨分离神器 Spleeter 实现</p>
+    <p>目前使用的是人工智能训练库 2stems</p>
+    <p>可分离出 人声 和 伴奏</p>
+</div>
 {% if data == [] or data[0]['status'] not in ['waiting','working'] %}
 <div class="separator-upload">
     <form action="/audio/separator/upload" method="POST" enctype="multipart/form-data">
