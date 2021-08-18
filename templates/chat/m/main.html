@@ -1,0 +1,86 @@
+{% extends "m.html" %}
+
+{% block title %}消息{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/chat/m/main.css" />
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/chat/m/main.js"></script>
+<script src="/static/js/moment.min.js"></script>
+<div class="index-page">
+    <div class="index-left">
+        <div class="title-box">
+            <div class="title-top">
+                <div class="title-user">
+                    <div class="user-photo"></div>
+                    <span class="user-name"></span>
+                </div>
+                <i class="fas fa-chevron-circle-down fa-lg right-btn R180"></i>
+            </div>
+            <div class="title-settings" style="display: none;">
+                <div>
+                    <span>允许陌生人跟我发消息</span>
+                    <div class="choice" id="alws" title="关闭后，只有好友可以跟你发消息"></div>
+                </div>
+            </div>
+            <div class="title-search">
+                <i class="fas fa-search"></i>
+                <input id="search" placeholder="搜索用户..." maxlength="64" />
+                <div id="search-box"></div>
+            </div>
+        </div>
+        <div class="chat-list">
+            <!-- 
+            <div class="msg-item active">
+                <div class="left photo">
+                    <img src="/api/userphoto/9889573" />
+                </div>
+                <div class="right">
+                    <div class="right-top">
+                        <div class="name">
+                            <span></span>
+                        </div>
+                        <div class="time"></div>
+                    </div>
+                    <div class="right-bottom">
+                        <p class="last-msg"></p>
+                        <span class="count"></span>
+                    </div>
+                </div>
+            </div> 
+            -->
+
+        </div>
+    </div>
+    <div class="index-main" style="display: none;">
+        <div class="tip">您还未选中或者发起聊天，快去跟好友聊一聊吧</div>
+<!-- 
+        <div class="chat-header">
+            <a class="char-header-user"></a>
+        </div>
+        <div class="msg-content-box">
+            <div>
+                <div class="msg">
+                    <div class="system-propmt">08-04 16:38</div>
+                    <div class="msg-main">
+                        <img src="/static/images/icon.jpg">
+                        <div class="msg-text mkfriends">对方请求添加你为好友<span class="yes">同意</span><span class="no">拒绝</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="send-msg-box">
+            <div class="edit-textarea">
+                <textarea id="msg-text" autofocus="autofocus" maxlength="500"></textarea>
+            </div>
+            <footer>
+                <p class="word-count"><span>0</span> / 500</p>
+                <button id="send-msg">发送<span>Enter</span></button>
+            </footer>
+        </div> -->
+
+    </div>
+</div>
+{% endblock %}

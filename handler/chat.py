@@ -13,6 +13,7 @@ maindb = client['main']
 chatdb = client['chat']
 TSTRING = "%Y-%m-%d %H:%M:%S"
 chatb = Blueprint('chat', __name__)
+chatmb = Blueprint('chatm', __name__)
 
 
 # 更新消息列表
@@ -75,6 +76,14 @@ def chat():
     if not _uid:
         return redirect('/login')
     return render_template('chat/pc/main.html')
+
+# 手机版
+@chatmb.route('/', methods=['GET'])
+def chat():
+    _uid = getuser(request.cookies.get('_uid'))
+    if not _uid:
+        return redirect('/m/login')
+    return render_template('chat/m/main.html')
 
 
 # 操作
