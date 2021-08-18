@@ -1,0 +1,39 @@
+{% macro js_css(index_js) %}
+<link rel="stylesheet" href="/static/css/m.css">
+<link rel="stylesheet" href="/static/css/jquery.Jcrop.css">
+<link rel="stylesheet" href="/static/css/canvi.css">
+<script src="/static/js/jquery/jquery-1.6.2.min.js"></script>
+<script src="/static/js/jquery/jquery-1.8.3.min.js"></script>
+<!-- <script src="/static/js/jquery/jquery-3.4.0.min.js"></script> -->
+<script src="/static/js/jquery/jquery.cookie.min.js"></script>
+
+<script src="{{index_js}}"></script>
+<script src="/static/js/canvi.js"></script>
+<script src="/static/js/jquery/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="/static/css/pcPopup.css">
+<script src="/static/js/pcPopup.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+{% endmacro %}
+
+{% macro nav() %}
+<div class="nav">
+    <div class="user">
+        <div class="user-photo"></div>
+        <div class="uinfo">
+            <a class="user-name" href="/m/login">登录</a>
+            <div class="user-ops">
+                <a href="/m/user/settings">修改信息</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layout"></div>
+<div class="bar">
+    <button class="open-nav">
+        <svg viewBox="0 0 18 18">
+            <path d="M2 13.5h14V12H2v1.5zm0-4h14V8H2v1.5zM2 4v1.5h14V4H2z"></path>
+        </svg>
+    </button>
+</div>
+{% endmacro %}

@@ -12,11 +12,13 @@ $(document).ready(function() {
                 path : '/'
             });
             var u = $('.nav .user');
-            u.children('img').get(0).src = rel['photo'];
+            $(".user-photo").prepend('<img src="' + rel['photo'] + '" />');
             var info = u.children('.uinfo');
-            info.children('.uname').text(rel['user']);
-            info.children('.uname').get(0).href='/m/user/'+rel['_uid'];
+            $(".user-name").text(rel['user']);
+            $(".nav .user .uinfo .user-name").get(0).href = '/user/' + rel['_uid'];
             if(rel['user'])info.children('.user-ops').show()
+            user_data = rel;
+            if(afterdata)afterdata();
         }
     }).fail(function() {
         $.cookie('_uid', '', {
