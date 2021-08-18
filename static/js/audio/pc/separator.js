@@ -6,9 +6,9 @@ $(document).ready(function () {
                 if (rel[i]['status'] == 'finished') {
                     // console.log('#' + rel[i]['id'] + ' .vocals');
                     $('#' + rel[i]['id'] + ' .vocals')
-                    .html('<a href="/audio/separator/download/' + rel[i]['id'] + '/vocals' + '" data-text="下载地址">')
+                    .html('<a href="/audio/separator/download/' + rel[i]['id'] + '/vocals' + '" target="_blank" data-text="下载地址">')
                     $('#' + rel[i]['id'] + ' .accompaniment')
-                    .html('<a href="/audio/separator/download/' + rel[i]['id'] + '/accompaniment' + '"  data-text="下载地址">')
+                    .html('<a href="/audio/separator/download/' + rel[i]['id'] + '/accompaniment' + '"  target="_blank" data-text="下载地址">')
                 }
             }
         })
