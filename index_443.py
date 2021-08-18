@@ -142,6 +142,7 @@ sy.register_blueprint(audio.audio,url_prefix='/audio')
 sy.register_blueprint(audio.audiom,url_prefix='/m/audio')
 # sy.register_blueprint(special_res.sr,url_prefix='/res')
 sy.register_blueprint(chat.chatb, url_prefix='/chat')
+sy.register_blueprint(chat.chatmb, url_prefix='/m/chat')
 
 # sy.register_blueprint(pwa.pwa, subdomain='pwa')
 LocalIP = get_host_ip()  # 获取ip
