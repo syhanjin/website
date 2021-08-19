@@ -70,7 +70,7 @@ def admin_main_(p):
 def admin_main_post_(p):
     user = userdb.userdata.find_one({'_uid':getuser(request.cookies.get('_uid'))})
     if user != None and user['admin'] > 0:
-        path = 'file/' + p
+        path = 'file/' + (p if(p) else '')
         op = request.form.get('op')
         if op == 'uploadFile':
             file = request.files.get('file')
