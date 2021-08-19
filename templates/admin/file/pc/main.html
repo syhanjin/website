@@ -15,6 +15,7 @@
 		height: 55px;
 		line-height: 35px;
 	}
+
 	.container .m .main {
 		display: inline-block;
 		height: 100%;
@@ -25,12 +26,14 @@
 		width: 60%;
 		line-height: 55px;
 	}
+
 	.container a:hover {
 		-webkit-filter: brightness(1.2);
 		-o-filter: brightness(1.2);
 		-moz-filter: brightness(1.2);
 		filter: brightness(1.2);
 	}
+
 	.container .op {
 		display: inline-block;
 		background-color: #f4f4f4;
@@ -42,6 +45,7 @@
 		text-align: center;
 		cursor: pointer;
 	}
+
 	.f-ops {
 		margin: 10px auto;
 		width: 80%;
@@ -53,15 +57,15 @@
 
 {% block mdv %}
 <script>
-	var del = function(path) {
-		openP(350, 200, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">是否删除？删除后将不可恢复！</p><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div>', function(rel) {
+	var del = function (path) {
+		openP(350, 200, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">是否删除？删除后将不可恢复！</p><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div>', function (rel) {
 			if (rel == "yes") {
 				window.location = path;
 			}
 		});
 	}
-	var rename = function(path) {
-		openP(400, 300, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">请输入新名字:</p><input type="text" style="background-color: #f4f4f4;margin: 5px auto;width: 80%;display: block;height: 36px;line-height: 36px;font-size: 32px;border: none;border-bottom: 3px solid #e0d1cd;outline: 0;" id="nename" placeholder="新名字..." maxlength="20" /><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div></div>', function(rel) {
+	var rename = function (path) {
+		openP(400, 300, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">请输入新名字:</p><input type="text" style="background-color: #f4f4f4;margin: 5px auto;width: 80%;display: block;height: 36px;line-height: 36px;font-size: 32px;border: none;border-bottom: 3px solid #e0d1cd;outline: 0;" id="nename" placeholder="新名字..." maxlength="20" /><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div></div>', function (rel) {
 			if (rel == "yes") {
 				var nename = document.getElementById("nename").value.replace(/(^\s*)|(\s*$)/g, "");
 				if (nename == '') {
@@ -70,12 +74,12 @@
 				}
 				window.location = path + "&nename=" + nename;
 			}
-		}, function() {
+		}, function () {
 			$("#nename").focus();
 		});
 	}
-	var add = function(path) {
-		openP(400, 300, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">请输入文件夹名:</p><input type="text" style="margin: 5px auto;width: 80%;display: block;height: 30px;line-height: 30px;font-size: 24px;border: none;border-bottom: 3px solid #e0d1cd;outline: 0;" id="name" placeholder="文件夹名..." /><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div></div>', function(rel) {
+	var add = function (path) {
+		openP(400, 300, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">请输入文件夹名:</p><input type="text" style="margin: 5px auto;width: 80%;display: block;height: 30px;line-height: 30px;font-size: 24px;border: none;border-bottom: 3px solid #e0d1cd;outline: 0;" id="name" placeholder="文件夹名..." /><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div></div>', function (rel) {
 			if (rel == "yes") {
 				var name = document.getElementById("name").value.replace(/(^\s*)|(\s*$)/g, "");
 				if (name == '') {
@@ -84,14 +88,14 @@
 				}
 				window.location += "/" + name + "?op=mkdir";
 			}
-		}, function() {
+		}, function () {
 			$("#name").focus();
 		});
 	}
-	var upload_file = function(path) {
-		openP(500, 350, '<input id="upload" type="file" value="选择文件" />', function() {
-		}, function() {
-			$("#upload").change(function(link) {
+	var upload_file = function (path) {
+		openP(500, 350, '<input id="upload" type="file" value="选择文件" />', function () {
+		}, function () {
+			$("#upload").change(function (link) {
 				var file = link.target.files[0];
 				var formData = new FormData();
 				formData.append("file", file);
@@ -100,40 +104,40 @@
 				document.getElementById("popup").innerHTML += '<div><span></span></div>';
 				$("#popup div").append("<div id='before'>")
 				$("#popup div #before").css({
-					'content' : '',
-					'position' : 'absolute',
-					'top':'0',
-					'left':'0',
-					'width' : '0%',
-					'height' : '100%',
-					'background-color' : '#d5d5d5',
-					'border' : '0',
-					'border-radius' : '0',
-					'z-index':'-1'
+					'content': '',
+					'position': 'absolute',
+					'top': '0',
+					'left': '0',
+					'width': '0%',
+					'height': '100%',
+					'background-color': '#d5d5d5',
+					'border': '0',
+					'border-radius': '0',
+					'z-index': '-1'
 				});
 				$.ajax({
-					url : path,
-					type : "post",
-					data : formData,
-					dataType : 'json',
-					contentType : false,
-					processData : false,
-					xhr : function() {
+					url: path,
+					type: "post",
+					data: formData,
+					dataType: 'json',
+					contentType: false,
+					processData: false,
+					xhr: function () {
 						var myXhr = $.ajaxSettings.xhr()
 						if (myXhr.upload) {
-							myXhr.upload.addEventListener('progress', function(e) {
+							myXhr.upload.addEventListener('progress', function (e) {
 								if (e.lengthComputable) {
 									var max = e.total
 									var current = e.loaded
 									var Percentage = (current * 100) / max
 									$("#popup div #before").css('width', Percentage + '%');
-									$("#popup div span").text((current / (1024 * 1024)).toFixed(2) + ' / ' + (max / (1024 * 1024)).toFixed(2) +' MB');
+									$("#popup div span").text((current / (1024 * 1024)).toFixed(2) + ' / ' + (max / (1024 * 1024)).toFixed(2) + ' MB');
 								}
 							}, false)
 						}
 						return myXhr
 					},
-					complete : function(response) {
+					complete: function (response) {
 						location.reload();
 					}
 				});
@@ -142,29 +146,31 @@
 	}
 </script>
 <div class="f-ops">
-	<a class="op new" onclick='add("/admin/{{data['parent']}}")'>[NEW DIR]</a>
-	<a class="op opload" onclick='upload_file("/admin/{{data['parent']}}")'>[UPLOAD FILE]</a>
+	<a class="op new" onclick='add("/admin/{{data[' parent']}}")'>[NEW DIR]</a>
+	{% if data['parent'] != 'file' %}
+	<a class="op opload" onclick='upload_file("/admin/{{data[' parent']}}")'>[UPLOAD FILE]</a>
+	{% endif %}
 </div>
-<div class="m" >
+<div class="m">
 	<a class="main" href="/admin/{{data['parent']}}">&lt;PARENT&gt; .</a>
 </div>
 {% if data['parent'] != 'file' %}
-<div class="m" >
+<div class="m">
 	<a class="main" href="/admin/{{data['dirname']}}">&lt;PARENT&gt; ..</a>
 </div>
 {% endif %}
 {% for i in data['dirs'] %}
-<div class="m" >
+<div class="m">
 	<a class="main" href="/admin/{{data['parent']}}/{{i}}">&lt;DIR&gt; {{i}}</a>
-	<a class="op del" onclick='del("/admin/{{data['parent']}}/{{i}}?op=del")'>[DELETE]</a>
-	<a class="op rename" onclick='rename("/admin/{{data['parent']}}/{{i}}?op=rename")'>[RENAME]</a>
+	<a class="op del" onclick='del("/admin/{{data[' parent']}}/{{i}}?op=del")'>[DELETE]</a>
+	<a class="op rename" onclick='rename("/admin/{{data[' parent']}}/{{i}}?op=rename")'>[RENAME]</a>
 </div>
 {% endfor %}
 {% for i in data['files'] %}
-<div class="m" >
+<div class="m">
 	<a class="main" href="/admin/{{data['parent']}}/{{i}}">&lt;FILE&gt; {{i}}</a>
-	<a class="op del" onclick='del("/admin/{{data['parent']}}/{{i}}?op=del")'>[DELETE]</a>
-	<a class="op rename" onclick='rename("/admin/{{data['parent']}}/{{i}}?op=rename")'>[RENAME]</a>
+	<a class="op del" onclick='del("/admin/{{data[' parent']}}/{{i}}?op=del")'>[DELETE]</a>
+	<a class="op rename" onclick='rename("/admin/{{data[' parent']}}/{{i}}?op=rename")'>[RENAME]</a>
 </div>
 {% endfor %}
 {% endblock %}

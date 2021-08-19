@@ -65,12 +65,11 @@ def admin_main_(p):
     else:
         abort(404)
 
-@admin_file.route('/admin/file', methods=['POST'])
 @admin_file.route('/admin/file/<path:p>', methods=['POST'])
 def admin_main_post_(p):
     user = userdb.userdata.find_one({'_uid':getuser(request.cookies.get('_uid'))})
     if user != None and user['admin'] > 0:
-        path = 'file/' + (p if(p) else '')
+        path = 'file/' + p
         op = request.form.get('op')
         if op == 'uploadFile':
             file = request.files.get('file')
