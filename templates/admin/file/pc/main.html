@@ -148,7 +148,7 @@
 <div class="f-ops">
 	<a class="op new" onclick='add("/admin/{{data[' parent']}}")'>[NEW DIR]</a>
 	{% if data['parent'] != 'file' %}
-	<a class="op opload" onclick='upload_file("/admin/{{data[' parent']}}")'>[UPLOAD FILE]</a>
+	<a class="op opload" onclick='upload_file("/admin/{{data['parent']}}")'>[UPLOAD FILE]</a>
 	{% endif %}
 </div>
 <div class="m">
