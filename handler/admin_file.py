@@ -65,6 +65,7 @@ def admin_main_(p):
     else:
         abort(404)
 
+@admin_file.route('/admin/file', methods=['POST'])
 @admin_file.route('/admin/file/<path:p>', methods=['POST'])
 def admin_main_post_(p):
     user = userdb.userdata.find_one({'_uid':getuser(request.cookies.get('_uid'))})
