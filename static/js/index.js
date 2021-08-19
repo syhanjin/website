@@ -40,9 +40,6 @@ $(document).ready(function () {
             if(afterdata)afterdata();
         }
     }).fail(function () {
-        $.cookie('_uid', '', {
-            path: '/'
-        });
         $(".user .user-menu").remove();
     });
     $.get('/api/getnavitems', function (rel) {
