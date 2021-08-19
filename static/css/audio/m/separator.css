@@ -2,12 +2,12 @@
     border-collapse: collapse;
     text-align: center;
     margin: 1em auto;
-    border: 2px solid #5c5c5c;
+    border: .2rem solid #5c5c5c;
 }
 .separator-status-box td{
     background-color: white;
-    border-top: 1px solid #bebebe;
-    border-right: 1px solid #bebebe;
+    border-top: .1rem solid #bebebe;
+    border-right: .1rem solid #bebebe;
     padding: .2em .4em;
     box-sizing: border-box;
 }

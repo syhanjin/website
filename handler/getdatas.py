@@ -13,8 +13,10 @@ client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 maindb = client['main']
 noveldb = client['novel']
+chatdb = client['chat']
 getdatas = Blueprint('getdatas', __name__)
-userdels = ['pwd']
+userdels = ['pwd', 'introduction', 'personalized',
+            'pmodify', 'umodifydate', 'umodify']
 
 
 def getuser(_uid):
@@ -97,7 +99,10 @@ def api_getuserdata():
             data['umodify'] = 365-day
     data['_id'] = str(data['_id'])
     for i in userdels:
-        del data[i]
+        if i in data:
+            del data[i]
+    data['chat-count'] = chatdb.messages.find(
+        {'read': False, 'r_uid': _uid}).count()
     return jsonify(data)
 
 

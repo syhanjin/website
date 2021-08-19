@@ -56,7 +56,10 @@ function close_search_box(op) {
 function open_search_box(users, u) {
     var box = search_box
         .stop()
-        .css('height', '');
+        .css({
+            'height': '',
+            'overflow': ''
+        });
     var sheight = 0;
     if (users.type == null) {
         sheight = box.html().length <= 0 && box.css('z-index') == '9999999' ? 30 : box.height();
@@ -481,8 +484,11 @@ $(document).ready(function () {
         }).fail(function () {
             new Event('用户查找失败');
         });
-    }).on('focus', open_search_box)
-        .on('blur', close_search_box)
+    })
+        .on('focus', open_search_box)
+        .on('blur', function () {
+            close_search_box()
+        });
     search_box.on("click", ".search-item", function () {
         var d = $(this);
         $("#search").val('');
@@ -507,10 +513,10 @@ $(document).ready(function () {
         .on('click', '#mkfriends', function () {
             var _uid = $(this).attr('data-_uid');
             openP(300, 300,
-                `<p style="font-size: 18px;text-align: center;">添加好友</p>
+                `<p style="font-size: 1.8rem;text-align: center;">添加好友</p>
                 <span style="text-align: center;display: block;">`+ $(this).attr('data-user') + `</span>
             <textarea data-_uid=`+ _uid + ` id="mk-text" type="text" maxlength="32" autofocus="autofocus" placeholder="填写验证信息..."
-                style="resize:none;width: 80%;max-width: 450px;display: block;outline: 0;border: 2px solid #000000;margin: auto;padding: .2em 1em;height: 72px;"></textarea>
+                style="resize:none;width: 80%;max-width: 45rem;display: block;outline: 0;border: .2rem solid #000000;margin: auto;padding: .2em 1em;height: 7.2rem;"></textarea>
             <button id="mk-send"
                 style="padding: .2em 1em;text-align: center;margin: auto;display: block;margin-top: 1em;">发送请求</button>`,
             );
@@ -545,16 +551,16 @@ $(document).ready(function () {
         .on('focus', '.send-msg-box', function () {
 
             $(this).stop().animate({
-                'height': '146px'
+                'height': '14.6rem'
             })
         })
-        .on('blur', '.send-msg-box', function(){
+        .on('blur', '.send-msg-box', function () {
             $(this).stop().animate({
-                'height': '40px'
+                'height': '4rem'
             })
         })
         // 返回按钮
-        .on('click','.return',function(){
+        .on('click', '.return', function () {
             window.location.hash = '';
             window.location.reload();
         })
