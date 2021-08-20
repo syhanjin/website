@@ -108,6 +108,8 @@ function check_hash() {
             });
             break;
         case '#activity':
+            this_page.html('<p>该功能暂停开发</p>');
+            return;
             $.get(location.pathname + '/activity?page=' + activity_page, function (rel) {
                 if (rel == 'False')
                     this_page.html('<p>获取动态失败</p>')
