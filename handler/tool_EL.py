@@ -4,6 +4,7 @@ import random
 import os
 from flask import Blueprint, render_template, request, jsonify, session, redirect
 from flask.helpers import send_file
+from flask.wrappers import Response
 from pydub.audio_segment import AudioSegment
 path = os.path.join('.','tmp','EL')
 if not os.path.exists(path):
@@ -16,8 +17,11 @@ EL = Blueprint('EL', __name__)
 
 def audio_add(tmp,id,R=False):
     path = os.path.join('.','tmp','EL',id+'.mp3')
-    tmp.save(path)
-    tmp_au = AudioSegment.from_file(path,'mp3')
+    # tmp.save(path)
+    f = open(path,'wb')
+    f.write(tmp.read())
+    f.close()
+    tmp_au = AudioSegment.from_mp3(path)
     if R:
         tmp_au += tmp_au
     os.remove(path)
@@ -33,6 +37,7 @@ def EL_home():
 def EL_upload():
     id = datetime.datetime.now().__format__('%Y%m%d%H%M%S%f') + \
             str(random.randint(10, 99))
+    # print('英语听力，开始处理(id:',id,')')
     au = AudioSegment.empty()
     tmp = request.files.get('au-title')
     if not tmp:

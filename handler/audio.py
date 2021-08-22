@@ -17,7 +17,7 @@ minute = 60 * 1000
 root_path = '../audio'
 tmp_path = os.path.join(root_path, 'tmp')
 if not os.path.exists(tmp_path):
-    os.mkdir(tmp_path)
+    os.makedirs(tmp_path)
 
 
 def division(file, filename, id):

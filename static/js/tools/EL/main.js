@@ -42,18 +42,44 @@ $(document).ready(function () {
         }
     });
     $('#upload').on('click', function () {
-
+        $(this).attr('disabled', 'disabled').val('上传中...');
         $.ajax({
             url: '/tools/EL/upload',
             type: 'post',
-            contentType:false,
-            processData:false,
+            contentType: false,
+            processData: false,
             data: fd,
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr()
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', function (e) {
+                        if (e.lengthComputable) {
+                            var max = e.total
+                            var current = e.loaded
+                            var Percentage = (current * 100) / max
+                            $('#upload-pro').text(Percentage + '%');
+                            if (Percentage == 100) {
+                                $('#upload-pro').empty();
+                                $('#upload').val('后台处理中...');
+                            }
+                            // $("#popup div #before").css('width', Percentage + '%');
+                            // $("#popup div span").text((current / (1024 * 1024)).toFixed(2) + ' / ' + (max / (1024 * 1024)).toFixed(2) + ' MB');
+                        }
+                    }, false)
+                }
+                return myXhr
+            },
             success: function (rel) {
                 if (rel == 'False') {
-                    new Event('数据不全')
+                    new Event('数据不全');
+                    $('#upload').removeAttr('disabled').val('提交生成');
                 } else {
-                    window.location.href = "/tools/EL/download/" + rel;
+                    var a = document.createElement('a')
+                    a.href = "/tools/EL/download/" + rel;
+                    a.download = rel;
+                    document.body.appendChild(a);
+                    a.click();
+                    location.reload()
                 }
             }
         })
