@@ -21,10 +21,15 @@
 
     <div id="title" class="part">
         <span>标题</span>
-        <input type="button" value="录制" id="r-t"/>
+        <input type="button" value="录制" id="r-t" name="au-title" />
+        <span>试听：</span>
+        <audio controls="">
+            浏览器不支持
+        </audio>
     </div>
     <div class="part">
-        <span class="text">第一节  听下面5段对话。每段对话后有一个小题，从题中所给的A、B、C三个选项中选出最佳选项回答问题，听每段对话前，你将有时间读各个小题，每小题5秒钟；听完后，各小题将给出5秒钟的作答时间。（共5小题，记5分）</span>
+        <span class="text">第一节
+            听下面5段对话。每段对话后有一个小题，从题中所给的A、B、C三个选项中选出最佳选项回答问题，听每段对话前，你将有时间读各个小题，每小题5秒钟；听完后，各小题将给出5秒钟的作答时间。（共5小题，记5分）</span>
         <div>
             <span>试听：</span>
             <audio src="/static/tools/EL/01.mp3" controls="">
@@ -35,7 +40,7 @@
     <div class="part">
         <div class="conv">
             <span>对话1</span>
-            <input type="button" value="录制" name="1"/>
+            <input type="button" value="录制" name="au-pt1" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -43,7 +48,7 @@
         </div>
         <div class="conv">
             <span>对话2</span>
-            <input type="button" value="录制" name="2"/>
+            <input type="button" value="录制" name="au-pt2" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -51,7 +56,7 @@
         </div>
         <div class="conv">
             <span>对话3</span>
-            <input type="button" value="录制" name="3"/>
+            <input type="button" value="录制" name="au-pt3" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -59,7 +64,7 @@
         </div>
         <div class="conv">
             <span>对话4</span>
-            <input type="button" value="录制" name="4"/>
+            <input type="button" value="录制" name="au-pt4" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -67,7 +72,7 @@
         </div>
         <div class="conv">
             <span>对话5</span>
-            <input type="button" value="录制" name="5"/>
+            <input type="button" value="录制" name="au-pt5" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -75,7 +80,8 @@
         </div>
     </div>
     <div class="part">
-        <span class="text">第二节  听下面6段对话或独白。每段对话或独白后有2-3个小题，从题中所给的A、B、C三个选项中选出最佳选项回答问题，听每段对话或独白前，你将有时间阅读各个小题，每小题5秒钟；听完后，各小题将给出5秒钟的作答时间（共15小题，计15分）</span>
+        <span class="text">第二节
+            听下面6段对话或独白。每段对话或独白后有2-3个小题，从题中所给的A、B、C三个选项中选出最佳选项回答问题，听每段对话或独白前，你将有时间阅读各个小题，每小题5秒钟；听完后，各小题将给出5秒钟的作答时间（共15小题，计15分）</span>
         <div>
             <span>试听：</span>
             <audio src="/static/tools/EL/02.mp3" controls="">
@@ -95,7 +101,7 @@
     <div class="part">
         <div class="conv">
             <span>对话6</span>
-            <input type="button" value="录制" name="6"/>
+            <input type="button" value="录制" name="au-pt6" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -114,7 +120,7 @@
     <div class="part">
         <div class="conv">
             <span>对话7</span>
-            <input type="button" value="录制" name="7"/>
+            <input type="button" value="录制" name="au-pt7" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -133,7 +139,7 @@
     <div class="part">
         <div class="conv">
             <span>对话8</span>
-            <input type="button" value="录制" name="8"/>
+            <input type="button" value="录制" name="au-pt8" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -152,7 +158,7 @@
     <div class="part">
         <div class="conv">
             <span>对话9</span>
-            <input type="button" value="录制" name="9"/>
+            <input type="button" value="录制" name="au-pt9" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -171,7 +177,7 @@
     <div class="part">
         <div class="conv">
             <span>对话10</span>
-            <input type="button" value="录制" name="10"/>
+            <input type="button" value="录制" name="au-pt10" />
             <span>试听：</span>
             <audio controls="">
                 浏览器不支持
@@ -190,11 +196,22 @@
     <div class="part">
         <div class="conv">
             <span>独白</span>
-            <input type="button" value="录制" name="11"/>
-            <span>试听：</span>
-            <audio controls="">
-                浏览器不支持
-            </audio>
+            <div>
+                <span>男</span>
+                <input type="button" value="录制" name="au-pt11" />
+                <span>试听：</span>
+                <audio controls="">
+                    浏览器不支持
+                </audio>
+            </div>
+            <div>
+                <span>女</span>
+                <input type="button" value="录制" name="au-pt12" />
+                <span>试听：</span>
+                <audio controls="">
+                    浏览器不支持
+                </audio>
+            </div>
         </div>
     </div>
     <div id="recording">
@@ -202,5 +219,6 @@
         <span>:</span>
         <em>0</em>
     </div>
+    <input type="button" id="upload" value="提交生成">
 </div>
 {% endblock %}

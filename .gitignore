@@ -7,3 +7,4 @@ file/
 !templates/admin/file
 ./logs/
 index_test.py
+tmp
