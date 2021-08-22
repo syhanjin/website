@@ -134,4 +134,6 @@ def EL_upload():
 @EL.route('/tools/EL/download/<string:id>')
 def EL_download(id):
     path = os.path.join('.','tmp','EL_download',id+'.mp3')
-    return send_file(path)
+    s = open(path,'rb').read()
+    os.remove(path)
+    return Response(s,mimetype='audio/mp3')
