@@ -1,0 +1,140 @@
+#main {
+    width: 99%;
+    margin: 3rem auto;
+    box-shadow: 0 0 .5rem #888888;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+#main .part {
+    box-shadow: 0 0 .2rem #555555;
+    padding: 1rem;
+    margin: 1.5rem auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.part .audition {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.part>span:not(.text),
+.part .conv>span:not(.text) {
+    font-size: 2rem;
+    text-align: center;
+    display: block;
+    line-height: 1;
+}
+
+.part input[type=button] {
+    width: 90%;
+    padding: .3em .5em;
+    border: 0;
+    border-radius: .5rem;
+    background-color: #6161ff;
+    margin: .5rem 0 0 0;
+}
+
+.part .audition audio {
+    flex: 1;
+}
+
+.intr {
+    color: grey;
+    margin: .5rem auto;
+    display: block;
+    padding: .5rem 1rem;
+    width: 90%;
+}
+
+.intr span {
+    font-weight: bold;
+}
+
+.part .text {
+    border-radius: .5rem;
+    display: block;
+    width: 95%;
+    margin: 0 auto;
+    padding: .5rem;
+    background: #80808063;
+}
+
+.part div {
+    display: block;
+    margin: .5rem auto;
+    width: 95%;
+    position: relative;
+    text-align: center;
+}
+
+.part div * {
+    display: inline-table;
+    vertical-align: middle;
+    position: relative;
+}
+
+#recording {
+    width: 10rem;
+    height: 3rem;
+    display: none;
+    padding-left: 3.5rem;
+    position: fixed;
+    line-height: 3rem;
+    border-radius: .5rem;
+    top: 1.5rem;
+    left: 1.5rem;
+    color: #FFFFFF;
+    background-color: #000000;
+}
+
+#recording:before {
+    content: '';
+    display: block;
+    padding: 0;
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: .75rem;
+    left: .8rem;
+    border-radius: 50%;
+    background-color: red;
+    animation-name: t1;
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+}
+#upload{
+    width: 90%;
+    padding: .3em .5em;
+    text-align: center;
+    margin: auto;
+    display: block;
+}
+#upload-pro{
+    width: 90%;
+    display: block;
+    text-align: center;
+    font-size: 2.2rem;
+}
+
+#recording em {
+    font-style: normal;
+}
+
+@keyframes t1 {
+    0% {
+        opacity: 1;
+    }
+
+    51% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

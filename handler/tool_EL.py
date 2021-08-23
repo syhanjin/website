@@ -31,6 +31,9 @@ def audio_add(tmp,id,R=False):
 @EL.route('/tools/EL')
 def EL_home():
     return render_template('tools/EL/pc/main.html')
+@EL.route('/m/tools/EL')
+def EL_m():
+    return render_template('tools/EL/m/main.html')
 
 
 @EL.route('/tools/EL/upload', methods=['POST'])
