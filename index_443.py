@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 from flask import Flask, request, render_template, session, redirect, make_response, send_file  # 引入flask
-from handler import getdatas, register, login, user, games, tool_EL, admin_file, c18, blog, photo, chat, audio  # special_res
+from handler import getdatas, register, login, user, games, admin_file, c18, blog, photo, chat, audio  # special_res
+from handler.tools import EL
 import socket
 import base64
 import datetime
@@ -92,11 +93,9 @@ def before_request():  # 记录上一次访问
         if i in url:
             return
     session['lpage'] = url
-#     print(url)
-
-# 对 /m/c18进行重定向
 
 
+# region 对 /m/c18进行重定向
 @sy.route('/m/c18')
 def c18_redirect():
     return redirect('/c18/m')
@@ -105,15 +104,24 @@ def c18_redirect():
 @sy.route('/m/c18/<path:p>')
 def c18_redirect_(p):
     return redirect('/c18/m/'+p)
-# robots.txt
+# endregion
 
 
+# region robots.txt
 @sy.route('/robots.txt')
 def robots():
     try:
         return send_file('robots.txt')
     except Exception as e:
         return str(e)
+# endregion
+
+
+@sy.after_request
+def after_request(resp):
+    if request.url.rsplit('.', 1)[1] == 'js':
+        resp.mimetype = 'text/javascript'
+    return resp
 
 
 '''
@@ -124,28 +132,61 @@ def test():
     return ''#request
 '''
 
-sy.register_blueprint(getdatas.getdatas)
-sy.register_blueprint(register.rg)
+# region login
 sy.register_blueprint(login.login, url_prefix='/login')
 sy.register_blueprint(login.loginm, url_prefix='/m/login')
+# endregion
+# region register
+sy.register_blueprint(register.rg)
+# endregion
+# region user
 sy.register_blueprint(user.userb, url_prefix='/user')
 sy.register_blueprint(user.usermb, url_prefix='/m/user')
-sy.register_blueprint(games.games, url_prefix='/games')
-sy.register_blueprint(tool_EL.EL)
-sy.register_blueprint(admin_file.admin_file)
-sy.register_blueprint(c18.c18, url_prefix='/c18')
-sy.register_blueprint(c18.c18m, url_prefix='/c18/m')
-sy.register_blueprint(blog.blog, url_prefix='/blog')
-sy.register_blueprint(blog.blogm, url_prefix='/m/blog')
-sy.register_blueprint(photo.photo, url_prefix='/photo')
-sy.register_blueprint(audio.audio,url_prefix='/audio')
-sy.register_blueprint(audio.audiom,url_prefix='/m/audio')
-# sy.register_blueprint(special_res.sr,url_prefix='/res')
+# endregion
+# region chat
 sy.register_blueprint(chat.chatb, url_prefix='/chat')
 sy.register_blueprint(chat.chatmb, url_prefix='/m/chat')
+# endregion
+# region games
+sy.register_blueprint(games.games, url_prefix='/games')
+# endregion
+# region blog
+sy.register_blueprint(blog.blog, url_prefix='/blog')
+sy.register_blueprint(blog.blogm, url_prefix='/m/blog')
+# endregion
+# region audio
+sy.register_blueprint(audio.audio, url_prefix='/audio')
+sy.register_blueprint(audio.audiom, url_prefix='/m/audio')
+# endregion
+# region photo
+sy.register_blueprint(photo.photo, url_prefix='/photo')
+# endregion
+# region api
+sy.register_blueprint(getdatas.getdatas)
+# endregion
+# region admin
+sy.register_blueprint(admin_file.admin_file)
+# endregion
 
+# region others
+# sy.register_blueprint(special_res.sr,url_prefix='/res')
+# endregion
+# region tools
+sy.register_blueprint(EL.EL)
+# endregion
+
+# 分站
+# region c18
+sy.register_blueprint(c18.c18, url_prefix='/c18')
+sy.register_blueprint(c18.c18m, url_prefix='/c18/m')
+# endregion
+# region 预备作家协会
 # sy.register_blueprint(pwa.pwa, subdomain='pwa')
+# endregion
+
+# 运行
 LocalIP = get_host_ip()  # 获取ip
-sy.run(host=LocalIP, port=443, ssl_context=('sakuyark.com.pem', 'sakuyark.com.key'))#启动服务器
+sy.run(host=LocalIP, port=443, ssl_context=(
+    'sakuyark.com.pem', 'sakuyark.com.key'))  # 启动服务器
 # sy.run(host=LocalIP, port=80)  # 启动服务器
 # sy.run(host='127.0.0.1', port=80)
