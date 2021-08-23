@@ -1,7 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
 from flask import Flask, request, render_template, session, redirect, make_response, send_file  # 引入flask
-from handler import getdatas, register, login, user, games, admin_file, c18, blog, photo, chat, audio  # special_res
+from handler import getdatas, register, login, user, games, c18, blog, photo, chat, audio  # special_res
 from handler.tools import EL
+from handler.admin import file
 import socket
 import base64
 import datetime
@@ -165,7 +166,7 @@ sy.register_blueprint(photo.photo, url_prefix='/photo')
 sy.register_blueprint(getdatas.getdatas)
 # endregion
 # region admin
-sy.register_blueprint(admin_file.admin_file)
+sy.register_blueprint(file.admin_file)
 # endregion
 
 # region others
@@ -186,7 +187,6 @@ sy.register_blueprint(c18.c18m, url_prefix='/c18/m')
 
 # 运行
 LocalIP = get_host_ip()  # 获取ip
-sy.run(host=LocalIP, port=443, ssl_context=(
-    'sakuyark.com.pem', 'sakuyark.com.key'))  # 启动服务器
+sy.run(host=LocalIP, port=443, ssl_context=('sakuyark.com.pem', 'sakuyark.com.key'))#启动服务器
 # sy.run(host=LocalIP, port=80)  # 启动服务器
 # sy.run(host='127.0.0.1', port=80)
