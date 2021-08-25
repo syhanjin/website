@@ -16,7 +16,7 @@ noveldb = client['novel']
 chatdb = client['chat']
 getdatas = Blueprint('getdatas', __name__)
 userdels = ['pwd', 'introduction', 'personalized',
-            'pmodify', 'umodifydate', 'umodify']
+            'pmodify', 'umodifydate']
 
 
 def getuser(_uid):
