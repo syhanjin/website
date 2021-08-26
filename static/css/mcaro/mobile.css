@@ -195,3 +195,7 @@ a.user-name {
     width: 24px;
     right: -11px;
 }
+
+.templates{
+    display: none !important;
+}

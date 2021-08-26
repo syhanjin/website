@@ -298,7 +298,7 @@
     line-height: 22px;
 }
 
-.msg-item .right-bottom .count{
+.msg-item .right-bottom .count {
     width: 18px;
     height: 18px;
     border-radius: 9px;
@@ -309,13 +309,17 @@
     align-self: center;
 }
 
-.msg-item .right-bottom .count::before{
-    content: attr(data-count);
-}
-.msg-item .right-bottom .count[data-count="99+"]{
-    width:24px;
+.msg-item .right-bottom .count[data-count="0"] {
+    display: none;
 }
 
+.msg-item .right-bottom .count::before {
+    content: attr(data-count);
+}
+
+.msg-item .right-bottom .count[data-count="99+"] {
+    width: 24px;
+}
 
 /* 主体 */
 .index-main {

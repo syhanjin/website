@@ -105,54 +105,21 @@ function make_msg_string(text) {
 }
 
 function make_msg(data, i2_time, T) {
-    var msg_item;
+    var div = document.importNode(document.getElementById('template-msg'), true), div = div.content || div;
     switch (data['type']) {
         case 'text':
-            /*
-            <div class="msg">
-                <div class="system-propmt"></div>
-                <div class="msg-main">
-                    <img src="/static/images/icon.jpg">
-                    <div class="msg-text"></div>
-                </div>
-            </div>
-            */
-            msg_item = document.createElement('div');
-            msg_item.className = 'msg' + (my_uid == data['s_uid'] ? ' r' : '');
-            if (T ||
-                moment(data['time']).diff(moment(i2_time), 'seconds') > 300) {
-                var system_propmt = document.createElement('div');
-                system_propmt.className = 'system-propmt';
-                system_propmt.innerText = make_time_string(data['time']);
-                msg_item.appendChild(system_propmt);
-            }
-            var msg_main = document.createElement('div');
-            msg_main.className = 'msg-main';
-            var img = document.createElement('img');
-            img.src = "/api/userphoto/" + data['s_uid'];
-            msg_main.appendChild(img);
-            var msg_text = document.createElement('div');
-            msg_text.className = 'msg-text';
-            msg_text.innerHTML = make_msg_string(data['text']);
-            msg_main.appendChild(msg_text);
-            msg_item.appendChild(msg_main);
+            div.className = 'msg' + (my_uid == data['s_uid'] ? ' r' : '');
+            if (T || moment(data['time']).diff(moment(i2_time), 'seconds') > 300)
+                div.querySelector('.system-propmt').innerText = make_time_string(data['time']);
+            div.querySelector('.msg-main img').src = "/api/userphoto/" + data['s_uid'];
+            div.querySelector('.msg-text').innerHTML = make_msg_string(data['text']);
             break;
         case 'mkfriends':
-            if (my_uid == data['s_uid']) break;
-            msg_item = document.createElement('div');
-            msg_item.className = 'msg';
-            var system_propmt = document.createElement('div');
-            system_propmt.className = 'system-propmt';
-            system_propmt.innerText = make_time_string(data['time']);
-            msg_item.appendChild(system_propmt);
-            var msg_main = document.createElement('div');
-            msg_main.className = 'msg-main';
-            var img = document.createElement('img');
-            img.src = "/api/userphoto/" + data['s_uid'];
-            msg_main.appendChild(img);
-            var msg_text = document.createElement('div');
-            msg_text.className = 'msg-text mkfriends';
-            msg_text.innerHTML =
+            if (my_uid == data['s_uid']) return null;
+            div.querySelector('.system-propmt').innerText = make_time_string(data['time']);
+            div.querySelector('.msg-main img').src = "/api/userphoto/" + data['s_uid'];
+            div.querySelector('.msg-text').className = 'msg-text mkfriends';
+            div.querySelector('.msg-text').innerHTML =
                 '对方请求添加你为好友\n'
                 + '验证信息：\n'
                 + data['text']
@@ -161,11 +128,9 @@ function make_msg(data, i2_time, T) {
                 + '">同意</span><span class="no" data-_uid="'
                 + data['s_uid']
                 + '">拒绝</span>'
-            msg_main.appendChild(msg_text);
-            msg_item.appendChild(msg_main);
             break;
     }
-    return msg_item;
+    return div;
 }
 
 function get_new_msg() {
@@ -255,87 +220,10 @@ function msg_box(_uid, user) {
         }
     })
     chat_main.empty();
-
-    /*
-    <div class="msg-content-box">
-         <div>
-             <!--
-             <div class="msg r">
-                 <div class="system-propmt">08-04 16:38</div>
-                 <div class="msg-main">
-                     <img src="/static/images/icon.jpg">
-                     <div class="msg-text"></div>
-                 </div>
-             </div>
-             -->
-         </div>
-     </div>
-     */
-    /*
-     <div class="send-msg-box">
-         <div class="edit-textarea">
-             <textarea id="msg-text" autofocus="autofocus" maxlength="500"></textarea>
-         </div>
-         <footer>
-             <p class="word-count"><span>0</span> / 500</p>
-             <button id="send-msg">发送<span>Enter</span></button>
-         </footer>
-     </div>
-    */
-    //#region 头部
-    var header = document.createElement('div');
-    header.className = 'chat-header';
-    {
-        var ret = document.createElement('div');
-        ret.innerHTML = '<i class="fas fa-chevron-left"></i>';
-        ret.className = 'return';
-        header.appendChild(ret);
-    } {
-        var un = document.createElement('a');
-        un.href = "/user/" + _uid;
-        un.innerText = user || '';
-        un.className = 'chat-header-user';
-        header.appendChild(un);
-    } {
-        var div = document.createElement('div');
-        div.innerHTML = '<span>自动刷新</span><div class="choice" id="ar" title="开启后，会自动获取最新消息"></div>';
-        header.appendChild(div);
-    }
-    chat_main.append(header);
-    //#endregion
-    //#region 主体
-    var main = document.createElement('div');
-    main.className = 'msg-content-box';
-    main.appendChild(document.createElement('div'));
-    chat_main.append(main);
-
-    //#endregion
-    //#region 发送消息
-    var smb = document.createElement('div');
-    smb.className = 'send-msg-box';
-    {
-        var edit_box = document.createElement('div');
-        edit_box.className = 'edit-textarea';
-        var textarea = document.createElement('textarea');
-        textarea.id = "msg-text";
-        textarea.autofocus = "autofocus";
-        textarea.maxLength = "500";
-        edit_box.appendChild(textarea);
-        smb.appendChild(edit_box);
-    } {
-        var footer = document.createElement('footer');
-        var p = document.createElement('p');
-        p.className = 'word-count';
-        p.innerHTML = '<span>0</span> / 500';
-        footer.appendChild(p);
-        var button = document.createElement('button');
-        button.id = "send-msg";
-        button.innerHTML = '发送';
-        footer.appendChild(button);
-        smb.appendChild(footer);
-    }
-    chat_main.append(smb);
-    //#endregion
+    var div = document.importNode(document.getElementById('template-index-main'), true), div = div.content || div;
+    div.querySelector('.chat-header a').href = "/user/" + _uid;
+    div.querySelector('.chat-header a').innerText = user || '';
+    chat_main.html(div);
     // 滚动条到最上方自动加载消息
     $('.msg-content-box').off('scroll').on('scroll', function (e) {
         if (this.scrollTop == 0)
@@ -353,88 +241,13 @@ function chat_list() {
         } else {
             var cl = $('.chat-list');
             for (i in rel) {
-                /*
-                <div class="msg-item">
-                    <div class="left photo">
-                        <img src="/api/userphoto/9889573" />
-                    </div>
-                    <div class="right">
-                        <div class="right-top">
-                            <div class="name">
-                                <span></span>
-                            </div>
-                            <div class="time"></div>
-                        </div>
-                        <div class="right-bottom">
-                            <p class="last-msg"></p>
-                            <span class="count"></span>
-                        </div>
-                    </div>
-                </div>
-                */
-                var div = document.createElement('a');
-                div.className = 'msg-item';
-                div.href = "#" + rel[i]['s_uid'];
-                // 头像
-                var photo = document.createElement('div');
-                photo.className = 'left photo';
-                var img = document.createElement('img')
-                img.src = '/api/userphoto/' + rel[i]['s_uid'];
-                photo.appendChild(img); // photo | img
-                div.appendChild(photo); // msg-item | { photo | img }
-                // 右侧
-                var right = document.createElement('div');
-                right.className = 'right';
-                // 右上
-                var r_top = document.createElement('div');
-                r_top.className = 'right-top';
-                // 用户名
-                var name_ = document.createElement('div');
-                name_.className = 'name';
-                var span = document.createElement('span');
-                span.innerText = rel[i]['s_user'];
-                name_.appendChild(span);// name | span | s_user
-                r_top.appendChild(name_);// right-top | { name | span | s_user }
-                // 时间
-                var time = document.createElement('div');
-                time.className = 'time';
-                time.innerText = make_time_string(rel[i]['time']);
-                r_top.appendChild(time);// right-top | { name | span | s_user} { time }
-                right.appendChild(r_top);// right | { right-top | { name | span | s_user} time }
-                // 右下
-                var r_bottom = document.createElement('div');
-                r_bottom.className = 'right-bottom';
-                // 最后一条消息
-                var last_msg = document.createElement('p');
-                last_msg.className = 'last-msg';
-                last_msg.innerText = rel[i]['last_msg'];
-                r_bottom.appendChild(last_msg)// right-bottom | last-msg
-                //未读消息计数
-                if (rel[i]['count'] > 0) {
-                    var count = document.createElement('span');
-                    count.className = 'count';
-                    count.setAttribute('data-count', rel[i]['count'] < 100 ? rel[i]['count'] : '99+');
-                    r_bottom.appendChild(count)// right-bottom | last-msg count
-                }
-                right.appendChild(r_bottom)
-                /* right | 
-                { right-top | { name | span | s_user} time }
-                { right-bottom | last-msg [count] }
-                */
-                div.appendChild(right);
-                /* msg-item | 
-                { photo | img }
-                { right | 
-                    { right-top | 
-                        { name | span | s_user}
-                        time 
-                    }
-                    { right-bottom | 
-                        last-msg 
-                        [count]
-                    }
-                }
-                */
+                var div = document.importNode(document.getElementById('template-msg-item'), true), div = div.content || div;
+                div.querySelector('.msg-item').href = "#" + rel[i]['s_uid'];
+                div.querySelector('.left.photo img').src = '/api/userphoto/' + rel[i]['s_uid'];
+                div.querySelector('.name span').innerText = rel[i]['s_user'];
+                div.querySelector('.time').innerText = make_time_string(rel[i]['time']);
+                div.querySelector('.last-msg').innerText = rel[i]['last_msg'];
+                div.querySelector('.count').setAttribute('data-count', rel[i]['count'] < 100 ? rel[i]['count'] : '99+');
                 cl.append(div);
             }
         }

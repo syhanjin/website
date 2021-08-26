@@ -312,6 +312,10 @@
     content: attr(data-count);
 }
 
+.msg-item .right-bottom .count[data-count="0"] {
+    display: none;
+}
+
 .msg-item .right-bottom .count[data-count="99+"] {
     width: 24px;
 }
@@ -347,11 +351,13 @@
     display: flex;
     align-items: center;
 }
-.index-main .chat-header .return{
+
+.index-main .chat-header .return {
     width: 2.2rem;
     text-align: center;
     margin-right: .5em;
 }
+
 .index-main .chat-header>a {
     flex: 1
 }
