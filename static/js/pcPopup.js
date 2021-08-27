@@ -18,8 +18,13 @@ var openP = function(w, h, e, callback_close, callback) {
         width : (w < 80 ? 80 : w) + 'px',
         height : (h < 50 ? 50 : h) + 'px'
     }, 150, function() {
-
-        document.getElementById('popup').innerHTML = '<div class="p-header"><div id="p-close" onclick="closeP()"></div></div>' + e;
+        var popup=document.getElementById('popup');
+        popup.innerHTML = '<div class="p-header"><div id="p-close" onclick="closeP()"></div></div>';
+        if (typeof e == typeof ''){
+            popup.innerHTML+=e;
+        }else{
+            popup.appendChild(e);
+        }
         if (callback != null)
             callback();
     });

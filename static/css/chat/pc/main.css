@@ -233,6 +233,8 @@
 
 .msg-item .left.photo img {
     width: 100%;
+    display: block;
+    margin: auto;
 }
 
 .msg-item .right {

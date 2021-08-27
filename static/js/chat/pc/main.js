@@ -1,7 +1,18 @@
 // 定义变量
-var search_box, choices = {}, chat_main,
-    msg_interval, msg_list = {}, msg_timestamp, msg_page,
-    my_uid, now_uid, auto_refresh, ctrl, last_time;
+var
+    // 对象
+    search_box, chat_main,
+    // 选择器函数字典
+    choices = {},
+    //intervals
+    msg_interval, list_interval,
+    //消息的时间戳和页码
+    msg_timestamp, msg_page,
+    // 我的用户名，当前对象用户名
+    my_uid, now_uid,
+    // 自动刷新，使用Ctrl，最新消息时间
+    auto_refresh, ctrl, last_time;
+
 // 数据获取完后运行
 var afterdata = function () {
     // 同步用户数据
@@ -17,24 +28,29 @@ var afterdata = function () {
     }
     my_uid = user_data['_uid'];
 }
+
 // 定义函数
 choices['alws'] = function (status) {
     if (status)
         $.get('/chat/modify/allowStrangers?s=yes');
     else
         $.get('/chat/modify/allowStrangers?s=no');
-};
+}
+
 choices['ar'] = function (status) {
     // new Event('这个东西还没做好，暂时不能开启');
     // $('#ar').removeClass('select');
     // return;
     if (status)
         msg_interval = setInterval(get_new_msg, 1000),
+            list_interval = setInterval(chat_list, 1000),
             auto_refresh = true;
     else
         clearInterval(msg_interval),
+            clearInterval(list_interval),
             auto_refresh = false;
 }
+
 choices['ctrl'] = function (status) {
     if (status) {
         $.get('/chat/modify/MSG_CTRL?s=yes');
@@ -46,6 +62,7 @@ choices['ctrl'] = function (status) {
         ctrl = false;
     }
 }
+
 function make_search_item(u, user, _uid) {
     var re = new RegExp(u, 'gi');
     rel = user.replace(re, function (i) {
@@ -124,8 +141,8 @@ function make_msg(data, i2_time, T) {
     var div = document.importNode(document.getElementById('template-msg'), true), div = div.content || div;
     switch (data['type']) {
         case 'text':
-            div.className = 'msg' + (my_uid == data['s_uid'] ? ' r' : '');
-            if (T || moment(data['time']).diff(moment(i2_time), 'seconds') > 300) 
+            div.querySelector('.msg').className = 'msg' + (my_uid == data['s_uid'] ? ' r' : '');
+            if (T || moment(data['time']).diff(moment(i2_time), 'seconds') > 300)
                 div.querySelector('.system-propmt').innerText = make_time_string(data['time']);
             div.querySelector('.msg-main img').src = "/api/userphoto/" + data['s_uid'];
             div.querySelector('.msg-text').innerHTML = make_msg_string(data['text']);
@@ -173,18 +190,15 @@ function send_msg(_uid, text) {
     }, function (rel) {
         if (rel == 'False') {
             var user = $('.chat-header-user').text();
-            var msg_item = document.createElement('div');
-            msg_item.className = 'msg';
-            var system_propmt = document.createElement('div');
-            system_propmt.className = 'system-propmt';
-            system_propmt.innerHTML = '你还不是'
+            var div = document.importNode(document.getElementById('template-msg'), true), div = div.content || div;
+            div.querySelector('.system-propmt').innerHTML = '你还不是'
                 + (user ? user : 'TA')
                 + '的好友，你可以选择 <span id="mkfriends" data-user="'
                 + (user ? user : '')
                 + '" data-_uid="'
                 + _uid + '">添加好友</span>';
-            msg_item.appendChild(system_propmt);
-            $(".msg-content-box > div").append(msg_item);
+            div.querySelector('.msg-main').remove();
+            $(".msg-content-box > div").append(div);
         } else {
             if (!auto_refresh) location.reload();
             else {
@@ -197,6 +211,7 @@ function send_msg(_uid, text) {
                 }, last_time));
                 last_time = moment().format("YYYY-MM-DD HH:mm:ss");
                 $('.msg-content-box').scrollTop($('.msg-content-box > div').height());
+                $('.chat-list .msg-item.active .last-msg').text(text);
             }
         }
     });
@@ -258,6 +273,7 @@ function chat_list() {
 
         } else {
             var cl = $('.chat-list');
+            cl.empty();
             for (i in rel) {
                 var div = document.importNode(document.getElementById('template-msg-item'), true), div = div.content || div;
                 div.querySelector('.msg-item').href = "#" + rel[i]['s_uid'];
@@ -274,6 +290,7 @@ function chat_list() {
 
 }
 
+
 function check_hash() {
     var hash = window.location.hash;
     if (!hash) return;
@@ -283,6 +300,8 @@ function check_hash() {
     $('.msg-item.active').removeClass('active');
     $('.msg-item[href="' + hash + '"]').addClass('active');
     $('.msg-item[href="' + hash + '"] .count').remove();
+    if (auto_refresh)
+        document.getElementById('ar').className = 'choice select';
 }
 
 $(document).ready(function () {
@@ -332,14 +351,10 @@ $(document).ready(function () {
         //绑定 添加好友
         .on('click', '#mkfriends', function () {
             var _uid = $(this).attr('data-_uid');
-            openP(500, 300,
-                `<p style="font-size: 18px;text-align: center;">添加好友</p>
-                <span style="text-align: center;display: block;">`+ $(this).attr('data-user') + `</span>
-            <textarea data-_uid=`+ _uid + ` id="mk-text" type="text" maxlength="32" autofocus="autofocus" placeholder="填写验证信息..."
-                style="resize:none;width: 80%;max-width: 450px;display: block;outline: 0;border: 2px solid #000000;margin: auto;padding: .2em 1em;height: 72px;"></textarea>
-            <button id="mk-send"
-                style="padding: .2em 1em;text-align: center;margin: auto;display: block;margin-top: 1em;">发送请求</button>`,
-            );
+            var div = document.importNode(document.getElementById('template-mkfriends'), true), div = div.content || div;
+            div.querySelector('span').innerText = $(this).attr('data-user');
+            div.querySelector('#mk-text').setAttribute('data-_uid', _uid);
+            openP(500, 300, div);
         })
         // 添加好友按钮，事件绑定
         .on('click', '#mk-send', function () {

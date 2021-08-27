@@ -47,7 +47,7 @@
 
 {% block templates %}
 <template id="template-msg-item">
-    <a class="msg-item active">
+    <a class="msg-item">
         <div class="left photo">
             <img src="" />
         </div>
@@ -93,5 +93,51 @@
             <div class="msg-text"></div>
         </div>
     </div>
+</template>
+<template id="template-mkfriends">
+    <p>添加好友</p>
+    <span></span>
+    <textarea id="mk-text" placeholder="填写验证信息..." maxlength="32" autofocus="autofocus"></textarea>
+    <button id="mk-send">发送请求</button>
+    <style>
+        #popup * {
+            line-height: 1;
+            margin-bottom: 1em;
+        }
+
+        #popup *:last-child {
+            margin-bottom: 0;
+        }
+
+        #popup p {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        #popup span {
+            text-align: center;
+            display: block;
+        }
+
+        #popup #mk-text {
+            resize: none;
+            width: 80%;
+            max-width: 450px;
+            display: block;
+            outline: 0;
+            border: 1px solid #646464;
+            margin: auto;
+            padding: .2em 1em;
+            height: 72px;
+        }
+
+        #popup #mk-send {
+            padding: .2em 1em;
+            text-align: center;
+            margin: auto;
+            display: block;
+            margin-top: 1em;
+        }
+    </style>
 </template>
 {% endblock %}
