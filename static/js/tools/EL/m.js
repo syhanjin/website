@@ -47,7 +47,7 @@ $(document).ready(function () {
             recorder.name = $(this).attr('name')
             recorder.getBlob((blob) => {
                 fd.set(recorder.name, blob)
-                $(this).nextAll('audio').get(0).src = create_url(blob);
+                $(this).next('.audition').children('audio').get(0).src = create_url(blob);
             });
 
         }
