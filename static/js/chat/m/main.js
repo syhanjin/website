@@ -108,7 +108,7 @@ function make_msg(data, i2_time, T) {
     var div = document.importNode(document.getElementById('template-msg'), true), div = div.content || div;
     switch (data['type']) {
         case 'text':
-            div.className = 'msg' + (my_uid == data['s_uid'] ? ' r' : '');
+            div.querySelector('.msg').className = 'msg' + (my_uid == data['s_uid'] ? ' r' : '');
             if (T || moment(data['time']).diff(moment(i2_time), 'seconds') > 300)
                 div.querySelector('.system-propmt').innerText = make_time_string(data['time']);
             div.querySelector('.msg-main img').src = "/api/userphoto/" + data['s_uid'];

@@ -1,5 +1,15 @@
 //alert("注意：需要获取录音权限！");
-
+function create_url(blob) {
+    var src;
+    if (window.createObjectURL != undefined) {// basic
+        src = window.createObjectURL(blob);
+    } else if (window.URL != undefined) {// mozilla(firefox)
+        src = window.URL.createObjectURL(blob);
+    } else if (window.webkitURL != undefined) {// webkit or chrome
+        src = window.webkitURL.createObjectURL(blob);
+    }
+    return src;
+}
 var recorder = new Recorder({
     sampleRate: 44100,
     bitRate: 128,
@@ -36,7 +46,7 @@ $(document).ready(function () {
             recorder.name = $(this).attr('name')
             recorder.getBlob((blob) => {
                 fd.set(recorder.name, blob)
-                $(this).nextAll('audio').get(0).src = URL.createObjectURL(blob);
+                $(this).nextAll('audio').get(0).src = create_url(blob);
             });
 
         }
