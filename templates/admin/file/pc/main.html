@@ -58,18 +58,18 @@
 {% block mdv %}
 <script>
 	var del = function (path) {
-		openP(350, 200, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">是否删除？删除后将不可恢复！</p><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div>', function (rel) {
+		P.open(350, 200, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">是否删除？删除后将不可恢复！</p>', function (rel) {
 			if (rel == "yes") {
 				window.location = path;
 			}
-		});
+		}, { 'btn': 'yes-no' });
 	}
 	var rename = function (path) {
-		openP(400, 300, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">请输入新名字:</p><input type="text" style="background-color: #f4f4f4;margin: 5px auto;width: 80%;display: block;height: 36px;line-height: 36px;font-size: 32px;border: none;border-bottom: 3px solid #e0d1cd;outline: 0;" id="nename" placeholder="新名字..." maxlength="20" /><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div></div>', function (rel) {
+		P.open(400, 300, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">请输入新名字:</p><input type="text" style="background-color: #f4f4f4;margin: 5px auto;width: 80%;display: block;height: 36px;line-height: 36px;font-size: 32px;border: none;border-bottom: 3px solid #e0d1cd;outline: 0;" id="nename" placeholder="新名字..." maxlength="20" /><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div></div>', function (rel) {
 			if (rel == "yes") {
 				var nename = document.getElementById("nename").value.replace(/(^\s*)|(\s*$)/g, "");
 				if (nename == '') {
-					openP(200, 100, '<p style="font-size:36px; text-align: center;">不可为空</p><div class="p-confirm" onclick="closeP()"></div>');
+					P.open(200, 100, '<p style="font-size:36px; text-align: center;">不可为空</p>');
 					return;
 				}
 				window.location = path + "&nename=" + nename;
@@ -79,21 +79,21 @@
 		});
 	}
 	var add = function (path) {
-		openP(400, 300, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">请输入文件夹名:</p><input type="text" style="margin: 5px auto;width: 80%;display: block;height: 30px;line-height: 30px;font-size: 24px;border: none;border-bottom: 3px solid #e0d1cd;outline: 0;" id="name" placeholder="文件夹名..." /><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div></div>', function (rel) {
+		P.open(400, 300, '<p style="font-size: 24px;text-align: center;margin: 50px 0;height: 30px;">请输入文件夹名:</p><input type="text" style="margin: 5px auto;width: 80%;display: block;height: 30px;line-height: 30px;font-size: 24px;border: none;border-bottom: 3px solid #e0d1cd;outline: 0;" id="name" placeholder="文件夹名..." />', function (rel) {
 			if (rel == "yes") {
 				var name = document.getElementById("name").value.replace(/(^\s*)|(\s*$)/g, "");
 				if (name == '') {
-					openP(200, 100, '<p style="font-size:36px; text-align: center;">不可为空</p><div class="p-confirm" onclick="closeP()"></div>');
+					P.open(200, 100, '<p style="font-size:36px; text-align: center;">不可为空</p>');
 					return;
 				}
 				window.location += "/" + name + "?op=mkdir";
 			}
 		}, function () {
 			$("#name").focus();
-		});
+		}, { 'btn': 'yes-no' });
 	}
 	var upload_file = function (path) {
-		openP(500, 350, '<input id="upload" type="file" value="选择文件" />', function () {
+		P.open(500, 350, '<input id="upload" type="file" value="选择文件" />', function () {
 		}, function () {
 			$("#upload").change(function (link) {
 				var file = link.target.files[0];
@@ -148,7 +148,7 @@
 <div class="f-ops">
 	<a class="op new" onclick='add("/admin/{{data[' parent']}}")'>[NEW DIR]</a>
 	{% if data['parent'] != 'file' %}
-	<a class="op opload" onclick='upload_file("/admin/{{data['parent']}}")'>[UPLOAD FILE]</a>
+	<a class="op opload" onclick='upload_file("/admin/{{data[' parent']}}")'>[UPLOAD FILE]</a>
 	{% endif %}
 </div>
 <div class="m">

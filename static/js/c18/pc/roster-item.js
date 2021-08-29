@@ -1,10 +1,10 @@
 var network_error = function() {
-    openP(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p><div class="p-confirm" onclick="closeP()"></div>', function() {
+    P.open(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p>', function() {
         window.location = '/c18/roster';
     });
 }
 var not_logged_in = function() {
-    openP(200, 100, '<p style="font-size:36px; text-align: center;">请先登录</p><div class="p-confirm" onclick="closeP()"></div>', function() {
+    P.open(200, 100, '<p style="font-size:36px; text-align: center;">请先登录</p>', function() {
         window.location = '/c18/roster';
     });
 }
@@ -19,7 +19,7 @@ $(document).ready(function() {
     var num = window.location.pathname.split('/').slice(-1);
     $.get('/c18/api/getstuinfo?num=' + num, function(data) {
         if (data == 'False') {
-            openP(200, 100, '<p style="font-size:36px; text-align: center;">粗错了</p><div class="p-confirm" onclick="closeP()"></div>', function() {
+            P.open(200, 100, '<p style="font-size:36px; text-align: center;">粗错了</p>', function() {
                 window.location = '/c18/roster';
             });
         } else {

@@ -1,13 +1,13 @@
 var jcropApi, scaling = [1, 1], i, pdatas = [], files, dataURLs = [];
-var jChange = function() {
+var jChange = function () {
     var pic = jcropApi.getWidgetSize();
     var sel = jcropApi.tellScaled();
     $('.p-jc').css({
-        top : (sel.y) * -1 + 'px',
-        left : (sel.x - 300) * -1 + 'px'
+        top: (sel.y) * -1 + 'px',
+        left: (sel.x - 300) * -1 + 'px'
     });
 }
-var pic_jcrop = function() {
+var pic_jcrop = function () {
 
     var src = "", file = files[i];
     // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
@@ -19,12 +19,12 @@ var pic_jcrop = function() {
         src = window.webkitURL.createObjectURL(file);
     }
     $("#p-Jcrop").get(0).src = src;
-    $("#now").bind("mousedown", function(e) {
+    $("#now").bind("mousedown", function (e) {
         //console.log(e);
         var lx = e.clientX, ly = e.clientY;
         //console.log(lx + " " + ly)
         //console.log('mousedown')
-        $(document).mousemove(function(e) {
+        $(document).mousemove(function (e) {
             // 获取鼠标的位移
             var dx = e.clientX - lx;
             var dy = e.clientY - ly;
@@ -41,26 +41,26 @@ var pic_jcrop = function() {
 
         })
         // 鼠标抬起
-        $(document).mouseup(function(e) {
+        $(document).mouseup(function (e) {
             $(document).off('mousemove');
             $(document).off('mouseup');
         })
     })
-    document.getElementById('p-Jcrop').onload = function() {
+    document.getElementById('p-Jcrop').onload = function () {
         jcropApi = $.Jcrop('#p-Jcrop', {
-            allowSelect : false,
-            allowMove : false,
-            allowResize : false,
-            aspectRatio : 2 / 3,
-            sideHandles : false,
-            minSize : [400, 600],
+            allowSelect: false,
+            allowMove: false,
+            allowResize: false,
+            aspectRatio: 2 / 3,
+            sideHandles: false,
+            minSize: [400, 600],
             //onChange : jChange,
-            addClass : 'p-jc'
+            addClass: 'p-jc'
         })
         $("#now *").unbind("mousedown")
         jChange();
         jcropApi.setSelect([300, 0, 120, 180]);
-        $("#popup").bind("mousewheel DOMMouseScroll", function(e) {
+        $("#popup").bind("mousewheel DOMMouseScroll", function (e) {
             e.preventDefault();
             e = e || window.event;
             var d = e.originalEvent.wheelDelta || -e.originalEvent.detail
@@ -77,21 +77,21 @@ var pic_jcrop = function() {
             jcropApi.destroy();
             var s2 = jcropApi.getScaleFactor();
             jcropApi = $.Jcrop('#p-Jcrop', {
-                allowSelect : false,
-                allowMove : false,
-                allowResize : false,
-                aspectRatio : 2 / 3,
-                sideHandles : false,
-                boxHeight : hig,
-                minSize : [s2[0] * 400 * scaling, s2[1] * 600 * scaling],
+                allowSelect: false,
+                allowMove: false,
+                allowResize: false,
+                aspectRatio: 2 / 3,
+                sideHandles: false,
+                boxHeight: hig,
+                minSize: [s2[0] * 400 * scaling, s2[1] * 600 * scaling],
                 //onChange : jChange,
-                addClass : 'p-jc'
+                addClass: 'p-jc'
             })
             $("#now *").unbind("mousedown")
             var b = jcropApi.getBounds();
             var w = jcropApi.getWidgetSize();
             jcropApi.setOptions({
-                minSize : [b[0] / w[0] * 400, b[1] / w[1] * 600]
+                minSize: [b[0] / w[0] * 400, b[1] / w[1] * 600]
             })
             jcropApi.setSelect([sel.x, sel.y, sel.x + b[0] / w[0] * 400, sel.y + b[1] / w[1] * 600]);
             jChange();
@@ -100,7 +100,7 @@ var pic_jcrop = function() {
         });
     }
 }
-var pic_next = function() {
+var pic_next = function () {
     var sel = jcropApi.tellSelect();
     var b = jcropApi.getBounds();
     var w = jcropApi.getWidgetSize();
@@ -113,11 +113,11 @@ var pic_next = function() {
     pic_jcrop();
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $("#pfile").change(function(e) {
+    $("#pfile").change(function (e) {
         files = e.currentTarget.files;
-        openP(1000, 700, '<div id="now"><img id="p-Jcrop"></div>', function(rel) {
+        P.open(1000, 700, '<div id="now"><img id="p-Jcrop"></div>', function (rel) {
             if (rel == 'yes') {
                 var sel = jcropApi.tellSelect();
                 var b = jcropApi.getBounds();
@@ -136,7 +136,7 @@ $(document).ready(function() {
                     var img = new Image();
                     img.src = src;
                     img.f = f;
-                    img.onload = function(e) {
+                    img.onload = function (e) {
                         var f = e.target.f;
                         var canvas = document.createElement('canvas')
                         canvas.width = 800;
@@ -147,7 +147,7 @@ $(document).ready(function() {
                     }
                 }
             }
-        }, function() {
+        }, function () {
             $("#popup").append('<div class="p-btn l" onclick="closeP()" data-text="取消"></div>');
             $("#popup").append('<div class="p-btn r" onclick="pic_next()" data-text="下一张"></div>');
             i = 0;
@@ -156,7 +156,7 @@ $(document).ready(function() {
             }
             pic_jcrop();
 
-        });
+        }, { 'btn': 'none' });
     });
 
 });
@@ -165,7 +165,7 @@ function downLoad(url) {
     oA.download = '';
     // 设置下载的文件名，默认是'下载'
     oA.href = url;
-    oA.download=(new Date().getTime())+''+(parseInt(Math.random()*899+100))+'.jpg'; 
+    oA.download = (new Date().getTime()) + '' + (parseInt(Math.random() * 899 + 100)) + '.jpg';
     document.body.appendChild(oA);
     oA.click();
     oA.remove();

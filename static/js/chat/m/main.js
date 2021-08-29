@@ -325,14 +325,10 @@ $(document).ready(function () {
         //绑定 添加好友
         .on('click', '#mkfriends', function () {
             var _uid = $(this).attr('data-_uid');
-            openP(300, 300,
-                `<p style="font-size: 1.8rem;text-align: center;">添加好友</p>
-                <span style="text-align: center;display: block;">`+ $(this).attr('data-user') + `</span>
-            <textarea data-_uid=`+ _uid + ` id="mk-text" type="text" maxlength="32" autofocus="autofocus" placeholder="填写验证信息..."
-                style="resize:none;width: 80%;max-width: 45rem;display: block;outline: 0;border: .2rem solid #000000;margin: auto;padding: .2em 1em;height: 7.2rem;"></textarea>
-            <button id="mk-send"
-                style="padding: .2em 1em;text-align: center;margin: auto;display: block;margin-top: 1em;">发送请求</button>`,
-            );
+            var div = document.importNode(document.getElementById('template-mkfriends'), true), div = div.content || div;
+            div.querySelector('span').innerText = $(this).attr('data-user');
+            div.querySelector('#mk-text').setAttribute('data-_uid', _uid);
+            P.open(500, 300, div);
         })
         // 添加好友按钮，事件绑定
         .on('click', '#mk-send', function () {

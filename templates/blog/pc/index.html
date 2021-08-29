@@ -10,7 +10,7 @@
 <script src="/static/highlight/highlight.min.js"></script>
 <script>
 	var network_error = function() {
-		openP(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p><div class="p-confirm" onclick="closeP()"></div>', function() {
+		P.open(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p>', function() {
 			window.location = '/';
 		});
 	}

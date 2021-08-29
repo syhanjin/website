@@ -354,7 +354,7 @@ $(document).ready(function () {
             var div = document.importNode(document.getElementById('template-mkfriends'), true), div = div.content || div;
             div.querySelector('span').innerText = $(this).attr('data-user');
             div.querySelector('#mk-text').setAttribute('data-_uid', _uid);
-            openP(500, 300, div);
+            P.open(500, 300, div);
         })
         // 添加好友按钮，事件绑定
         .on('click', '#mk-send', function () {

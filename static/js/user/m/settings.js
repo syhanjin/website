@@ -1,10 +1,10 @@
 var network_error = function () {
-    openP(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p><div class="p-confirm" onclick="closeP()"></div>', function () {
+    P.open(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p>', function () {
         window.location = '/login';
     });
 }
 var not_logged_in = function () {
-    openP(200, 100, '<p style="font-size:36px; text-align: center;">请先登录</p><div class="p-confirm" onclick="closeP()"></div>', function () {
+    P.open(200, 100, '<p style="font-size:36px; text-align: center;">请先登录</p>', function () {
         window.location = '/login';
     });
 }
@@ -123,11 +123,11 @@ $(document).ready(function () {
 		var newp = $("#new").val();
 		var newp2 = $("#new2").val();
 		if (newp.length < 8) {
-			openP(200, 100, '<p style="font-size: 24px;text-align:center">密码太短</p><div class="p-confirm" onclick="closeP()"></div>');
+			P.open(200, 100, '<p style="font-size: 24px;text-align:center">密码太短</p>');
 			return false;
 		}
 		if (newp != newp2) {
-			openP(200, 100, '<p style="font-size: 24px;text-align:center">两次输入不同</p><div class="p-confirm" onclick="closeP()"></div>')
+			P.open(200, 100, '<p style="font-size: 24px;text-align:center">两次输入不同</p>')
 			return false;
 		}
 		$.post('/user/settings/pwdmodify', {
@@ -137,16 +137,16 @@ $(document).ready(function () {
 			if (rel == 'Not Logged In') {
 				not_logged_in();
 			} else if (rel == 'pwd wrong') {
-				openP(200, 100, '<p style="font-size: 24px;text-align:center">原密码错误</p><div class="p-confirm" onclick="closeP()"></div>', function () {
+				P.open(200, 100, '<p style="font-size: 24px;text-align:center">原密码错误</p>', function () {
 					$("#usafe .pwd").find('div input').val('');
 				})
 				return false;
 			} else if (rel == 'True') {
-				openP(200, 100, '<p style="font-size: 24px;text-align:center">修改成功</p><div class="p-confirm" onclick="closeP()"></div>', function () {
+				P.open(200, 100, '<p style="font-size: 24px;text-align:center">修改成功</p>', function () {
 					$("#usafe .pwd").hide();
 				})
 			} else {
-				openP(200, 100, '<p style="font-size: 24px;text-align:center">未知错误</p><div class="p-confirm" onclick="closeP()"></div>');
+				P.open(200, 100, '<p style="font-size: 24px;text-align:center">未知错误</p>');
 			}
 		}).fail(network_error);
 	});

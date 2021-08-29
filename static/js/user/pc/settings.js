@@ -1,10 +1,10 @@
 var network_error = function () {
-	openP(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p><div class="p-confirm" onclick="closeP()"></div>', function () {
+	P.open(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p>', function () {
 		window.location = '/login';
 	});
 }
 var not_logged_in = function () {
-	openP(200, 100, '<p style="font-size:36px; text-align: center;">请先登录</p><div class="p-confirm" onclick="closeP()"></div>', function () {
+	P.open(200, 100, '<p style="font-size:36px; text-align: center;">请先登录</p>', function () {
 		window.location = '/login';
 	});
 }
@@ -67,7 +67,8 @@ $(document).ready(function () {
 		} else if (window.webkitURL != undefined) {// webkit or chrome
 			src = window.webkitURL.createObjectURL(file);
 		}
-		openP(1000, 700, '<p style="font-size:24px; text-align: center;">是否修改头像？<div style="overflow: auto;position: relative;margin: 0;margin-left:40px;width: 820px;height: 600px;" ><img id="p-Jcrop" src="' + src + '" style=" max-width:800px;margin:15px auto;position:relative;" /></div><div id="pre" style="border-radius: 50%;overflow:hidden;width: 100px;height: 100px;position:absolute;right: 40px;top: 100px;border: 1px solid purple;"><img id="pre-p" src="' + src + '" style="" ></div></p><p style="position: absolute;right: 10px;width:120px;top: 350px;text-align: center;">图片将会被压缩至 250 × 250</p><div class="p-choose" id="p-yes" onclick="closeP(\'yes\')"></div><div class="p-choose" id="p-no" onclick="closeP()"></div>', function (rel) {
+		P.open(1000, 700, '<p style="font-size:24px; text-align: center;">是否修改头像？<div style="overflow: auto;position: relative;margin: 0;margin-left:40px;width: 820px;height: 600px;align-self: flex-start" ><img id="p-Jcrop" src="' + src + '" style=" max-width:800px;margin:15px auto;position:relative;" /></div><div id="pre" style="border-radius: 50%;overflow:hidden;width: 100px;height: 100px;position:absolute;right: 40px;top: 100px;border: 1px solid purple;"><img id="pre-p" src="' + src + '" style="" ></div></p><p style="position: absolute;right: 10px;width:120px;top: 350px;text-align: center;">图片将会被压缩至 250 × 250</p>',
+		function (rel) {
 			if (rel == 'yes') {
 				var img = new Image();
 				img.src = src;
@@ -140,7 +141,7 @@ $(document).ready(function () {
 				jcropApi = this;
 				jcropApi.setSelect([0, 0, 100, 100]);
 			})
-		});
+		}, { btn: 'yes-no', up_offset: 0 });
 	});
 	$("#info-ops-umodify span").click(function () {
 		$("#info-ops-umodify div #text").attr('placeholder', '');
@@ -155,7 +156,7 @@ $(document).ready(function () {
 		if (newuser == "") {
 			$("#info-ops-umodify div #text").empty();
 			$("#info-ops-umodify div #text").attr('placeholder', '不可为空');
-			return ;
+			return;
 		}
 		$.post('/user/settings/setuser', {
 			'user': newuser
@@ -188,11 +189,11 @@ $(document).ready(function () {
 		var newp = $("#new").val();
 		var newp2 = $("#new2").val();
 		if (newp.length < 8) {
-			openP(200, 100, '<p style="font-size: 24px;text-align:center">密码太短</p><div class="p-confirm" onclick="closeP()"></div>');
+			P.open(200, 100, '<p style="font-size: 24px;text-align:center">密码太短</p>');
 			return false;
 		}
 		if (newp != newp2) {
-			openP(200, 100, '<p style="font-size: 24px;text-align:center">两次输入不同</p><div class="p-confirm" onclick="closeP()"></div>')
+			P.open(200, 100, '<p style="font-size: 24px;text-align:center">两次输入不同</p>')
 			return false;
 		}
 		$.post('/user/settings/pwdmodify', {
@@ -202,16 +203,16 @@ $(document).ready(function () {
 			if (rel == 'Not Logged In') {
 				not_logged_in();
 			} else if (rel == 'pwd wrong') {
-				openP(200, 100, '<p style="font-size: 24px;text-align:center">原密码错误</p><div class="p-confirm" onclick="closeP()"></div>', function () {
+				P.open(200, 100, '<p style="font-size: 24px;text-align:center">原密码错误</p>', function () {
 					$("#usafe .pwd").find('div input').val('');
 				})
 				return false;
 			} else if (rel == 'True') {
-				openP(200, 100, '<p style="font-size: 24px;text-align:center">修改成功</p><div class="p-confirm" onclick="closeP()"></div>', function () {
+				P.open(200, 100, '<p style="font-size: 24px;text-align:center">修改成功</p>', function () {
 					$("#usafe .pwd").hide();
 				})
 			} else {
-				openP(200, 100, '<p style="font-size: 24px;text-align:center">未知错误</p><div class="p-confirm" onclick="closeP()"></div>');
+				P.open(200, 100, '<p style="font-size: 24px;text-align:center">未知错误</p>');
 			}
 		}).fail(network_error);
 	});

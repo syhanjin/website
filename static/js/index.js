@@ -10,7 +10,7 @@ $(document).ready(function () {
         }
     });
     var event = new Event(
-        'SY右下角弹窗函数测试，如果您觉得这个弹窗不好看，欢迎来群<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=057e58f1b40bec3f845e20596550131fd236577d698315bc0981c6f53af44a4c">1032103456</a>提提建议'
+        '弹窗函数大改测试，如有出现样式问题，请到Q群<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=057e58f1b40bec3f845e20596550131fd236577d698315bc0981c6f53af44a4c">1032103456</a>留言'
     )
     // var cnt=0,
     // interval = setInterval(() => {
