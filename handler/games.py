@@ -13,12 +13,12 @@ games_data=[
     {
         'name':'Fight for Freedom',
         'name-zn':'自由之战',
-        'maker':'dream_dong',
+        'maker':'狸梦',
         'maker-host':'',
         'introduction':'一款老少皆宜的塔防游戏，极易上手。',
         'photo':'/static/images/games/FF.jpg',
         'play':'/games/fightforfreedom',
-        'edition':'v1.32'
+        'edition':'v1.40'
     },{
         'name':'A Dark Room',
         'name-zn':'小黑屋',
@@ -36,7 +36,7 @@ def games_():
 
 @games.route('/fightforfreedom',methods=['GET'])
 def ScratchWar():
-    return render_template('games/html/fight_for_freedom/fight for freedom1.32.html',edition="1.32")
+    return render_template('games/html/fight_for_freedom/fight for freedom1.40.html',edition="1.40")
 
 @games.route('/adarkroom',methods=['GET'])
 def a_dark_room():
