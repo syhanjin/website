@@ -1,4 +1,4 @@
-var jcropApi, scaling = [1, 1], i, pdatas = [], files, dataURLs = [];
+var jcropApi, scaling = [1, 1], i, pdatas = [], files, dataURLs = [], W=1200, H=800;
 var jChange = function () {
     var pic = jcropApi.getWidgetSize();
     var sel = jcropApi.tellScaled();
@@ -80,10 +80,10 @@ var pic_jcrop = function () {
                 allowSelect: false,
                 allowMove: false,
                 allowResize: false,
-                aspectRatio: 2 / 3,
+                aspectRatio: W / H,
                 sideHandles: false,
                 boxHeight: hig,
-                minSize: [s2[0] * 400 * scaling, s2[1] * 600 * scaling],
+                minSize: [s2[0] * W * scaling, s2[1] * H * scaling],
                 //onChange : jChange,
                 addClass: 'p-jc'
             })
@@ -91,9 +91,9 @@ var pic_jcrop = function () {
             var b = jcropApi.getBounds();
             var w = jcropApi.getWidgetSize();
             jcropApi.setOptions({
-                minSize: [b[0] / w[0] * 400, b[1] / w[1] * 600]
+                minSize: [b[0] / w[0] * W, b[1] / w[1] * H]
             })
-            jcropApi.setSelect([sel.x, sel.y, sel.x + b[0] / w[0] * 400, sel.y + b[1] / w[1] * 600]);
+            jcropApi.setSelect([sel.x, sel.y, sel.x + b[0] / w[0] * W, sel.y + b[1] / w[1] * H]);
             jChange();
             //console.log('boxWidth:  ' + pho[0] * scaling[0] + ' boxHeight: ' + pho[1] * scaling[1])
 
@@ -104,7 +104,7 @@ var pic_next = function () {
     var sel = jcropApi.tellSelect();
     var b = jcropApi.getBounds();
     var w = jcropApi.getWidgetSize();
-    pdatas[i] = [sel.x, sel.y, sel.x + b[0] / w[0] * 400, sel.y + b[1] / w[1] * 600]
+    pdatas[i] = [sel.x, sel.y, sel.x + b[0] / w[0] * W, sel.y + b[1] / w[1] * H]
     jcropApi.destroy();
     i += 1;
     if (i + 1 == files.length) {
@@ -122,7 +122,7 @@ $(document).ready(function () {
                 var sel = jcropApi.tellSelect();
                 var b = jcropApi.getBounds();
                 var w = jcropApi.getWidgetSize();
-                pdatas[i] = [sel.x, sel.y, sel.x + b[0] / w[0] * 400, sel.y + b[1] / w[1] * 600]
+                pdatas[i] = [sel.x, sel.y, sel.x + b[0] / w[0] * W, sel.y + b[1] / w[1] * H]
                 for (var f = 0; f < files.length; f++) {
                     var src = '';
                     // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
@@ -142,7 +142,7 @@ $(document).ready(function () {
                         canvas.width = 800;
                         canvas.height = 1200;
                         var ctx = canvas.getContext('2d')
-                        ctx.drawImage(e.target, pdatas[f][0], pdatas[f][1], pdatas[f][2] - pdatas[f][0], pdatas[f][3] - pdatas[f][1], 0, 0, 800, 1200);
+                        ctx.drawImage(e.target, pdatas[f][0], pdatas[f][1], pdatas[f][2] - pdatas[f][0], pdatas[f][3] - pdatas[f][1], 0, 0, W, H);
                         downLoad(canvas.toDataURL('image/jpeg'));
                     }
                 }
