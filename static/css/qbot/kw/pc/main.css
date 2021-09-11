@@ -46,6 +46,10 @@
     outline: 0;
 }
 
+#kws .seco-op .so-report::before{
+    content: '报告管理员';
+}
+
 .item-edit .kw input {
     border: 0;
     border-bottom: 1px solid;

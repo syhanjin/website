@@ -1,4 +1,4 @@
-var table, group_id, page = 0, nid = 0, fd = {};
+var table, group_id, page = 0, nid = 0, fd = {}, key = '';
 
 function import_template(template) {
     var div = document.importNode(document.getElementById('template-' + template), true)
@@ -111,6 +111,7 @@ function load(p) {
 $(function () {
     table = $("#kws tbody");
     group_id = $("#group_id").text();
+    key = $("#key").text();
     load(++page);
     // 绑定事件
     $("#add").on('click', function (e) {
@@ -189,7 +190,8 @@ $(function () {
             url: window.location.pathname + '/update',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({
-                'kws': fd
+                'kws': fd,
+                'key': key
             }),
             dataType: "json",
             success: function (rel) {

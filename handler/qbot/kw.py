@@ -20,8 +20,20 @@ def getuser(_uid):
 
 @kw.route('/<int:group_id>')
 def kw_home(group_id):
-
-    return render_template('qbot/kw/pc/main.html', group_id=group_id)
+    key = request.args.get('key')
+    if key is None:
+        return render_template('error/pc.html', error='缺少参数key')
+    data = botdb.kw_edit.find_one({
+        'key': key,
+        'group_id': group_id,
+    })
+    if data is None or data['deadtime'] < datetime.datetime.now():
+        botdb.kw_edit.delete_one({
+            'key': key,
+            'group_id': group_id,
+        })
+        return render_template('error/pc.html', error='key不存在或已过期')
+    return render_template('qbot/kw/pc/main.html', group_id=group_id, key=key)
 
 
 @kw.route('/<int:group_id>/get', methods=['GET'])
@@ -41,8 +53,19 @@ def kw_get(group_id):
 @kw.route('/<int:group_id>/update', methods=['POST'])
 def kw_update(group_id):
     data = request.json.get('kws')
-    if data is None:
-        abort(400)
+    key = request.json.get('key')
+    if (data or key) is None:
+        return {'code': 1, 'error': 'not data or key'}
+    keydata = botdb.kw_edit.find_one({
+        'key': key,
+        'group_id': group_id,
+    })
+    if keydata is None or keydata['deadtime'] < datetime.datetime.now():
+        botdb.kw_edit.delete_one({
+            'key': key,
+            'group_id': group_id,
+        })
+        return {'code': 1, 'error': 'key已过期'}
     data = dict(data)
     for k, v in data.items():
         if v == 'deleted':
