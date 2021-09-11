@@ -6,6 +6,8 @@ import datetime
 import os
 import hashlib
 import base64
+from handler import _0
+
 client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 maindb = client['main']
@@ -99,7 +101,7 @@ def user_m_display(_uid):
 def user_search():
     _uid = getuser(request.cookies.get('_uid'))
     if not _uid:
-        return 'False'
+        return {'code': 3}
     u = request.args.get('u')
     users = list(userdb.userdata.find(
         {'user': {'$regex': u, '$options': 'i'}}).limit(30))
@@ -115,19 +117,21 @@ def user_search():
 def user_modify_pres():
     _uid = getuser(request.cookies.get('_uid'))
     text = request.form.get('text')
-    if _uid == None or text == None:
-        return 'False'
+    if _uid == None:
+        return {'code': 3}
+    if text == None:
+        return {'code': 1, 'error': 'not text'}
     userdb.userdata.update_one(
         {'_uid': _uid}, {'$set': {'personalized': text}})
-    return 'True'
+    return _0
 
 
 @userb.route('/<string:_uid>/introduction')
 def user_uid_intr(_uid):
     data = userdb.userdata.find_one({'_uid': _uid})
     if not data or 'introduction' not in data:
-        return 'False'
-    return data['introduction']
+        return {'code': 2}
+    return {'code': 0, 'data': data['introduction']}
 
 
 @userb.route('/<string:_uid>/activity')
@@ -142,19 +146,21 @@ def user_uid_acti(_uid):
 def user_modify_intr():
     _uid = getuser(request.cookies.get('_uid'))
     text = request.form.get('text')
-    if _uid == None or text == None:
-        return 'False'
+    if _uid == None:
+        return {'code': 3}
+    if text == None:
+        return {'code': 1, 'error': 'not text'}
     userdb.userdata.update_one({'_uid': _uid}, {'$set': {
         'introduction': text
     }})
-    return 'True'
+    return _0
 
 
 @userb.route('/settings/uplphoto', methods=['POST'])
 def user_settings_uplphoto():
     _uid = getuser(request.cookies.get('_uid'))
     if _uid == None:
-        return 'False'
+        return {'code': 3}
     dataURL = request.form.get('dataURL')[23:]
     # 将base64转为图片文件
     img = base64.b64decode(dataURL)
@@ -171,39 +177,39 @@ def user_settings_uplphoto():
         except:
             pass
     userdb.userdata.update_one({'_uid': _uid}, {'$set': {'photo': '/'+fn}})
-    return 'True'
+    return _0
 
 
 @userb.route('/settings/setuser', methods=['POST'])
 def user_settings_setuser():
     _uid = getuser(request.cookies.get('_uid'))
     if _uid == None:
-        return 'Not Logged In'
+        return {'code': 3}
     nuser = request.form.get('user')
     if not userdb.userdata.find_one({'user': nuser}) == None:
-        return 'Existed'
+        return {'code': 2}
     data = userdb.userdata.find_one({'_uid': _uid})
 #     print(data)
     if 'umodifydate' not in data or (datetime.datetime.now() - data['umodifydate']).days > 365:
         userdb.userdata.update_one({'_uid': _uid}, {
                                    '$set': {'user': nuser, 'umodifydate': datetime.datetime.now()}})
-        return 'True'
-    return 'False'
+        return _0
+    return {'code': -1}
 
 
 @userb.route('/settings/pwdmodify', methods=['POST'])
 def user_settings_modify_pwd():
     _uid = getuser(request.cookies.get('_uid'))
     if _uid == None:
-        return 'Not Logged In'
+        return {'code': 3}
     old = request.form.get('old')
     oldmd5 = hashlib.md5(old.encode(encoding='UTF-8')).hexdigest()
     data = userdb.userdata.find_one({'_uid': _uid})
     if not data['pwd'] == oldmd5:
-        return 'pwd wrong'
+        return {'code': 1, 'error': 'pwd wrong'}
     new = request.form.get('new')
     newmd5 = hashlib.md5(new.encode(encoding='UTF-8')).hexdigest()
     session['utime'] = datetime.datetime.now().__format__('%Y-%m-%d %H:%M:%S')
     userdb.userdata.update_one(
         {'_uid': _uid}, {'$set': {'pwd': newmd5, 'pmodify': session['utime']}})
-    return 'True'
+    return _0

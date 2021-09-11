@@ -18,9 +18,10 @@
 	}
 	$(document).ready(function() {
 		$.get('/api/about/text', function(rel) {
-			if (rel == 'False') {
+			if (rel['code'] != 0) {
 				network_error();
 			}
+			rel = rel['data']
 			document.getElementById('text').innerHTML = marked(rel['content']);
 			hljs.initHighlightingOnLoad();
 			hljs.initLineNumbersOnLoad();

@@ -16,11 +16,12 @@ function PrefixInteger(num, n) {
 $(document).ready(function () {
     var num = window.location.pathname.split('/').slice(-1);
     $.get('/c18/api/getstuinfo?num=' + num, function (data) {
-        if (data == 'False') {
+        if (data['code'] != 0) {
             P.open(200, 100, '<p style="font-size:36px; text-align: center;">粗错了</p>', function () {
                 window.location = '/c18/roster';
             });
         } else {
+            data = data['data']
             $(".stu-info .r-photo").css('background', 'url(' + (data['photo'] ? data['photo'] : '/static/c18/user.png') + ') center/cover');
             $(".stu-info .r-info p .name").get(0).innerHTML = data['name'];
             $(".stu-info .r-info p .num").get(0).innerHTML = 'C1818' + PrefixInteger(data['num'], 2);

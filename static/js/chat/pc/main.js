@@ -171,7 +171,8 @@ function get_new_msg() {
         + $('.msg-content-box')[0].scrollTop
         + 10 >= $('.msg-content-box > div')[0].scrollHeight);
     $.get('/chat/unread_msg/' + now_uid, function (rel) {
-        if (rel == 'False') return;
+        if (rel['code'] != 0) return;
+        rel = rel['data']
         var mcb = $(".msg-content-box > div");
         for (var i = 0; i < rel.length; i++) {
             mcb.append(make_msg(rel[i], last_time));
@@ -188,7 +189,7 @@ function send_msg(_uid, text) {
         'r_uid': _uid,
         'text': text
     }, function (rel) {
-        if (rel == 'False') {
+        if (rel['code'] != 0) {
             var user = $('.chat-header-user').text();
             var div = document.importNode(document.getElementById('template-msg'), true), div = div.content || div;
             div.querySelector('.system-propmt').innerHTML = '你还不是'
@@ -200,6 +201,7 @@ function send_msg(_uid, text) {
             div.querySelector('.msg-main').remove();
             $(".msg-content-box > div").append(div);
         } else {
+            rel = rel['data']
             if (!auto_refresh) location.reload();
             else {
                 $(".msg-content-box > div").append(make_msg({
@@ -220,7 +222,8 @@ function send_msg(_uid, text) {
 function get_msg(_uid) {
     if (msg_page == -1) return;
     $.get('/chat/all_msg/' + _uid + '?p=' + msg_page + '&t=' + (msg_timestamp / 1000), function (rel) {
-        if (rel == 'False') return;
+        if (rel['code'] != 0) return;
+        rel = rel['data']
         if (rel.length == 0) {
             msg_page = -1;
             return;
@@ -243,11 +246,12 @@ function get_msg(_uid) {
 function msg_box(_uid, user) {
     now_uid = _uid;
     $.get('/chat/has_uid?u=' + _uid, function (rel) {
-        if (rel == 'False') {
+        if (rel['code'] != 0) {
             chat_main.empty();
             chat_main.html('<div class="tip">找不到用户：uid = ' + _uid + '</div>')
         } else {
-            $('.chat-header-user').text(rel);
+
+            $('.chat-header-user').text(rel['data']);
         }
     })
     chat_main.empty();
@@ -269,9 +273,10 @@ function msg_box(_uid, user) {
 
 function chat_list() {
     $.get('/chat/list', function (rel) {
-        if (rel == 'False') {
+        if (rel['code'] != 0) {
 
         } else {
+            rel = rel['data']
             var cl = $('.chat-list');
             cl.empty();
             for (i in rel) {
@@ -318,10 +323,10 @@ $(document).ready(function () {
             return;
         }
         $.get('/user/search?u=' + u, function (rel) {
-            if (rel == 'False') {
+            if (rel['code'] != 0) {
                 new Event('用户查找失败');
             } else {
-                open_search_box(rel, u)
+                open_search_box(rel['data'], u)
             }
         }).fail(function () {
             new Event('用户查找失败');
@@ -362,7 +367,7 @@ $(document).ready(function () {
                 "u": $("#mk-text").attr('data-_uid'),
                 "t": $("#mk-text").val()
             }, (rel) => {
-                if (rel == 'False')
+                if (rel['code'] != 0)
                     new Event('已经发送过请求');
                 else
                     new Event('请求发送成功');

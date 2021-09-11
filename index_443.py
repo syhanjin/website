@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 from flask import Flask, request, render_template, session, redirect, make_response, send_file  # 引入flask
-from handler import getdatas, register, login, user, games, c18, blog, photo, chat, audio  # special_res
+from handler import getdatas, register, login, user, games, c18, blog, photo, chat, audio, qbot  # special_res
 from handler.tools import EL
 from handler.admin import file
 import socket
@@ -168,6 +168,7 @@ sy.register_blueprint(getdatas.getdatas)
 # region admin
 sy.register_blueprint(file.admin_file)
 # endregion
+
 
 # region others
 # sy.register_blueprint(special_res.sr,url_prefix='/res')

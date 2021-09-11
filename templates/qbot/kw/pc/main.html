@@ -1,0 +1,97 @@
+{% extends "index.html" %}
+
+{% block title %}QQ群机器人-关键字拦截{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/qbot/kw/pc/main.css" />
+{% endblock %}
+
+{% block mdv %}
+<script src="/static/js/qbot/kw/pc/main.js"></script>
+<p><span>群号：</span><span id="group_id">{{group_id}}</span></p>
+<div>
+
+</div>
+<div class="text">
+    <span class="title">说明</span>
+    <span>这是QQ机器人关键字拦截控制台，BOT将会识别群成员发送的消息，当消息中出现被设置的关键字，BOT将会执行对应操作</span>
+    <span>拦截等级代表识别的等级，
+        【等级<em>1</em>】如包含其他字符（空格、标点等）将无法被识别
+        【等级<em>2</em>】其中包含空格可被识别
+        【等级<em>3</em>】其中包含空格或标点均可被识别</span>
+    <span>按<i class="fas fa-plus-circle"></i>可以新增一个条目</span>
+    <span>编辑完成后按<i class="yes far fa-check-circle"></i>条目将会添加到表格</span>
+    <span class="warn">按<i class="no  far fa-times-circle"></i>将会删除该条目</span>
+</div>
+<table id="kws">
+    <tr>
+        <td>开启</td>
+        <td>编号</td>
+        <td>关键字</td>
+        <td>主操作</td>
+        <td>副操作</td>
+        <td>检测级别</td>
+        <td id="add"><i class="fas fa-plus-circle"></i></td>
+    </tr>
+    <tr>
+        <td id="load" colspan="7">加载更多</td>
+    </tr>
+</table>
+<div>
+    <button id="submit">提交保存</button>
+</div>
+{% endblock %}
+
+{% block templates %}
+<template id="template-kw">
+    <tr class="item">
+        <td class="opened"><input type="checkbox" value="opened" checked="checked" /></td>
+        <td class="id"></td>
+        <td class="kw"></td>
+        <td class="main-op">
+            <div class="ban">
+                禁言
+                <span class="ban-time"></span>
+                秒
+            </div>
+            <div class="kick">
+                警告
+                <span class="kick-warn"></span>
+                次后踢出
+            </div>
+        </td>
+        <td class="seco-op"></td>
+        <td class="degree"></td>
+        <td><i class="edit far fa-edit"></i></td>
+    </tr>
+</template>
+<template id="template-kw-edit">
+    <tr class="item-edit">
+        <td class="opened"><input type="checkbox" value="opened" checked="checked" /></td>
+        <td class="id"></td>
+        <td class="kw"><input type="text" /></td>
+        <td class="main-op">
+            <select>
+                <option class="ban" value="ban">禁言</option>
+                <option class="kick" value="kick">踢出</option>
+            </select>，
+            <div class="ban">
+                禁言时间：
+                <input type="number" class="" value="60" min="30" />
+            </div>
+            <div class="kick" style="display: none;">
+                警告次数：
+                <input type="number" class="" value="3" min="0" />
+            </div>
+        </td>
+        <td class="seco-op">
+            <label><input name="seco-op" type="checkbox" value="report" />报告管理员</label>
+        </td>
+        <td class="degree"><input type="number" value="2" max="3" min="1" /></td>
+        <td>
+            <i class="yes far fa-check-circle"></i>
+            <i class="no  far fa-times-circle"></i>
+        </td>
+    </tr>
+</template>
+{% endblock %}

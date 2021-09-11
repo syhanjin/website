@@ -1,10 +1,10 @@
-var network_error = function() {
-    P.open(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p>', function() {
+var network_error = function () {
+    P.open(200, 100, '<p style="font-size:36px; text-align: center;">网络错误</p>', function () {
         window.location = '/c18/roster';
     });
 }
-var not_logged_in = function() {
-    P.open(200, 100, '<p style="font-size:36px; text-align: center;">请先登录</p>', function() {
+var not_logged_in = function () {
+    P.open(200, 100, '<p style="font-size:36px; text-align: center;">请先登录</p>', function () {
         window.location = '/c18/roster';
     });
 }
@@ -15,51 +15,52 @@ function PrefixInteger(num, n) {
 }
 
 
-$(document).ready(function() {
+$(document).ready(function () {
     var num = window.location.pathname.split('/').slice(-1);
-    $.get('/c18/api/getstuinfo?num=' + num, function(data) {
-        if (data == 'False') {
-            P.open(200, 100, '<p style="font-size:36px; text-align: center;">粗错了</p>', function() {
+    $.get('/c18/api/getstuinfo?num=' + num, function (data) {
+        if (data['code'] != 0) {
+            P.open(200, 100, '<p style="font-size:36px; text-align: center;">粗错了</p>', function () {
                 window.location = '/c18/roster';
             });
         } else {
+            data = data['data']
             $(".stu-info .r-photo img").get(0).src = data['photo'] ? data['photo'] : '/static/c18/user.png';
             $(".stu-info .r-info p .name").get(0).innerHTML = data['name'];
             $(".stu-info .r-info p .num").get(0).innerHTML = 'C1818' + PrefixInteger(data['num'], 2);
-            document.title='C1818' + PrefixInteger(data['num'], 2)+data['name'];
+            document.title = 'C1818' + PrefixInteger(data['num'], 2) + data['name'];
 
-            if(data['tel'])
+            if (data['tel'])
                 $(".stu-info .info- .tel").text(data['tel']);
-            if(data['nick'])
+            if (data['nick'])
                 $(".stu-info .info- .nick").text(data['nick']);
-            if(data['addr'])
+            if (data['addr'])
                 $(".stu-info .info- .addr").text(data['addr']);
-            if(data['seni'])
+            if (data['seni'])
                 $(".stu-info .info- .seni").text(data['seni']);
-            if(data['qq'])
+            if (data['qq'])
                 $(".stu-info .info- .qq").text(data['qq']).get(0).href = "tencent://Message/?Uin=" + data['qq'] + "&amp;websiteName=q-zone.qq.com&amp;Menu=yes";
-            
-            if(data['message']){
-                var spl = data['message'].replace(/ /g,"&nbsp;").split(/\n/g);
+
+            if (data['message']) {
+                var spl = data['message'].replace(/ /g, "&nbsp;").split(/\n/g);
                 var res = '';
-                for(i in spl)res+='<p>'+spl[i]+'</p>';
+                for (i in spl) res += '<p>' + spl[i] + '</p>';
                 $(".message div").html(res);
             }
-            
-            if(data['gp']){
-                $(".gp .ph-left").css('background','url('+data['gp'][0]+') center/cover');
-                $(".gp .ph-right").css('background','url('+data['gp'][1]+') center/cover');
+
+            if (data['gp']) {
+                $(".gp .ph-left").css('background', 'url(' + data['gp'][0] + ') center/cover');
+                $(".gp .ph-right").css('background', 'url(' + data['gp'][1] + ') center/cover');
             }
-            if(data['pp']){
-                for(var i = 0;i < 6;i++){
-                    $(".pp div").eq(i).css("background","url("+data['pp'][i]+") center/cover");
+            if (data['pp']) {
+                for (var i = 0; i < 6; i++) {
+                    $(".pp div").eq(i).css("background", "url(" + data['pp'][i] + ") center/cover");
                 }
             }
         }
     }).fail(network_error);
 
     var obox = document.getElementById('pp'), aDiv = obox.getElementsByTagName('div');
-    var open_pho = function() {
+    var open_pho = function () {
         document.getElementById("fixed").onmouseup = null;
         var sX, nX, desX = 0, tX = 0, index = 0;
         obox.style.transition = "";
@@ -68,31 +69,31 @@ $(document).ready(function() {
             aDiv[i].style.transition = "transform 1s " + (aDiv.length - i) * 0.2 + "s";
         }
 
-        obox.autotimer = setInterval(function() {
+        obox.autotimer = setInterval(function () {
             tX += 0.1;
             tX %= 360;
             obox.style.transform = "rotateX(0deg) rotateY(" + tX + "deg)";
         }, 20);
 
-        document.getElementById("fixed").onmousedown = function(e) {
+        document.getElementById("fixed").onmousedown = function (e) {
             clearInterval(obox.timer);
             e = e || window.event;
-            var sX = e.clientX, hasMove=false;
-            this.onmousemove = function(e) {
+            var sX = e.clientX, hasMove = false;
+            this.onmousemove = function (e) {
                 e = e || window.event;
                 var nX = e.clientX;
                 // 当前点的坐标和前一点的坐标差值
                 desX = nX - sX;
                 tX += desX * 0.1;
                 sX = nX;
-                if(Math.abs(desX) > 1)hasMove=true;
+                if (Math.abs(desX) > 1) hasMove = true;
             }
-            this.onmouseup = function() {
+            this.onmouseup = function () {
                 this.onmousemove = this.onmouseup = null;
                 if (!hasMove) {
                     close_pho();
                 }
-                obox.timer = setInterval(function() {
+                obox.timer = setInterval(function () {
                     desX *= 0.95;
                     tX += desX * 0.1;
                     if (Math.abs(desX) < 0.5) {
@@ -122,7 +123,7 @@ $(document).ready(function() {
         }
 
     }
-    var close_pho = function() {
+    var close_pho = function () {
         clearInterval(obox.timer);
         clearInterval(obox.autotimer);
         document.getElementById("fixed").onmousedown = null;

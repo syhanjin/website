@@ -1,10 +1,12 @@
-var jcropApi, scaling = [1, 1], i, pdatas = [], files, dataURLs = [], W=1200, H=800;
+var jcropApi, scaling = [1, 1], i, pdatas = [], files, dataURLs = [],
+    bW = 1000, bH = 500;
+W = 1500, H = 750;
 var jChange = function () {
     var pic = jcropApi.getWidgetSize();
     var sel = jcropApi.tellScaled();
     $('.p-jc').css({
         top: (sel.y) * -1 + 'px',
-        left: (sel.x - 300) * -1 + 'px'
+        left: (sel.x) * -1 + 'px'
     });
 }
 var pic_jcrop = function () {
@@ -36,7 +38,10 @@ var pic_jcrop = function () {
 
             //console.log(dx + " " + dy)
 
-            jcropApi.setSelect([sel.x - dx * b[0] / w[0], sel.y - dy * b[1] / w[1], sel.x - dx * b[0] / w[0] + b[0] / w[0] * 400, sel.y - dy * b[1] / w[1] + b[1] / w[1] * 600]);
+            jcropApi.setSelect([
+                sel.x - dx * b[0] / w[0], sel.y - dy * b[1] / w[1],
+                sel.x - dx * b[0] / w[0] + b[0] / w[0] * bW, sel.y - dy * b[1] / w[1] + b[1] / w[1] * bH
+            ]);
             jChange();
 
         })
@@ -51,9 +56,9 @@ var pic_jcrop = function () {
             allowSelect: false,
             allowMove: false,
             allowResize: false,
-            aspectRatio: 2 / 3,
+            aspectRatio: bW / bH,
             sideHandles: false,
-            minSize: [400, 600],
+            minSize: [bW, bH],
             //onChange : jChange,
             addClass: 'p-jc'
         })
@@ -71,8 +76,8 @@ var pic_jcrop = function () {
             var sel = jcropApi.tellSelect();
             //console.log(sel);
             var hig = pho[1] * scaling;
-            if (hig < 600) {
-                hig = 600;
+            if (hig * bW / bH < bW || hig < bH){
+                hig = bH;
             }
             jcropApi.destroy();
             var s2 = jcropApi.getScaleFactor();
@@ -80,10 +85,10 @@ var pic_jcrop = function () {
                 allowSelect: false,
                 allowMove: false,
                 allowResize: false,
-                aspectRatio: W / H,
+                aspectRatio: bW / bH,
                 sideHandles: false,
                 boxHeight: hig,
-                minSize: [s2[0] * W * scaling, s2[1] * H * scaling],
+                minSize: [s2[0] * bW * scaling, s2[1] * bH * scaling],
                 //onChange : jChange,
                 addClass: 'p-jc'
             })
@@ -91,9 +96,9 @@ var pic_jcrop = function () {
             var b = jcropApi.getBounds();
             var w = jcropApi.getWidgetSize();
             jcropApi.setOptions({
-                minSize: [b[0] / w[0] * W, b[1] / w[1] * H]
+                minSize: [b[0] / w[0] * bW, b[1] / w[1] * bH]
             })
-            jcropApi.setSelect([sel.x, sel.y, sel.x + b[0] / w[0] * W, sel.y + b[1] / w[1] * H]);
+            jcropApi.setSelect([sel.x, sel.y, sel.x + b[0] / w[0] * bW, sel.y + b[1] / w[1] * bH]);
             jChange();
             //console.log('boxWidth:  ' + pho[0] * scaling[0] + ' boxHeight: ' + pho[1] * scaling[1])
 
@@ -104,7 +109,7 @@ var pic_next = function () {
     var sel = jcropApi.tellSelect();
     var b = jcropApi.getBounds();
     var w = jcropApi.getWidgetSize();
-    pdatas[i] = [sel.x, sel.y, sel.x + b[0] / w[0] * W, sel.y + b[1] / w[1] * H]
+    pdatas[i] = [sel.x, sel.y, sel.x + b[0] / w[0] * bW, sel.y + b[1] / w[1] * bH]
     jcropApi.destroy();
     i += 1;
     if (i + 1 == files.length) {
@@ -122,7 +127,7 @@ $(document).ready(function () {
                 var sel = jcropApi.tellSelect();
                 var b = jcropApi.getBounds();
                 var w = jcropApi.getWidgetSize();
-                pdatas[i] = [sel.x, sel.y, sel.x + b[0] / w[0] * W, sel.y + b[1] / w[1] * H]
+                pdatas[i] = [sel.x, sel.y, sel.x + b[0] / w[0] * bW, sel.y + b[1] / w[1] * bH]
                 for (var f = 0; f < files.length; f++) {
                     var src = '';
                     // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
@@ -139,10 +144,15 @@ $(document).ready(function () {
                     img.onload = function (e) {
                         var f = e.target.f;
                         var canvas = document.createElement('canvas')
-                        canvas.width = 800;
-                        canvas.height = 1200;
+                        canvas.width = W;
+                        canvas.height = H;
                         var ctx = canvas.getContext('2d')
-                        ctx.drawImage(e.target, pdatas[f][0], pdatas[f][1], pdatas[f][2] - pdatas[f][0], pdatas[f][3] - pdatas[f][1], 0, 0, W, H);
+                        ctx.drawImage(
+                            e.target,
+                            pdatas[f][0], pdatas[f][1],
+                            pdatas[f][2] - pdatas[f][0], pdatas[f][3] - pdatas[f][1],
+                            0, 0, W, H
+                        );
                         downLoad(canvas.toDataURL('image/jpeg'));
                     }
                 }

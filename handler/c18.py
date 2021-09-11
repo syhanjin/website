@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, request, jsonify, session, redirect,send_file
 import pymongo, random, datetime, os
+from handler import _0
 client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 maindb = client['main']
@@ -55,7 +56,7 @@ def c18_roster__editor_post(num):
     user = userdb.userdata.find_one({'_uid':uid})
     data = get_c18_data(uid)
     if (not data) or data['num'] != num:
-        return 'False'
+        return {'code': 4}
     pp = request.form.get('pp')
     if not pp:
         pp = []
@@ -70,7 +71,7 @@ def c18_roster__editor_post(num):
             
             
     }})
-    return 'True'
+    return _0
 @c18.route('/teachers')
 def c18_teachers():
     return render_template('/c18/pc/teachers.html')
@@ -115,7 +116,7 @@ def c18_m_roster__editor_post(num):
     user = userdb.userdata.find_one({'_uid':uid})
     data = get_c18_data(uid)
     if (not data) or data['num'] != num:
-        return 'False'
+        return {'code': 4, 'error': ''}
     
     pp = request.form.get('pp')
     if not pp:
@@ -129,7 +130,7 @@ def c18_m_roster__editor_post(num):
             'message' : request.form.get('message'),
             'pp' : pp
     }})
-    return 'True'
+    return _0
 @c18m.route('/teachers')
 def c18_m_teachers():
     return render_template('/c18/m/teachers.html')
@@ -155,15 +156,15 @@ def c18_api_getstuinfo():
     user = getuser(request.cookies.get('_uid'))
     data = get_c18_data(user)
     if (not data):
-        return 'False'
+        return {'code': 4, 'error': '并非C18人'}
     num = int(request.args.get('num'))
     data = c18db.roster.find_one({'num':num})
     if data:
         data['_id'] = str(data['_id'])
         data['__id'] = str(data['__id'])
-        return jsonify(data)
+        return data
     else:
-        return False
+        return {'code': 2, 'error': 'not this student'}
 @c18.route('/api/getroster')
 def c18_api_getroster():
     data = list(c18db.roster.find().sort('num', 1))
@@ -183,15 +184,17 @@ def c18_api_getnavitems():
 def api_uniapp_update():
     version = float(request.form.get('version'))
     version_dict = {
+        "code": 0,
         "isUpdate": True,
         "downloadAndroidUrl": 'https://sakuyark.com/static/c18/NY·C1818.apk',
         "downloadIOSUrl": 'null',
         "note": "版本已更新,请下载最新版本v1.4",
     } if version < 1.4 else {
+        "code": 0,
         "isUpdate": False,
         "note": "当前已经是最新版本",
     }
-    return jsonify(version_dict)
+    return version_dict
 
 # 访问图片
 @c18.route('/api/pictures/<path:p>')
@@ -199,11 +202,11 @@ def api_pictures(p):
     user = getuser(request.cookies.get('_uid'))
     data = get_c18_data(user)
     if (not data):
-        return 'False'
+        return {'code': 4, 'error': ''}
     path='c18/'+p
     if os.path.isfile(path):
         try:
             return send_file(path)
         except Exception as e:
             return str(e)
-    return 'Is not a file.'
+    return {'code': 2, 'error': 'Is not a file.'}

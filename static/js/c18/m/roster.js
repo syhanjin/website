@@ -15,11 +15,12 @@ function PrefixInteger(num, n) {
 
 $(document).ready(function() {
     $.get('/c18/api/getroster', function(data) {
-        if (data == 'False') {
+        if (data['code'] != 0) {
             P.open(200, 100, '<p style="font-size:36px; text-align: center;">粗错了</p>', function() {
                 window.location = '/c18';
             });
         } else {
+            data = data['data']
             var r = $("#roster table tbody");
             for (var i = 0; i < data.length; i++) {
                 var item = r.append("<tr class='roster-tr' onclick=\"window.location.href+='/'+" + PrefixInteger(data[i]['num'], 2) + "\">").children('.roster-tr').last();

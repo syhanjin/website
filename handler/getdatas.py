@@ -31,9 +31,9 @@ def getuser(_uid):
 def api_about():
     data = maindb.about.find_one({'type': 'text'})
     if not data:
-        return 'False'
+        return {'code': 2, 'error': ''}
     del data['_id']
-    return jsonify(data)
+    return data
 
 
 @getdatas.route('/api/getnavitems')
@@ -57,16 +57,16 @@ def api_getlinksitems():
 def api_getuserdata():
     _uid = getuser(request.cookies.get('_uid'))
     data = userdb.userdata.find_one({'_uid': _uid})
-    if data == None:
+    if data is None or _uid is None:
         session['_uid'] = ''
-        return 'False'
+        return {'code': 3, 'error': ''}
     utime = datetime.datetime.strptime(
         session.get('utime'), '%Y-%m-%d %H:%M:%S')
     ptime = datetime.datetime.strptime(data['pmodify'], '%Y-%m-%d %H:%M:%S')
     # print(utime)
     # print(type(ptime))
     if utime.__lt__(ptime):
-        return 'False'
+        return {'code': 3, 'error': ''}
     # print('T02')
     now = datetime.datetime.now()
     session['utime'] = now.__format__('%Y-%m-%d %H:%M:%S')
@@ -103,16 +103,16 @@ def api_getuserdata():
             del data[i]
     data['chat-count'] = chatdb.messages.find(
         {'read': False, 'r_uid': _uid}).count()
-    return jsonify(data)
+    return data
 
 
 @getdatas.route('/api/getlvldata/<int:lvl>', methods=['GET'])
 def api_getlvldata(lvl):
     data = userdb.lvldata.find_one({'lvl': lvl})
     if data == None:
-        return False
+        return {'code': 2, 'error': ''}
     del data['_id']
-    return jsonify(data)
+    return data
 
 
 # 用户头像动态获取
@@ -224,11 +224,13 @@ def gaa_edid():
 def api_uniapp_update():
     version = float(request.form.get('version'))
     version_dict = {
+        "code": 0,
         "isUpdate": True,
         "downloadAndroidUrl": 'https://sakuyark.com/static/file/sakuyark.apk',
         "downloadIOSUrl": 'null',
         "note": "版本已更新,请下载最新版本v1.4",
     } if version < 1.4 else {
+        "code": 0,
         "isUpdate": False,
         "note": "当前已经是最新版本",
     }

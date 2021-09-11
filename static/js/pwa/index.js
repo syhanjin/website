@@ -18,7 +18,7 @@ try {
 
 $(document).ready(function() {
     $.get('//aichistudio.space/api/getuserdata', function(rel) {
-        if (rel == 'False') {
+        if (rel['code'] != 0) {
             $.cookie('_uid', '', {
                 path : '/'
             });

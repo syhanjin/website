@@ -1,6 +1,8 @@
 $(function(){
     var sep_interval = setInterval(function () {
         $.get('/audio/separator/status', function (rel) {
+            if (rel['code']!=0)return;
+            rel = rel['data'];
             for (i in rel) {
                 $('#' + rel[i]['id'] + '-1 .status').attr('data-status', rel[i]['status']);
                 if (rel[i]['status'] == 'finished') {

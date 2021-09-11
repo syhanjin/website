@@ -1,11 +1,12 @@
 $(document).ready(function () {
     $.get('/api/getuserdata', function (rel) {
-        if (rel == 'False') {
+        if (rel['code'] != 0) {
             $.cookie('_uid', '', {
                 path: '/',
                 expires: -1
             });
         } else {
+            rel = rel['data']
             // alert($.cookie('_uid'));
             $.cookie('_uid', $.cookie('_uid'), {
                 expires: 3,

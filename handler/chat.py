@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from flask import Blueprint, render_template, request, jsonify, session, redirect, make_response
+from handler import _0
 import pymongo
 import random
 import datetime
@@ -78,6 +79,8 @@ def chat():
     return render_template('chat/pc/main.html')
 
 # 手机版
+
+
 @chatmb.route('/', methods=['GET'])
 def chat():
     _uid = getuser(request.cookies.get('_uid'))
@@ -91,31 +94,33 @@ def chat():
 @chatb.route('/has_uid')
 def has_uid():
     u = request.args.get('u')
-    data = userdb.userdata.find_one({'_uid':u})
+    data = userdb.userdata.find_one({'_uid': u})
     if not data:
-        return 'False'
-    return data['user']
+        return {'code': 2, 'error': 'not this user'}
+    return {'code': 0, 'data': data['user']}
 
 
 # 请求添加好友
-@chatb.route('/make_friends',methods=['POST'])
+@chatb.route('/make_friends', methods=['POST'])
 def make_friends():
     _uid = getuser(request.cookies.get('_uid'))
     _uid2 = request.form.get('u')
     text = request.form.get('t')
-    if not _uid or not _uid2 or not text:
-        return 'False'
+    if not _uid:
+        return {'code': 3, 'error': ''}
+    if not _uid2 or not text:
+        return {'code': 1, 'error': 'not u or t '}
     if userdb.friends.find_one({'_uid1': _uid, '_uid2': _uid2}):  # 如果已经是好友
-        return 'True'
+        return _0
     if chatdb.messages.find_one({
         's_uid': _uid,
         'r_uid': _uid2,
         'read': False,
         'type': 'mkfriends'
     }):  # 如果发送过交友请求且对方未读
-        return 'False'
+        return {'code': 2, 'error': 'sent but not read'}
     send_msg(_uid, _uid2, text, 'mkfriends')
-    return 'True'
+    return _0
 
 
 # 同意添加好友
@@ -123,10 +128,12 @@ def make_friends():
 def agree_make_friends():  # GET u ==> 对方 _uid
     _uid = getuser(request.cookies.get('_uid'))
     _uid2 = request.args.get('u')
-    if not _uid or not _uid2:
-        return 'False'
+    if not _uid:
+        return {'code': 3, 'error': ''}
+    if not _uid2:
+        return {'code': 1, 'error': 'not u'}
     if userdb.friends.find_one({'_uid1': _uid, '_uid2': _uid2}):  # 如果已经是好友
-        return 'True'
+        return _0
     # 交友，建双向边
     userdb.friends.insert_many([
         {'_uid1': _uid, '_uid2': _uid2},
@@ -137,7 +144,7 @@ def agree_make_friends():  # GET u ==> 对方 _uid
     # 删除原本的交友请求
     chatdb.messages.delete_many(
         {'s_uid': _uid2, 'r_uid': _uid, 'type': 'mkfriends'})
-    return 'True'
+    return _0
 
 
 # 不同意添加好友
@@ -145,11 +152,13 @@ def agree_make_friends():  # GET u ==> 对方 _uid
 def disagree_make_friends():  # GET u ==> 对方 _uid
     _uid = getuser(request.cookies.get('_uid'))
     _uid2 = request.args.get('u')
-    if not _uid or not _uid2:
-        return 'False'
+    if not _uid:
+        return {'code': 3, 'error': ''}
+    if not _uid2:
+        return {'code': 1, 'error': 'not u'}
     # 发送一条消息
     msg_list(_uid, _uid2, '', 'refuse_friend')
-    return 'True'
+    return _0
 
 
 # 发送 消息
@@ -158,15 +167,17 @@ def chat_send_msg():  # post r_uid, text
     _uid = getuser(request.cookies.get('_uid'))
     r_uid = request.form.get('r_uid')
     text = request.form.get('text')
-    if not _uid or not r_uid or not text:
-        return 'False'
+    if not _uid:
+        return {'code': 3, 'error': ''}
+    if not r_uid or not text:
+        return {'code': 1, 'error': 'not r_uid or text'}
     # 首先判断对方是否允许陌生人发消息
     if not userdb.userdata.find_one({'_uid': r_uid}).get('allowStrangers'):
         # 如果不允许判断是否是好友
         if not userdb.friends.find_one({'_uid1': _uid, '_uid2': r_uid}):
-            return 'False'
+            return {'code': 4, 'error': '你们还不是好友'}
     send_msg(_uid, r_uid, text)
-    return 'True'
+    return _0
 
 
 # 获取未读消息数量
@@ -174,7 +185,7 @@ def chat_send_msg():  # post r_uid, text
 def chat_unread_msg_count():
     _uid = getuser(request.cookies.get('_uid'))
     if not _uid:
-        return 'False'
+        return {'code': 3, 'error': ''}
     return chatdb.messages.find({'read': False, 'r_uid': _uid}).count()
 
 
@@ -183,7 +194,7 @@ def chat_unread_msg_count():
 def chat_unread_msg_s_uid(s_uid):
     _uid = getuser(request.cookies.get('_uid'))
     if not _uid:
-        return 'False'
+        return {'code': 3, 'error': ''}
     datas = list(chatdb.messages.find(
         {'read': False, 's_uid': s_uid, 'r_uid': _uid}).sort('time', 1))
     # 将所有未读消息设置为已读
@@ -201,14 +212,16 @@ def chat_all_msg_s_uid(s_uid):  # p ==> page, t ==> timestamp
     _uid = getuser(request.cookies.get('_uid'))
     page = int(request.args.get('p'))
     timestamp = request.args.get('t')
-    if not _uid or not page or not timestamp:
-        return 'False'
+    if not _uid:
+        return {'code': 3, 'error': ''}
+    if not page or not timestamp:
+        return {'code': 1, 'error': 'not p or t'}
     time = datetime.datetime.fromtimestamp(float(timestamp))
     # 获取消息，只获取timestamp以前的消息，因为新消息会打乱分页
     datas = list(chatdb.messages.find({
-        '$or':[
-            {'s_uid': s_uid,'r_uid': _uid},
-            {'s_uid': _uid,'r_uid': s_uid}
+        '$or': [
+            {'s_uid': s_uid, 'r_uid': _uid},
+            {'s_uid': _uid, 'r_uid': s_uid}
         ],
         'time': {'$lte': time}
     }).sort('time', -1).skip((page - 1) * 20).limit(20))
@@ -230,7 +243,7 @@ def chat_all_msg_s_uid(s_uid):  # p ==> page, t ==> timestamp
 def chat_list():
     _uid = getuser(request.cookies.get('_uid'))
     if not _uid:
-        return 'False'
+        return {'code': 3, 'error': ''}
     datas = list(chatdb.list.find({'r_uid': _uid}).sort('time', -1))
     for data in datas:
         data['count'] = chatdb.messages.find(
@@ -247,11 +260,13 @@ def chat_list():
 def modify_allow_strangers():
     _uid = getuser(request.cookies.get('_uid'))
     s = request.args.get('s')
-    if not s or not _uid:
-        return 'False'
+    if not _uid:
+        return {'code': 3, 'error': ''}
+    if not s:
+        return {'code': 1, 'error': 'not s'}
     userdb.userdata.update_one(
         {'_uid': _uid}, {'$set': {'allowStrangers': (s == 'yes')}})
-    return 'True'
+    return _0
 
 
 # 修改信息 是否使用 Ctrl + Enter 发送消息
@@ -259,8 +274,10 @@ def modify_allow_strangers():
 def modify_msg_ctrl():
     _uid = getuser(request.cookies.get('_uid'))
     s = request.args.get('s')
-    if not s or not _uid:
-        return 'False'
+    if not _uid:
+        return {'code': 3, 'error': ''}
+    if not s:
+        return {'code': 1, 'error': 'not s'}
     userdb.userdata.update_one(
         {'_uid': _uid}, {'$set': {'MSG_CTRL': (s == 'yes')}})
-    return 'True'
+    return _0

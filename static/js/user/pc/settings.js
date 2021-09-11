@@ -10,9 +10,10 @@ var not_logged_in = function () {
 }
 $(document).ready(function () {
 	$.get('/api/getuserdata', function (data) {
-		if (data == 'False') {
+		if (data['code'] != 0) {
 			not_logged_in();
 		} else {
+			data = data['data']
 			// alert(str(data));
 			document.getElementById('info-ops-cphoto').src = data['photo'];
 			$("#info-ops-cuser").text(data['user']);
@@ -28,9 +29,10 @@ $(document).ready(function () {
 			tits.append('<span class="lvl lv' + data['lvl'] + '">');
 			tits.children('.lvl').last().append('Lv.' + data['lvl']);
 			$.get('/api/getlvldata/' + data['lvl'], function (rel) {
-				if (rel == 'False') {
+				if (rel['code'] != 0) {
 					$('#exp').remove();
 				} else {
+					rel = rel['data']
 					$('#exp em').eq(0).text(data['exp']);
 					$('#exp em').eq(1).text(rel['exp']);
 					$('#exp #bar').css('width', data['exp'] / rel['exp'] * 100 + '%');
@@ -92,7 +94,7 @@ $(document).ready(function () {
 					$.post('/user/settings/uplphoto', {
 						'dataURL': dataURL
 					}, function (rel) {
-						if (rel == 'False') {
+						if (rel['code'] != 0) {
 							not_logged_in();
 						} else {
 							location.reload();
@@ -161,12 +163,12 @@ $(document).ready(function () {
 		$.post('/user/settings/setuser', {
 			'user': newuser
 		}, function (rel) {
-			if (rel == 'True') {
+			if (rel['code'] == 0) {
 				location.reload();
-			} else if (rel == 'Existed') {
+			} else if (rel['code'] == 2) {
 				$("#info-ops-umodify div #mwarn").text('名字已存在');
 				return;
-			} else if (rel == 'Not Logged In') {
+			} else if (rel['code'] == 3) {
 				not_logged_in();
 			} else {
 				$("#info-ops-umodify div #mwarn").text('无法修改');
@@ -200,14 +202,14 @@ $(document).ready(function () {
 			'old': oldp,
 			'new': newp
 		}, function (rel) {
-			if (rel == 'Not Logged In') {
+			if(rel['code'] == 3) {
 				not_logged_in();
-			} else if (rel == 'pwd wrong') {
+			} else if (rel['code'] == 1) {
 				P.open(200, 100, '<p style="font-size: 24px;text-align:center">原密码错误</p>', function () {
 					$("#usafe .pwd").find('div input').val('');
 				})
 				return false;
-			} else if (rel == 'True') {
+			} else if (rel['code'] == 0) {
 				P.open(200, 100, '<p style="font-size: 24px;text-align:center">修改成功</p>', function () {
 					$("#usafe .pwd").hide();
 				})

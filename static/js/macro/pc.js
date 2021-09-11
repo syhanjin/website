@@ -20,11 +20,12 @@ var user, user_data,//
 $(function () {
     $.cookie.raw = true;
     $.get('/api/getuserdata', function (rel) {
-        if (rel == 'False') {
+        if (rel['code'] != 0) {
             // alert('t');
             $.cookie('_uid', '', { path: '/', expires: -1 });
             $(".user .user-menu").remove();
         } else {
+            rel = rel['data']
             // alert($.cookie('_uid'));
             $.cookie('_uid', $.cookie('_uid'), {
                 expires: 3,
@@ -54,6 +55,8 @@ $(function () {
     });
     $.get('/api/getlinksitems', function (rel) {
         // alert(rel);
+        if(rel['code'] != 0) return;
+        rel = rel['data']
         var nav_bar = $(".tail .links");
         for (var i = 0; i < rel.length; i++) {
             if (i % 6 == 0)

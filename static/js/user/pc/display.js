@@ -100,9 +100,10 @@ function check_hash() {
     switch (hash) {
         case '#main':
             $.get(location.pathname + '/introduction', function (rel) {
-                if (rel == 'False' || !rel) return;
+                if (rel['code'] != 0) return;
                 var el = document.querySelector('.display-main-introduction');
                 var ta = document.querySelector('.display-main-middle .card textarea');
+                rel = rel['data']
                 ta.value = rel;
                 markdown(el, rel);
             });
@@ -161,7 +162,7 @@ $(document).ready(function () {
         stackedit.on('close', () => {
             var text = ta.value;
             $.post('/user/modify/introduction', { 'text': text }, function (rel) {
-                if (rel == 'True')
+                if (rel['code'] == 0)
                     markdown(el, text);
                 else
                     failed_intr(el, ta, old_text);
@@ -184,7 +185,7 @@ $(document).ready(function () {
         var text = $(this).val().replace(/^\s\s*/, '').replace(/\s\s*$/, '');
         if (text.length > 0) {
             $.post('/user/modify/personalized', { 'text': text }, function (rel) {
-                if (rel == 'True')
+                if (rel['code'] == 0)
                     p.text(text);
                 else
                     failed_pers(p, old_text);

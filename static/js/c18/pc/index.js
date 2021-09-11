@@ -1,6 +1,8 @@
-$(document).ready(function() {
-    $.get('/c18/api/getnavitems', function(rel) {
+$(document).ready(function () {
+    $.get('/c18/api/getnavitems', function (rel) {
         // alert(rel);
+        if (rel['code'] != 0) return;
+        rel = rel['data']
         var nav_bar = $(".nav .bar");
         for (var i = 0; i < rel.length; i++) {
             if (i >= 6)

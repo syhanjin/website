@@ -16,8 +16,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    padding-top: 20px;
+
 }
-.layout{
+
+.layout {
     background-color: #000;
     opacity: 0;
     position: fixed;
@@ -31,6 +34,7 @@
 .popup .p-header {
     height: 20px;
     width: 100%;
+    margin-top: -20px;
 }
 
 .popup #p-close {

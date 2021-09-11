@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
     $.get("/c18/api/getteachers", function(data) {
+        if (data['code'] != 0)return;
+        data = data['data']
         var f = $(".container");
         for (var i = 0; i < data.length; i++) {
             var t = f.append("<div class='teacher' onclick='window.location.href+=\"/" + data[i]['id'] + "\"'>").children().last();
