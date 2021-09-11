@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-from flask import Flask, request, render_template, session, redirect, make_response, send_file  # 引入flask
+from flask import Flask, json, jsonify, request, render_template, session, redirect, make_response, send_file
 from handler import getdatas, register, login, user, games, c18, blog, photo, chat, audio, qbot  # special_res
 from handler.tools import EL
 from handler.admin import file
@@ -7,6 +7,9 @@ import socket
 import base64
 import datetime
 from datetime import timedelta
+
+substations = ['c18']  # 分站列表
+mobile_rules = {}
 
 
 def get_host_ip():
@@ -48,6 +51,8 @@ def about():
     return render_template('about/pc/main.html')
 
 
+# region 500
+''' 
 # 捕获500错误，并发送邮件
 @sy.errorhandler(500)
 def handle_500_error(err):
@@ -76,6 +81,8 @@ def handle_500_error(err):
         return '服务器产生一个500错误，已报告管理员，错误信息：\n' + err
     except smtplib.SMTPException:
         return '服务器产生一个500错误，未成功报告管理员，错误信息：\n' + err
+'''
+# endregion
 
 
 @sy.errorhandler(404)
@@ -122,6 +129,14 @@ def robots():
 def after_request(resp):
     if request.url.rsplit('.', 1)[1] == 'js':
         resp.mimetype = 'text/javascript'
+    if resp.mimetype == 'application/json':
+        data = json.loads(resp.data)
+        if 'code' in data:
+            return jsonify(data)
+        return jsonify({
+            'code': 0,
+            'data': data
+        })
     return resp
 
 
@@ -168,7 +183,9 @@ sy.register_blueprint(getdatas.getdatas)
 # region admin
 sy.register_blueprint(file.admin_file)
 # endregion
-
+# region qbot
+sy.register_blueprint(qbot.kw, url_prefix='/qbot/kw')
+# endregion
 
 # region others
 # sy.register_blueprint(special_res.sr,url_prefix='/res')
@@ -184,6 +201,34 @@ sy.register_blueprint(c18.c18m, url_prefix='/c18/m')
 # endregion
 # region 预备作家协会
 # sy.register_blueprint(pwa.pwa, subdomain='pwa')
+# endregion
+
+# region 处理手机版
+'''技术难度过大，终止
+# 调试
+# from werkzeug.routing import MapAdapter,Map,Rule
+# print(sy.url_map._rules[0].rule)
+# m = MapAdapter(sy.url_map)
+# print(m)
+
+
+# 处理手机页面
+import re
+# print(re.match('^\\|/+?m$','/m'))
+# exit()
+for i in sy.url_map._rules:
+    print(i.rule)
+    print(i._regex)
+    print(i.match('/m'))
+    continue
+    # 判断是否在主站
+    p = re.compile(r'^/m')
+    if p.match(i.rule):
+        print(i.rule)
+    pass
+
+exit()
+'''
 # endregion
 
 # 运行
