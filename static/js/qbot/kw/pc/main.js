@@ -137,7 +137,7 @@ $(function () {
             var kw = div.querySelector('.kw input').value.replace(' ', '');
             if (kw.length == 0) return;
             var degree = parseInt(div.querySelector('.degree input').value);
-            var main_op = div.querySelector('.main-op div').className;
+            var main_op = div.querySelector('.main-op select').value;
             var seco_op = [];
             var so = $(div.querySelector('.seco-op'));
             so.find('input[type="checkbox"]:checked').each(function (i, e) {
