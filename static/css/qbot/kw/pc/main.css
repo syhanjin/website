@@ -46,7 +46,7 @@
     outline: 0;
 }
 
-#kws .seco-op .so-report::before{
+#kws .seco-op .so-report::before {
     content: '报告管理员';
 }
 
@@ -163,4 +163,19 @@
     color: red;
     background-color: #e6e6e6;
     font-weight: 600;
+}
+
+#submit {
+    margin: 5px auto;
+    display: block;
+    width: 20em;
+    height: 3em;
+}
+
+.container>p {
+    margin: 5px auto;
+    width: 99%;
+    min-width: 750px;
+    max-width: 900px;
+    text-align: center;
 }
