@@ -8,4 +8,4 @@ file/
 ./logs/
 index_test.py
 tmp
-./test
+test/
