@@ -55,6 +55,15 @@ def allowed_file(filename):
 
 @audio.route('/separator', methods=['GET'])
 def audio_separator():
+    return render_template('error/pc.html',error='该项目已关闭<br>因为有更好的：<a href="https://vocalremover.org/ch/">链接</a>')
+@audiom.route('/separator', methods=['GET'])
+def audio_m_separator():
+    return render_template('error/m.html',error='该项目已关闭<br>因为有更好的：<a href="https://vocalremover.org/ch/">链接</a>')
+
+
+'''
+@audio.route('/separator', methods=['GET'])
+def audio_separator():
     _uid = getuser(request.cookies.get('_uid'))
     if not _uid:
         return render_template('error/pc.html', error='请先登录再使用音轨分离')
@@ -128,3 +137,4 @@ def audio_separator_upload():
         return redirect('/audio/separator')
     else:
         return '文件类型不符合'
+'''
