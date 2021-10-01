@@ -37,7 +37,7 @@ class Popup {
         this.e = e;
         this.close_callback = close_callback || function () { };
         var layout = document.createElement('div');
-        layout.className = 'layout';
+        layout.className = 'popup-layout';
         document.body.appendChild(layout);
         this.p.empty()
             .css({

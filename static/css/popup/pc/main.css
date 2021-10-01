@@ -3,7 +3,7 @@
     position: fixed;
     margin: auto;
     opacity: 0;
-    z-index: 9999;
+    z-index: 999;
     background-color: #F6F6F6;
     box-shadow: 0 0 2.5px #d8d8d8;
     overflow: hidden;
@@ -20,7 +20,7 @@
 
 }
 
-.layout {
+.popup-layout {
     background-color: #000;
     opacity: 0;
     position: fixed;
@@ -28,7 +28,7 @@
     right: 0;
     bottom: 0;
     top: 0;
-    z-index: 9998;
+    z-index: 998;
 }
 
 .popup .p-header {
