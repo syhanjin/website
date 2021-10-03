@@ -13,8 +13,8 @@ userdb = client['user']
 maindb = client['main']
 chatdb = client['chat']
 TSTRING = "%Y-%m-%d %H:%M:%S"
-chatb = Blueprint('chat', __name__)
-chatmb = Blueprint('chatm', __name__)
+chatb = Blueprint('chat', __name__, url_prefix='/chat')
+chatmb = Blueprint('chatm', __name__, url_prefix='/m/chat')
 
 
 # 更新消息列表

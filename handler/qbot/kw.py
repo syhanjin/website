@@ -9,7 +9,7 @@ import shutil
 client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 botdb = client['qbot']
-kw = Blueprint('bot_kw', __name__)
+kw = Blueprint('bot_kw', __name__, url_prefix='/qbot/kw')
 
 
 def getuser(_uid):
@@ -22,7 +22,7 @@ def getuser(_uid):
 def kw_home(group_id):
     key = request.args.get('key')
     if key is None:
-        return render_template('error/pc.html', error='缺少参数key')
+        return render_template('error/pc.html', error='权限不足')
     data = botdb.kw_edit.find_one({
         'key': key,
         'group_id': group_id,
@@ -32,7 +32,7 @@ def kw_home(group_id):
             'key': key,
             'group_id': group_id,
         })
-        return render_template('error/pc.html', error='key不存在或已过期')
+        return render_template('error/pc.html', error='权限不足')
     return render_template('qbot/kw/pc/main.html', group_id=group_id, key=key)
 
 

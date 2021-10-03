@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, request,jsonify,session,redirect,make_response
+from flask.helpers import send_file
 import pymongo,random,datetime,re,os,hashlib
 import base64
 client = pymongo.MongoClient('127.0.0.1',27017)
 userdb = client['user']
 maindb = client['main']
 noveldb = client['novel']
-games = Blueprint('games', __name__)
+games = Blueprint('games', __name__, url_prefix='/games')
 
 # 因为懒，此BP不接数据库
 games_data=[
@@ -18,7 +19,7 @@ games_data=[
         'introduction':'一款老少皆宜的塔防游戏，极易上手。',
         'photo':'/static/images/games/FF.jpg',
         'play':'/games/fightforfreedom',
-        'edition':'v1.41'
+        'edition':'v1.42'
     },{
         'name':'A Dark Room',
         'name-zn':'小黑屋',
@@ -36,7 +37,7 @@ def games_():
 
 @games.route('/fightforfreedom',methods=['GET'])
 def ScratchWar():
-    return render_template('games/html/fight_for_freedom/fight for freedom1.41.html',edition="1.41")
+    return send_file('templates/games/html/fight_for_freedom/fight for freedom1.42.html')
 
 @games.route('/adarkroom',methods=['GET'])
 def a_dark_room():

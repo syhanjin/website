@@ -16,8 +16,8 @@ client = pymongo.MongoClient('127.0.0.1',27017)
 userdb = client['user']
 maindb = client['main']
 noveldb = client['novel']
-login = Blueprint('login', __name__)
-loginm = Blueprint('loginm', __name__)
+login = Blueprint('login', __name__, url_prefix='/login')
+loginm = Blueprint('loginm', __name__, url_prefix='/m/login')
 
 # 电脑版
 @login.route('/',methods=['GET'])

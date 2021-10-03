@@ -6,7 +6,7 @@ client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 maindb = client['main']
 c18db = client['c18']
-c18 = Blueprint('c18', __name__)
+c18 = Blueprint('c18', __name__, url_prefix='/c18')
 def getuser(_uid):
     if _uid and not _uid == session.get('_uid'):
         return None
@@ -85,7 +85,7 @@ def c18_developer_helper():
     return render_template('c18/pc/d&h.html',code_theme='vs2015',theme='Whitelines/whitelines',user=user)
 
 #手机版
-c18m = Blueprint('c18m', __name__)
+c18m = Blueprint('c18m', __name__, url_prefix='/c18/m')
 @c18m.route('/')
 def c18_m_main():
     first = 'c18-first' not in session

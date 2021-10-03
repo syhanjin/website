@@ -6,8 +6,8 @@ userdb = client['user']
 maindb = client['main']
 blogdb = client['blog']
 noveldb = client['novel']
-blog = Blueprint('blog', __name__)
-blogm = Blueprint('blogm', __name__)
+blog = Blueprint('blog', __name__, url_prefix='/blog')
+blogm = Blueprint('blogm', __name__, url_prefix='/m/blog')
 def getuser(_uid):
     if _uid and not _uid == session.get('_uid'):
         return None

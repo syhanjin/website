@@ -11,8 +11,8 @@ from werkzeug.utils import secure_filename
 client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 audiodb = client['audio']
-audio = Blueprint('audio', __name__)
-audiom = Blueprint('audiom', __name__)
+audio = Blueprint('audio', __name__, url_prefix='/audio')
+audiom = Blueprint('audiom', __name__, url_prefix='/m/audio')
 minute = 60 * 1000
 root_path = '../audio'
 tmp_path = os.path.join(root_path, 'tmp')

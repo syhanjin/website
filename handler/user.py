@@ -13,8 +13,8 @@ userdb = client['user']
 maindb = client['main']
 noveldb = client['novel']
 activdb = client['activity']
-userb = Blueprint('user', __name__)
-usermb = Blueprint('userm', __name__)
+userb = Blueprint('user', __name__, url_prefix='/user')
+usermb = Blueprint('userm', __name__, url_prefix='/m/user')
 
 
 def getuser(_uid):
