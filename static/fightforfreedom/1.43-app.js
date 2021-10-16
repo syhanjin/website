@@ -44,9 +44,9 @@ try {
     scaffolding.setUsername("player####".replace(/#/g, () => Math.floor(Math.random() * 10)));
     scaffolding.setAccentColor("#ff4c4c");
 
-    scaffolding.addCloudProvider(new Scaffolding.Cloud.WebSocketProvider("wss://clouddata.turbowarp.org", "p4-@fight for freedom1.42.sb3"));
+    scaffolding.addCloudProvider(new Scaffolding.Cloud.WebSocketProvider("wss://clouddata.turbowarp.org", "p4-@fight for freedom1.43.sb3"));
 
-    if (true) {
+    if (false) {
         const greenFlagButton = document.createElement('img');
         greenFlagButton.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.63 17.5"><path d="M.75 2a6.44 6.44 0 017.69 0h0a6.44 6.44 0 007.69 0v10.4a6.44 6.44 0 01-7.69 0h0a6.44 6.44 0 00-7.69 0" fill="#4cbf56" stroke="#45993d" stroke-linecap="round" stroke-linejoin="round"/><path stroke-width="1.5" fill="#4cbf56" stroke="#45993d" stroke-linecap="round" stroke-linejoin="round" d="M.75 16.75v-16"/></svg>');
         greenFlagButton.className = 'control-button';
@@ -65,7 +65,7 @@ try {
         });
     }
 
-    if (true) {
+    if (false) {
         const stopAllButton = document.createElement('img');
         stopAllButton.src = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path fill="#ec5959" stroke="#b84848" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M4.3.5h5.4l3.8 3.8v5.4l-3.8 3.8H4.3L.5 9.7V4.3z"/></svg>');
         stopAllButton.className = 'control-button';
@@ -97,7 +97,7 @@ try {
                 }
             }
         });
-        const otherControlsExist = true;
+        const otherControlsExist = false;
         const fillColor = otherControlsExist ? '#575E75' : '#ffffff';
         const updateFullScreen = () => {
             isFullScreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
@@ -124,7 +124,7 @@ try {
     }
 
     vm.setTurboMode(false);
-    if (vm.setInterpolation) vm.setInterpolation(false);
+    if (vm.setInterpolation) vm.setInterpolation(true);
     if (vm.setFramerate) vm.setFramerate(30);
     if (vm.renderer.setUseHighQualityRender) vm.renderer.setUseHighQualityRender(false);
     if (vm.setRuntimeOptions) vm.setRuntimeOptions({
@@ -179,3 +179,4 @@ if (false) {
         }
     });
 }
+

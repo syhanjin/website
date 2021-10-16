@@ -1,21 +1,11 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request, jsonify, session, redirect, send_file, abort
+from flask import Blueprint, render_template, request, jsonify
 import pymongo
 from handler import _0
-import random
 import datetime
-import os
-import shutil
 client = pymongo.MongoClient('127.0.0.1', 27017)
-userdb = client['user']
 botdb = client['qbot']
 kw = Blueprint('bot_kw', __name__, url_prefix='/qbot/kw')
-
-
-def getuser(_uid):
-    if _uid and not _uid == session.get('_uid'):
-        return None
-    return _uid
 
 
 @kw.route('/<int:group_id>')
