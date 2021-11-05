@@ -7,6 +7,7 @@ import os
 import hashlib
 import base64
 from handler import _0
+from utils.user import User
 
 client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
@@ -16,11 +17,6 @@ activdb = client['activity']
 userb = Blueprint('user', __name__, url_prefix='/user')
 usermb = Blueprint('userm', __name__, url_prefix='/m/user')
 
-
-def getuser(_uid):
-    if _uid and not session.get('_uid') == _uid:
-        return None
-    return _uid
 
 
 def getactivities(_uid, my_uid, page):
@@ -57,8 +53,8 @@ def getactivities(_uid, my_uid, page):
 
 @userb.route('/settings')
 def user_settings():
-    _uid = getuser(request.cookies.get('_uid'))
-    if _uid == None:
+    _uid = User.check_uid(request, session)
+    if _uid is None:
         return redirect('/login')
     return render_template('/user/pc/settings.html')
 
@@ -68,19 +64,19 @@ def user_display(_uid):
     data = userdb.userdata.find_one({'_uid': _uid})
     if data == None:
         return render_template('error/pc.html', error='找不到用户：uid='+_uid), 404
-    my_uid = getuser(request.cookies.get('_uid'))
+    my_uid = User.check_uid(request, session)
     data['is_mine'] = (my_uid == data['_uid'])
     # 获取等级信息
     lvld = userdb.lvldata.find_one({'lvl': data['lvl']})
     data['max_exp'] = lvld['exp']
     return render_template('user/pc/display.html', data=data, my_uid=my_uid)
+
+
 # 手机版
-
-
 @usermb.route('/settings')
 def user_m_settings():
-    _uid = getuser(request.cookies.get('_uid'))
-    if _uid == None:
+    _uid = User.check_uid(request, session)
+    if _uid is None:
         return redirect('/login')
     return render_template('/user/m/settings.html')
 
@@ -99,8 +95,8 @@ def user_m_display(_uid):
 
 @userb.route('/search')
 def user_search():
-    _uid = getuser(request.cookies.get('_uid'))
-    if not _uid:
+    _uid = User.check_uid(request, session)
+    if _uid is None:
         return {'code': 3}
     u = request.args.get('u')
     users = list(userdb.userdata.find(
@@ -115,11 +111,11 @@ def user_search():
 
 @userb.route('/modify/personalized', methods=['POST'])
 def user_modify_pres():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     text = request.form.get('text')
-    if _uid == None:
+    if _uid is None:
         return {'code': 3}
-    if text == None:
+    if text is None:
         return {'code': 1, 'error': 'not text'}
     userdb.userdata.update_one(
         {'_uid': _uid}, {'$set': {'personalized': text}})
@@ -136,7 +132,7 @@ def user_uid_intr(_uid):
 
 @userb.route('/<string:_uid>/activity')
 def user_uid_acti(_uid):
-    my_uid = getuser(request.cookies.get('_uid'))
+    my_uid = User.check_uid(request, session)
     page = int(request.args.get('page'))
     activities = getactivities(_uid, my_uid, page)
     return jsonify(activities)
@@ -144,7 +140,7 @@ def user_uid_acti(_uid):
 
 @userb.route('/modify/introduction', methods=['POST'])
 def user_modify_intr():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     text = request.form.get('text')
     if _uid == None:
         return {'code': 3}
@@ -158,7 +154,7 @@ def user_modify_intr():
 
 @userb.route('/settings/uplphoto', methods=['POST'])
 def user_settings_uplphoto():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     if _uid == None:
         return {'code': 3}
     dataURL = request.form.get('dataURL')[23:]
@@ -182,34 +178,28 @@ def user_settings_uplphoto():
 
 @userb.route('/settings/setuser', methods=['POST'])
 def user_settings_setuser():
-    _uid = getuser(request.cookies.get('_uid'))
-    if _uid == None:
+    _uid = User.check_uid(request, session)
+    if _uid is None:
         return {'code': 3}
     nuser = request.form.get('user')
-    if not userdb.userdata.find_one({'user': nuser}) == None:
-        return {'code': 2}
-    data = userdb.userdata.find_one({'_uid': _uid})
-#     print(data)
-    if 'umodifydate' not in data or (datetime.datetime.now() - data['umodifydate']).days > 365:
-        userdb.userdata.update_one({'_uid': _uid}, {
-                                   '$set': {'user': nuser, 'umodifydate': datetime.datetime.now()}})
+    user = User(_uid)
+    if user.setuser(nuser):
         return _0
-    return {'code': -1}
+    return {'code': 2}
 
 
 @userb.route('/settings/pwdmodify', methods=['POST'])
 def user_settings_modify_pwd():
-    _uid = getuser(request.cookies.get('_uid'))
-    if _uid == None:
+    _uid = User.check_uid(request, session)
+    if _uid is None:
         return {'code': 3}
     old = request.form.get('old')
-    oldmd5 = hashlib.md5(old.encode(encoding='UTF-8')).hexdigest()
-    data = userdb.userdata.find_one({'_uid': _uid})
-    if not data['pwd'] == oldmd5:
-        return {'code': 1, 'error': 'pwd wrong'}
     new = request.form.get('new')
-    newmd5 = hashlib.md5(new.encode(encoding='UTF-8')).hexdigest()
-    session['utime'] = datetime.datetime.now().__format__('%Y-%m-%d %H:%M:%S')
-    userdb.userdata.update_one(
-        {'_uid': _uid}, {'$set': {'pwd': newmd5, 'pmodify': session['utime']}})
+    if old is None or new is None:
+        return {'code': 1}
+    user = User(_uid)
+    if not user.setpwd(old, new):
+        return {'code': 1, 'error': 'pwd wrong'}
+    user.save()
+    session['utime'] = str(datetime.datetime.now())
     return _0

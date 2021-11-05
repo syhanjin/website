@@ -8,6 +8,9 @@ import os
 import json
 from datetime import timedelta
 import base64
+from utils import TIME_FORMAT
+
+from utils.user import User
 # from tools import userhelper
 client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
@@ -17,14 +20,6 @@ chatdb = client['chat']
 getdatas = Blueprint('getdatas', __name__)
 userdels = ['pwd', 'introduction', 'personalized',
             'pmodify', 'umodifydate']
-
-
-def getuser(_uid):
-    if _uid and not (_uid == session.get('_uid')):
-        return None
-    if not 'utime' in session:
-        return None
-    return _uid
 
 
 @getdatas.route('/api/about/text')
@@ -55,52 +50,17 @@ def api_getlinksitems():
 
 @getdatas.route('/api/getuserdata')
 def api_getuserdata():
-    _uid = getuser(request.cookies.get('_uid'))
-    data = userdb.userdata.find_one({'_uid': _uid})
-    if data is None or _uid is None:
+    _uid = User.check_uid(request, session)
+    user = User(_uid)
+    if user.error is not None:
         session['_uid'] = ''
-        return {'code': 3, 'error': ''}
-    utime = datetime.datetime.strptime(
-        session.get('utime'), '%Y-%m-%d %H:%M:%S')
-    ptime = datetime.datetime.strptime(data['pmodify'], '%Y-%m-%d %H:%M:%S')
-    # print(utime)
-    # print(type(ptime))
+        return {'code': 3, 'error': f'{user.error} _uid={_uid}'}
+    utime = datetime.datetime.strptime(session.get('utime'), TIME_FORMAT)
+    ptime = user.pmodify
     if utime.__lt__(ptime):
-        return {'code': 3, 'error': ''}
-    # print('T02')
-    now = datetime.datetime.now()
-    session['utime'] = now.__format__('%Y-%m-%d %H:%M:%S')
-#     print(data['lastLogin'])
-    lastlogin = datetime.datetime.strptime(data['lastLogin'], '%Y-%m-%d')
-    if (lastlogin + timedelta(1)) <= now:
-        cld = data['ConLoginDays'] + 1
-        if (lastlogin + timedelta(2)) <= now:
-            cld = 1
-        exp = data['exp']
-        lvl = data['lvl']
-        if cld <= 7:
-            exp += cld
-        else:
-            exp += 7
-        nexp = userdb.lvldata.find_one({'lvl': data['lvl']})['exp']
-        if exp >= nexp:
-            exp -= nexp
-            lvl += 1
-        userdb.userdata.update_one({'_uid': _uid}, {'$set': {
-                                   'ConLoginDays': cld, 'exp': exp, 'lvl': lvl, 'lastLogin': now.__format__('%Y-%m-%d')}})
-    if 'umodifydate' not in data:
-        data['umodify'] = 0
-    else:
-        umodify = data['umodifydate']
-        day = (datetime.datetime.now() - umodify).days
-        if day > 365:
-            data['umodify'] = 0
-        else:
-            data['umodify'] = 365-day
-    data['_id'] = str(data['_id'])
-    for i in userdels:
-        if i in data:
-            del data[i]
+        return {'code': 3, 'error': f'password has changed. utime={utime}, ptime={ptime}'}
+    user.setutime()
+    data = user.to_dict()
     data['chat-count'] = chatdb.messages.find(
         {'read': False, 'r_uid': _uid}).count()
     return data

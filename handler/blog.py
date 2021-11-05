@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, request,jsonify,session,redirect,abort
-import pymongo,random,datetime
+import pymongo, random, datetime
 client = pymongo.MongoClient('127.0.0.1',27017)
 userdb = client['user']
 maindb = client['main']
@@ -8,10 +8,6 @@ blogdb = client['blog']
 noveldb = client['novel']
 blog = Blueprint('blog', __name__, url_prefix='/blog')
 blogm = Blueprint('blogm', __name__, url_prefix='/m/blog')
-def getuser(_uid):
-    if _uid and not _uid == session.get('_uid'):
-        return None
-    return _uid
 @blog.route('/')
 def blog_main():
     s_index=open('templates/blog/pc/index.html','r',encoding='UTF-8').read()

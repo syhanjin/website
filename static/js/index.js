@@ -12,7 +12,7 @@ $(document).ready(function () {
         }
     });
     var event = new Event(
-        '弹窗函数大改测试，如有出现样式问题，请到Q群<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=057e58f1b40bec3f845e20596550131fd236577d698315bc0981c6f53af44a4c">1032103456</a>留言'
+        '网站前期制作代码较为底端，现正大改，可能会出现问题，请到Q群<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=057e58f1b40bec3f845e20596550131fd236577d698315bc0981c6f53af44a4c">1032103456</a>反馈'
     )
     // var cnt=0,
     // interval = setInterval(() => {

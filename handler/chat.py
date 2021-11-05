@@ -8,6 +8,8 @@ import datetime
 import os
 import hashlib
 import base64
+
+from utils.user import User
 client = pymongo.MongoClient('127.0.0.1', 27017)
 userdb = client['user']
 maindb = client['main']
@@ -64,26 +66,20 @@ def send_msg(s_uid, r_uid, text, type='text', TOLIST=True):
         msg_list(s_uid, r_uid, text, type)
 
 
-def getuser(_uid):
-    if _uid and not session.get('_uid') == _uid:
-        return None
-    return _uid
-
-
 # 电脑版
 @chatb.route('/', methods=['GET'])
 def chat():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     if not _uid:
         return redirect('/login')
     return render_template('chat/pc/main.html')
 
-# 手机版
 
+# 手机版
 
 @chatmb.route('/', methods=['GET'])
 def chat():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     if not _uid:
         return redirect('/m/login')
     return render_template('chat/m/main.html')
@@ -93,7 +89,7 @@ def chat():
 # 判断是否有这个人
 @chatb.route('/has_uid')
 def has_uid():
-    u = request.args.get('u')
+    u = int(request.args.get('u'))
     data = userdb.userdata.find_one({'_uid': u})
     if not data:
         return {'code': 2, 'error': 'not this user'}
@@ -103,8 +99,8 @@ def has_uid():
 # 请求添加好友
 @chatb.route('/make_friends', methods=['POST'])
 def make_friends():
-    _uid = getuser(request.cookies.get('_uid'))
-    _uid2 = request.form.get('u')
+    _uid = User.check_uid(request, session)
+    _uid2 = int(request.form.get('u'))
     text = request.form.get('t')
     if not _uid:
         return {'code': 3, 'error': ''}
@@ -126,8 +122,8 @@ def make_friends():
 # 同意添加好友
 @chatb.route('/make_friends/accept')
 def agree_make_friends():  # GET u ==> 对方 _uid
-    _uid = getuser(request.cookies.get('_uid'))
-    _uid2 = request.args.get('u')
+    _uid = User.check_uid(request, session)
+    _uid2 = int(request.args.get('u'))
     if not _uid:
         return {'code': 3, 'error': ''}
     if not _uid2:
@@ -150,8 +146,8 @@ def agree_make_friends():  # GET u ==> 对方 _uid
 # 不同意添加好友
 @chatb.route('/make_friends/refuse')
 def disagree_make_friends():  # GET u ==> 对方 _uid
-    _uid = getuser(request.cookies.get('_uid'))
-    _uid2 = request.args.get('u')
+    _uid = User.check_uid(request, session)
+    _uid2 = int(request.args.get('u'))
     if not _uid:
         return {'code': 3, 'error': ''}
     if not _uid2:
@@ -164,8 +160,8 @@ def disagree_make_friends():  # GET u ==> 对方 _uid
 # 发送 消息
 @chatb.route('/send_msg', methods=['POST'])
 def chat_send_msg():  # post r_uid, text
-    _uid = getuser(request.cookies.get('_uid'))
-    r_uid = request.form.get('r_uid')
+    _uid = User.check_uid(request, session)
+    r_uid = int(request.form.get('r_uid'))
     text = request.form.get('text')
     if not _uid:
         return {'code': 3, 'error': ''}
@@ -183,16 +179,16 @@ def chat_send_msg():  # post r_uid, text
 # 获取未读消息数量
 @chatb.route('/unread_msg/count')
 def chat_unread_msg_count():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     if not _uid:
         return {'code': 3, 'error': ''}
     return chatdb.messages.find({'read': False, 'r_uid': _uid}).count()
 
 
 # 获取未读消息
-@chatb.route('/unread_msg/<string:s_uid>')
+@chatb.route('/unread_msg/<int:s_uid>')
 def chat_unread_msg_s_uid(s_uid):
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     if not _uid:
         return {'code': 3, 'error': ''}
     datas = list(chatdb.messages.find(
@@ -207,9 +203,9 @@ def chat_unread_msg_s_uid(s_uid):
 
 
 # 获取消息 & 页码 & timestamp
-@chatb.route('/all_msg/<string:s_uid>')
+@chatb.route('/all_msg/<int:s_uid>')
 def chat_all_msg_s_uid(s_uid):  # p ==> page, t ==> timestamp
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     page = int(request.args.get('p'))
     timestamp = request.args.get('t')
     if not _uid:
@@ -241,7 +237,7 @@ def chat_all_msg_s_uid(s_uid):  # p ==> page, t ==> timestamp
 # 获取 sender 列表
 @chatb.route('/list')
 def chat_list():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     if not _uid:
         return {'code': 3, 'error': ''}
     datas = list(chatdb.list.find({'r_uid': _uid}).sort('time', -1))
@@ -258,7 +254,7 @@ def chat_list():
 # 修改信息 是否允许陌生人发消息
 @chatb.route('/modify/allowStrangers')
 def modify_allow_strangers():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     s = request.args.get('s')
     if not _uid:
         return {'code': 3, 'error': ''}
@@ -272,7 +268,7 @@ def modify_allow_strangers():
 # 修改信息 是否使用 Ctrl + Enter 发送消息
 @chatb.route('/modify/MSG_CTRL')
 def modify_msg_ctrl():
-    _uid = getuser(request.cookies.get('_uid'))
+    _uid = User.check_uid(request, session)
     s = request.args.get('s')
     if not _uid:
         return {'code': 3, 'error': ''}

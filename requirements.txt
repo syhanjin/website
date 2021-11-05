@@ -1,0 +1,6 @@
+flask
+pymongo
+datetime
+pillow
+pandas
+pydub

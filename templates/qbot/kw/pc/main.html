@@ -1,12 +1,12 @@
-{% extends "index.html" %}
+{% extends "qbot/layout/pc.html" %}
 
-{% block title %}QQ群机器人-关键字拦截{% endblock %}
+{% block sub_title %}关键字拦截{% endblock %}
 
-{% block css %}
+{% block sub_css %}
 <link rel="stylesheet" href="/static/css/qbot/kw/pc/main.css" />
 {% endblock %}
 
-{% block mdv %}
+{% block sub_mdv %}
 <script src="/static/js/qbot/kw/pc/main.js"></script>
 <p><span>群号：</span><span id="group_id">{{group_id}}</span></p>
 <p>本次操作key=<span id="key">{{key}}</span></p>
@@ -46,7 +46,7 @@
 </div>
 {% endblock %}
 
-{% block templates %}
+{% block sub_templates %}
 <template id="template-kw">
     <tr class="item">
         <td class="opened"><input type="checkbox" value="opened" checked="checked" /></td>
