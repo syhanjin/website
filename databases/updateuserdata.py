@@ -22,20 +22,20 @@ userdb.userdata.update_many({'ddd':None},{'$set':{'pmodify': datetime.datetime(2
 #     print(i['user'],'--> _uid = ',_uid)
 #     userdb.userdata.update_one({'_id':i['_id']},{'$set':{'_uid':_uid}})
 
-# st = 100000
-# for i in list(userdb.userdata.find()):
-#     print(f"{i['user']} -> {st}")
-#     userdb.userdata.update_one(
-#         {'_uid': i['_uid']},
-#         {
-#             '$set': {'_uid': st}
-#         })
-#     st += 1
-# print(list(userdb.userdata.find()))
-# print(
-#     list(
-#         userdb.userdata.find()
-#         .sort('_uid', -1).limit(1)
-#     )
-#     [0]['_uid'] + 1
-# )
+st = 100000
+for i in list(userdb.userdata.find()):
+    print(f"{i['user']} -> {st}")
+    userdb.userdata.update_one(
+        {'_uid': i['_uid']},
+        {
+            '$set': {'_uid': st}
+        })
+    st += 1
+print(list(userdb.userdata.find()))
+print(
+    list(
+        userdb.userdata.find()
+        .sort('_uid', -1).limit(1)
+    )
+    [0]['_uid'] + 1
+)
