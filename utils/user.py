@@ -162,6 +162,7 @@ class User:
                         data['umodify'] = 365-day
             else: 
                 data[i] = getattr(self, i, None)
+        data['_uid'] = self.uid
         return data
 
     def save(self) -> None:
