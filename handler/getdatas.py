@@ -76,7 +76,7 @@ def api_getlvldata(lvl):
 
 
 # 用户头像动态获取
-@getdatas.route('/api/userphoto/<_uid>')
+@getdatas.route('/api/userphoto/<int:_uid>')
 def api_geruserphoto(_uid):
     userd = userdb.userdata.find_one({'_uid': _uid})
     if userd:
