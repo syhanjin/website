@@ -12,9 +12,9 @@ def get_host_ip():
 sy = Flask(__name__)
 @sy.route('/')
 def home():
-    return redirect('https://sakuyark.com')
+    return redirect('https://sakuyark.com', code=301)
 @sy.route('/<path:p>')
 def home2(p):
-    return redirect('https://sakuyark.com/'+p)
+    return redirect('https://sakuyark.com/'+p, code=301)
 LocalIP = get_host_ip()
 sy.run(host=LocalIP, port=80)#启动服务器
