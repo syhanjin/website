@@ -127,8 +127,11 @@ def robots():
 
 @sy.after_request
 def after_request(resp):
-    if request.url.rsplit('.', 1)[1] == 'js':
-        resp.mimetype = 'text/javascript'
+    try:
+        if request.url.rsplit('.', 1)[1] == 'js':
+            resp.mimetype = 'text/javascript'
+    except:
+        pass
     if resp.mimetype == 'application/json':
         data = json.loads(resp.data)
         if 'code' in data:
