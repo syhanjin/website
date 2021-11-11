@@ -182,9 +182,9 @@ def login_m_post():
     if user.check_pwd(pwd):
         session['_uid'] = user.uid
         session['utime'] = str(datetime.datetime.now())
-        return render_template(
-            'login/m/success.html', _uid=user.uid, url=session.get('lpage')
-        )
+        resp = redirect(session.get('lpage') or '/m')
+        resp.set_cookie('_uid', str(user.uid))
+        return resp
     else:
         return render_template('login/m/main.html', warn=u'用户名或密码错误', user=un)
 

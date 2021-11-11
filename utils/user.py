@@ -70,7 +70,7 @@ class User:
             return
         self.uid = data['_uid']
         for i in self.attrs:
-            setattr(self, i, data.get(i))
+            setattr(self, i, data.get(i) or getattr(self, i))
         lvldata = userdb.lvldata.find_one({'lvl': self.lvl})
         if lvldata is None:
             self.error = f'等级数据缺失 lvl={self.lvl}'
