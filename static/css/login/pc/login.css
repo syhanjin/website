@@ -7,28 +7,33 @@
     padding: 50px 50px 30px 50px;
     height: 400px;
 }
-.retrieve{
+
+.retrieve {
     display: inline-block;
     font-size: 12px;
     float: right;
 }
-.retrieve span{
+
+.retrieve span {
     margin: 5px 7px;
 }
-.retrieve a{
+
+.retrieve a {
     color: blue;
 }
 
-.title{
+.title {
     font-size: 24px;
     text-align: center;
     margin-bottom: 35px;
 }
-.warns{
+
+.warns {
     text-align: center;
     font-size: 14px;
     color: red;
 }
+
 .submit {
     text-align: center;
     margin: 15px auto;
@@ -43,7 +48,8 @@
 .login *:focus {
     outline: 0;
 }
-.login .entry{
+
+.login .entry {
     background-color: white;
     position: relative;
     margin: 30px auto;
@@ -55,6 +61,7 @@
     padding-left: 50px;
     border: 1px solid #00B01B;
 }
+
 .login .entry:before {
     content: "";
     position: absolute;
@@ -64,15 +71,52 @@
     height: 30px;
     background: url(/static/images/reg_icon.png) 0 0 no-repeat;
 }
+
 #entry-user:before {
     background-position: -62px -64px;
 }
+
 #entry-pwd:before {
     background-position: 7px -28px !important;
 }
-.login .entry input{
+
+.login .entry input {
     width: 277px;
     height: 46px;
     border: 0;
     outline: 0;
+}
+
+
+
+#qqLoginBtn {
+    background: url(/static/images/QQ.png) center/cover;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50% 50%;
+    cursor: pointer;
+}
+
+.login-ways>span {
+    padding: 4px 0;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #555666;
+
+}
+
+.other .login-ways {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    line-height: 24px;
+    height: 24px;
+}
+
+.other .login-ways>div {
+    margin-left: .2em;
+    line-height: 24px;
+    height: 24px;
 }
