@@ -211,7 +211,7 @@ class User:
         result['access_token'] = data['access_token']
         result['expires_in'] = data['expires_in']
         result['refresh_token'] = data['refresh_token']
-        r = s.get('https://graph.qq.com/oauth2.0/me', params={'access_token': result['access_token']})
+        r = s.get('https://graph.qq.com/oauth2.0/me', params={'access_token': result['access_token'], 'fmt': 'json'})
         result['openid'] = r.json()['openid']
         r = s.get(
             'https://graph.qq.com/user/get_user_info',
