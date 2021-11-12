@@ -223,4 +223,4 @@ class User:
             }
         )
         data = r.json()
-        return dict(result.items() + data.items())
+        return dict(result, **dict(data))
