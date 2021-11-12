@@ -206,7 +206,7 @@ class User:
             }
         )
         result = {}
-        data = r.json()
+        data = r.data()
         result['access_token'] = data['access_token']
         result['expires_in'] = data['expires_in']
         result['refresh_token'] = data['refresh_token']
