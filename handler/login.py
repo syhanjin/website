@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request, jsonify, session, redirect, abort
+from flask import Blueprint, render_template, request, jsonify, session, redirect, abort, url_for
 import pymongo
 import random
 import datetime
-import hashlib
+import requests
 import os
 from email.mime.text import MIMEText
 from email.header import Header
@@ -26,9 +26,10 @@ noveldb = client['novel']
 login = Blueprint('login', __name__, url_prefix='/login')
 loginm = Blueprint('loginm', __name__, url_prefix='/m/login')
 
+    
+
+
 # 电脑版
-
-
 @login.route('/', methods=['GET'])
 def login_pc_main():
     if User.check_uid(request, session) is not None:
@@ -97,6 +98,18 @@ def login_post():
         return resp
     else:
         return render_template('login/pc/main.html', warn=u'用户名或密码错误', user=un)
+
+
+# QQ 登录
+@login.route('/qq')
+def login_qq():
+    if request.args.get('state') != 'login':
+        return redirect(url_for('.'))
+    code = request.args.get('code')
+    if code is None:
+        return redirect(url_for('.'))
+    data = User.get_qq_data(code)
+    return jsonify(data)
 
 
 # 激活

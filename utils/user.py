@@ -3,8 +3,9 @@ import hashlib
 from typing import ClassVar
 from flask.globals import session
 import pymongo
+import requests
 
-from utils import INITIAL_TIME, LOGIN_EXP
+from utils import INITIAL_TIME, LOGIN_EXP, QQ_CLIENT_ID, QQ_CLIENT_SECRET, QQ_REDIRECT_URI
 
 
 client = pymongo.MongoClient('127.0.0.1', 27017)
@@ -189,3 +190,34 @@ class User:
             session['_uid'] = ''
             return None
         return int(_uid)
+
+    @staticmethod
+    def get_qq_data(code) -> dict:
+        s = requests.Session()
+        r = s.get(
+            'https://graph.qq.com/oauth2.0/token', 
+            params={
+                'grant_type': 'authorization_code',
+                'client_id': QQ_CLIENT_ID,
+                'client_secret': QQ_CLIENT_SECRET,
+                'code': code,
+                'redirect_uri': QQ_REDIRECT_URI,
+            }
+        )
+        result = {}
+        data = r.json()
+        result['access_token'] = data['access_token']
+        result['expires_in'] = data['expires_in']
+        result['refresh_token'] = data['refresh_token']
+        r = s.get('https://graph.qq.com/oauth2.0/me', params={'access_token': result['access_token']})
+        result['openid'] = r.json()['openid']
+        r = s.get(
+            'https://graph.qq.com/user/get_user_info',
+            params={
+                'access_token': result['access_token'],
+                'oauth_consumer_key': QQ_CLIENT_ID,
+                'openid': result['openid']
+            }
+        )
+        data = r.json()
+        return dict(result.items(), data.items(),)
