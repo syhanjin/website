@@ -5,7 +5,7 @@ from flask.globals import session
 import pymongo
 import requests
 
-from utils import INITIAL_TIME, LOGIN_EXP, QQ_CLIENT_ID, QQ_CLIENT_SECRET, QQ_REDIRECT_URI
+from utils import HEADERS, INITIAL_TIME, LOGIN_EXP, QQ_CLIENT_ID, QQ_CLIENT_SECRET, QQ_REDIRECT_URI
 
 
 client = pymongo.MongoClient('127.0.0.1', 27017)
@@ -194,6 +194,7 @@ class User:
     @staticmethod
     def get_qq_data(code) -> dict:
         s = requests.Session()
+        s.headers = HEADERS
         r = s.get(
             'https://graph.qq.com/oauth2.0/token', 
             params={
