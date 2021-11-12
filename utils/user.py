@@ -203,10 +203,11 @@ class User:
                 'client_secret': QQ_CLIENT_SECRET,
                 'code': code,
                 'redirect_uri': QQ_REDIRECT_URI,
+                'fmt': 'json'
             }
         )
         result = {}
-        data = r.data()
+        data = r.json()
         result['access_token'] = data['access_token']
         result['expires_in'] = data['expires_in']
         result['refresh_token'] = data['refresh_token']
@@ -217,7 +218,8 @@ class User:
             params={
                 'access_token': result['access_token'],
                 'oauth_consumer_key': QQ_CLIENT_ID,
-                'openid': result['openid']
+                'openid': result['openid'],
+                'fmt': 'json'
             }
         )
         data = r.json()
