@@ -7,7 +7,7 @@ TIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
 
 QQ_CLIENT_ID = 101978697
-QQ_CLIENT_SECRET = 000 # key
+QQ_CLIENT_SECRET = '2247193aa54fa286182734a1863bdc63' # key
 QQ_REDIRECT_URI = 'https://sakuyark.com/login/qq'
 
 HEADERS = {
