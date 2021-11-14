@@ -115,7 +115,7 @@ def login_qq():
     user = User(qq_open_id=data['openid'])
     if user.error is not None:
         key = create_kv_pairs(userdb['qq_login'], data, datetime.timedelta(hours=24))
-        return redirect(url_for(f'./new?key={key}'))
+        return redirect('/login/qq/new?key={key}')
     session['_uid'] = user.uid
     session['utime'] = str(datetime.datetime.now())
     user.setutime()
