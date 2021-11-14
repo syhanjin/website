@@ -1,8 +1,6 @@
 import datetime
 import hashlib
 import random
-from typing import ClassVar
-from flask.globals import session
 import pymongo
 import requests
 
@@ -227,17 +225,6 @@ class User:
         r = s.get('https://graph.qq.com/oauth2.0/me', params={'access_token': result['access_token'], 'fmt': 'json'})
         result['openid'] = r.json()['openid']
         return dict(result)
-        # r = s.get(
-        #     'https://graph.qq.com/user/get_user_info',
-        #     params={
-        #         'access_token': result['access_token'],
-        #         'oauth_consumer_key': QQ_CLIENT_ID,
-        #         'openid': result['openid'],
-        #         'fmt': 'json'
-        #     }
-        # )
-        # data = r.json()
-        # return dict(result, **dict(data))
     
     @staticmethod
     def has_user(user: str):
