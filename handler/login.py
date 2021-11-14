@@ -11,6 +11,8 @@ import smtplib
 import hashlib
 import random
 from smtplib import SMTP_SSL
+from handler import user
+from utils import create_kv_pairs, get_kv_pairs, is_mobile
 
 from utils.user import User
 randombase = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -51,9 +53,10 @@ def login_retrieve_reset():
     if key == None or userdb.retrieve.find_one({'key': key}) == None:
         abort(404)
     return render_template('login/pc/retrieve_reset.html', key=key)
+
+
+
 # 重置POST
-
-
 @login.route('/retrieve/reset', methods=['POST'])
 def login_retrieve_reset_():
     pwd1 = request.form.get('pwd1')
@@ -109,8 +112,67 @@ def login_qq():
     if code is None:
         return redirect(url_for('.'))
     data = User.get_qq_data(code)
-    return jsonify(data)
+    user = User(qq_open_id=data['openid'])
+    if user.error is not None:
+        key = create_kv_pairs(userdb['qq_login'], data, datetime.timedelta(hours=24))
+        return redirect(url_for(f'./new?key={key}'))
+    session['_uid'] = user.uid
+    session['utime'] = str(datetime.datetime.now())
+    user.setutime()
+    user.save()
+    resp = redirect(session.get('lpage') or '/')
+    resp.set_cookie('_uid', str(user.uid))
+    return resp
 
+@login.route('/qq/new', methods=['GET'])
+def login_qq_new():
+    key = request.args.get('key')
+    if key is None:
+        return render_template('error/pc.html',error='key有误')
+    return render_template('login/pc/qq/new.html')
+
+
+@login.route('/qq/new', methods=['POST'])
+def login_qq_new_post():
+    key = request.args.get('key')
+    if key is None:
+        return {'code': 1, 'error': 'key'}
+    qq_data = get_kv_pairs(userdb['qq_login'], key)
+    if qq_data is None:
+        return {'code': 1, 'error': 'key'}
+    user = request.args.get('user')
+    if user is None:
+        return {'code': 1, 'error': 'user'}
+    if User.has_user(user):
+        return {'code': 1, 'error': 'user is exist'}
+    data = {
+        'access_token': qq_data['access_token'],
+        'expires_in': qq_data['expires_in'],
+        'refresh_token': qq_data['refresh_token'],
+        'openid': qq_data['openid'],
+        'user': user
+    }
+    User.register_user(data)
+    user = User(qq_open_id=data['openid'])
+    session['_uid'] = user.uid
+    session['utime'] = str(datetime.datetime.now())
+    user.setutime()
+    user.save()
+    resp = redirect(session.get('lpage') or '/')
+    resp.set_cookie('_uid', str(user.uid))
+    return resp
+
+    
+    
+    
+
+
+@loginm.route('/qq/new', methods=['GET'])
+def login_m_qq_new():
+    key = request.args.get('key')
+    if key is None:
+        return render_template('error/m.html',error='key有误')
+    return render_template('login/m/qq/new.html')
 
 # 激活
 @login.route('/activate', methods=['GET'])

@@ -1,5 +1,6 @@
 import datetime
 import hashlib
+from random import random
 from typing import ClassVar
 from flask.globals import session
 import pymongo
@@ -32,12 +33,12 @@ class User:
     attrs = [
         'user', 'pwd', 'photo', 'lvl', 'exp',
         'admin', 'titles', 'pmodify', 'umodify',
-        'last', 'continuity'
+        'last', 'continuity', 'qq', 'qq_data', 
     ]
     public = [
         'user', 'photo', 'lvl', 'exp', 'admin',
         'titles', 'pmodify', 'umodify', 'last',
-        'continuity'
+        'continuity', 'qq'
     ]
     # region 初始值
     user = ''
@@ -52,9 +53,16 @@ class User:
     umodify = INITIAL_TIME
     last = INITIAL_TIME
     continuity = 0
+    qq = 0
+    qq_data = {}
     # endregion
 
-    def __init__(self, _uid: 'int | None' = None, user: 'str | None' = None) -> None:
+    def __init__(
+        self, 
+        _uid: 'int | None' = None, 
+        user: 'str | None' = None,
+        qq_open_id: 'str | None' = None,
+    ) -> None:
         self.error = None
         if _uid is not None:
             data = userdb.userdata.find_one({'_uid': _uid})
@@ -66,8 +74,13 @@ class User:
             if data is None:
                 self.error = f'无此用户 user={user}'
                 return
+        elif qq_open_id is not None:
+            data = userdb.userdata.find_one({'qq_data.open_id': qq_open_id})
+            if data is None:
+                self.error = f'qq 未注册'
+                return
         else:
-            self.error = f'缺少_uid or user'
+            self.error = f'缺少识别信息'
             return
         self.uid = data['_uid']
         for i in self.attrs:
@@ -213,14 +226,36 @@ class User:
         result['refresh_token'] = data['refresh_token']
         r = s.get('https://graph.qq.com/oauth2.0/me', params={'access_token': result['access_token'], 'fmt': 'json'})
         result['openid'] = r.json()['openid']
-        r = s.get(
-            'https://graph.qq.com/user/get_user_info',
-            params={
-                'access_token': result['access_token'],
-                'oauth_consumer_key': QQ_CLIENT_ID,
-                'openid': result['openid'],
-                'fmt': 'json'
-            }
-        )
-        data = r.json()
-        return dict(result, **dict(data))
+        return dict(result)
+        # r = s.get(
+        #     'https://graph.qq.com/user/get_user_info',
+        #     params={
+        #         'access_token': result['access_token'],
+        #         'oauth_consumer_key': QQ_CLIENT_ID,
+        #         'openid': result['openid'],
+        #         'fmt': 'json'
+        #     }
+        # )
+        # data = r.json()
+        # return dict(result, **dict(data))
+    
+    @staticmethod
+    def has_user(user: str):
+        return userdb.userdata.find_one({'user': user})
+    
+    @staticmethod
+    def register_user(data):
+        if data.get('pwd'):
+            pwdmd5 = hashlib.md5(data['pwd'].encode(encoding='UTF-8')).hexdigest()
+            data['pwd'] = pwdmd5
+        data['photo'] = '/static/images/photo/'+str(random.randint(1,9))+'.jpg'
+        data['lvl'] = 0
+        data['exp'] = 0
+        data['admin'] = 0
+        data['titles'] = []
+        data['pmodify'] = INITIAL_TIME
+        data['lastLogin'] = INITIAL_TIME
+        data['ConLoginDays'] = 0
+        _uid = list(userdb.userdata.find().sort('_uid', -1).limit(1))[0] + 1
+        data['_uid'] = _uid
+        userdb.userdata.insert_one(data)

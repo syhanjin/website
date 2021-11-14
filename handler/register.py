@@ -8,25 +8,12 @@ import smtplib,hashlib,random
 from smtplib import SMTP_SSL
 
 from utils import INITIAL_TIME
+from utils.user import User
 
 client = pymongo.MongoClient('127.0.0.1',27017)
 userdb = client['user']
 maindb = client['main']
 noveldb = client['novel']
-def register(data):
-    pwdmd5 = hashlib.md5(data['pwd'].encode(encoding='UTF-8')).hexdigest()
-    data['pwd'] = pwdmd5
-    data['photo'] = '/static/images/photo/'+str(random.randint(1,9))+'.jpg'
-    data['lvl'] = 0
-    data['exp'] = 0
-    data['admin'] = 0
-    data['titles'] = []
-    data['pmodify'] = INITIAL_TIME
-    data['lastLogin'] = INITIAL_TIME
-    data['ConLoginDays'] = 0
-    _uid = list(userdb.userdata.find().sort('_uid', -1).limit(1))[0] + 1
-    data['_uid'] = _uid
-    userdb.userdata.insert_one(data)
     
 # 电脑版
 rg = Blueprint('register', __name__)
@@ -64,7 +51,7 @@ def rg_post():
         return render_template('register/pc/main.html',warn=u'验证码错误！')
     if not int(session['veri']) == int(veri):
         return render_template('register/pc/main.html',warn=u'验证码错误！')
-    register({'user':user,'pwd':pwd1,'mail':mail})
+    User.register_user({'user':user,'pwd':pwd1,'mail':mail})
     if request.form.get('device') == None:
         return render_template('register/pc/success.html',url=session.get('lpage'))
     else :
@@ -74,7 +61,7 @@ def rg_post():
 def rg_judge_user():
     user=request.form.get('user')
     data=userdb.userdata.find_one({'user':user})
-    if data == None:
+    if data is None:
         return 'True'
     return 'False'
 @rg.route('/register/judgeveri',methods=['POST'])
