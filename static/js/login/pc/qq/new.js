@@ -18,15 +18,15 @@ $(document).ready(function () {
             }
         })
     });
-    $('.submit').on('click', function(){
-        key = getUrlParam('key');
-        $.post('/login/qq/new', {
-            'key': key,
-            'user': $('#user input').val()
-        }, function(rel){
-            if(rel == True){
+    // $('.submit').on('click', function(){
+    //     key = getUrlParam('key');
+    //     $.post('/login/qq/new', {
+    //         'key': key,
+    //         'user': $('#user input').val()
+    //     }, function(rel){
+    //         if(rel == True){
 
-            }
-        })
-    })
+    //         }
+    //     })
+    // })
 })
