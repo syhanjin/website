@@ -1,6 +1,6 @@
 import datetime
 import hashlib
-from random import random
+import random
 from typing import ClassVar
 from flask.globals import session
 import pymongo
