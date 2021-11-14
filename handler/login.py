@@ -134,13 +134,13 @@ def login_qq_new():
 
 @login.route('/qq/new', methods=['POST'])
 def login_qq_new_post():
-    key = request.args.get('key')
+    key = request.form.get('key')
     if key is None:
         return {'code': 1, 'error': 'key'}
     qq_data = get_kv_pairs(userdb['qq_login'], key)
     if qq_data is None:
         return {'code': 1, 'error': 'key'}
-    user = request.args.get('user')
+    user = request.form.get('user')
     if user is None:
         return {'code': 1, 'error': 'user'}
     if User.has_user(user):
