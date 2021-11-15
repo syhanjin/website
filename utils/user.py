@@ -243,6 +243,6 @@ class User:
         data['pmodify'] = INITIAL_TIME
         data['lastLogin'] = INITIAL_TIME
         data['ConLoginDays'] = 0
-        _uid = list(userdb.userdata.find().sort('_uid', -1).limit(1))[0] + 1
+        _uid = list(userdb.userdata.find().sort('_uid', -1).limit(1))[0]['_uid'] + 1
         data['_uid'] = _uid
         userdb.userdata.insert_one(data)
