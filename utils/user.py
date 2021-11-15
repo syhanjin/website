@@ -73,7 +73,7 @@ class User:
                 self.error = f'无此用户 user={user}'
                 return
         elif qq_open_id is not None:
-            data = userdb.userdata.find_one({'qq_data.open_id': qq_open_id})
+            data = userdb.userdata.find_one({'qq_data.openid': qq_open_id})
             if data is None:
                 self.error = f'qq 未注册'
                 return
