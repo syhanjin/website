@@ -146,14 +146,11 @@ def login_qq_new_post():
     if User.has_user(user):
         return {'code': 1, 'error': 'user is exist'}
     data = {
-        'access_token': qq_data['access_token'],
-        'expires_in': qq_data['expires_in'],
-        'refresh_token': qq_data['refresh_token'],
-        'openid': qq_data['openid'],
+        'qq_data': qq_data,
         'user': user
     }
     User.register_user(data)
-    user = User(qq_open_id=data['openid'])
+    user = User(qq_open_id=qq_data['openid'])
     session['_uid'] = user.uid
     session['utime'] = str(datetime.datetime.now())
     user.setutime()
