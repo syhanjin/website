@@ -58,7 +58,7 @@ def get_kv_pairs(
         return None
     dead = data['deadline'] < datetime.datetime.now()
     if delete or dead:
-        collection.delete_one({'_id', data['_id']})
+        collection.delete_one({'_id': data['_id']})
     if dead:
         return None
     return data['value']
