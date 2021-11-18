@@ -127,15 +127,15 @@ def login_qq():
 @login.route('/qq/new', methods=['GET'])
 def login_qq_new():
     key = request.args.get('key')
-    # if key is None or get_kv_pairs(userdb['qq_login'], key, False) is None:
-    #     return render_template('error/pc.html',error='key有误')
+    if key is None or get_kv_pairs(userdb['qq_login'], key, False) is None:
+        return render_template('error/pc.html',error='key有误')
     return render_template('login/pc/qq/new.html', key=key)
 
 @loginm.route('/qq/new', methods=['GET'])
 def login_m_qq_new():
     key = request.args.get('key')
-    # if key is None or get_kv_pairs(userdb['qq_login'], key, False) is None:
-    #     return render_template('error/m.html',error='key有误')
+    if key is None or get_kv_pairs(userdb['qq_login'], key, False) is None:
+        return render_template('error/m.html',error='key有误')
     return render_template('login/m/qq/new.html', key=key)
 
 
