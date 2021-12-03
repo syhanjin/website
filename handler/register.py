@@ -91,7 +91,7 @@ def rg_veri():
     )
     host_server = 'smtp.163.com'
     sender = 'Sakuyark@163.com'
-    pwd = 'ILRUQMTUDAEPFDUI'
+    pwd = 'JKXUTNJUDVRDGTTV'
     sender_mail = 'Sakuyark@163.com'
     receiver = str(request.form.get('mail'))
     session['mail']=receiver
